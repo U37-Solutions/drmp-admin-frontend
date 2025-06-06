@@ -1,3 +1,4 @@
+'use client';
 import { MoonOutlined } from '@ant-design/icons';
 import { Button, Flex, Tooltip } from 'antd';
 import { Header as AntHeader } from 'antd/es/layout/layout';

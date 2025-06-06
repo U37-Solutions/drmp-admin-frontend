@@ -1,0 +1,12 @@
+.layout:global(.ant-layout) {
+  min-height: 100vh;
+}
+
+.content:global(.ant-flex) {
+  height: 100%;
+  margin: 20px;
+
+  .contentCard {
+    width: 400px;
+  }
+}

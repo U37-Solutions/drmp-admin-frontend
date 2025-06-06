@@ -1,0 +1,10 @@
+@import "src/shared/ui/styles/utils";
+
+.form {
+  max-width: 400px;
+  width: 100%;
+}
+
+.error {
+  @include input-error-message;
+}

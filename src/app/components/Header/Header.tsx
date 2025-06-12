@@ -1,24 +1,18 @@
 'use client';
-import { MoonOutlined } from '@ant-design/icons';
-import { Button, Flex, Tooltip } from 'antd';
+import { Flex, Spin } from 'antd';
 import { Header as AntHeader } from 'antd/es/layout/layout';
-import React from 'react';
+import React, { useState } from 'react';
+
+import { TopMenu } from '@/app/components';
 
 const Header = () => {
-  const handleThemeSwitch = () => {
-    const currentTheme = localStorage.getItem('theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-    localStorage.setItem('theme', newTheme);
-    window.location.reload();
-  };
+  const [loading, setLoading] = useState(false);
 
   return (
     <AntHeader>
-      <Flex justify="end" align="center" style={{ height: '100%' }}>
-        <Tooltip title="Перемкнути тему">
-          <Button shape="circle" icon={<MoonOutlined />} onClick={handleThemeSwitch} />
-        </Tooltip>
+      <Spin spinning={loading} fullscreen />
+      <Flex justify="end" gap={8} align="center" style={{ height: '100%' }}>
+        <TopMenu setLoading={setLoading} />
       </Flex>
     </AntHeader>
   );

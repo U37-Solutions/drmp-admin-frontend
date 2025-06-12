@@ -1,8 +1,9 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Flex, Form, Input, Typography } from 'antd';
+import { Button, Flex, Form, Input, Spin, Typography } from 'antd';
 import Link from 'next/link';
-import React, { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import styles from './page.module.scss';
@@ -14,32 +15,37 @@ const { Item } = Form;
 const { Title } = Typography;
 
 const Page = () => {
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
   const {
     handleSubmit,
     control,
+    setError: setFormError,
     formState: { errors, isSubmitting },
   } = useForm<TLoginForm>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: TLoginForm) => console.log('Form submitted:', data);
+  const onSubmit = async (data: TLoginForm) => {
+    setLoading(true);
 
-  const renderPasswordExtra = useCallback(
-    () => (
-      <Flex justify="space-between" className={styles.passwordExtra}>
-        <div>
-          {errors.password && errors.password.message && (
-            <span className={styles.error}>{errors.password.message}</span>
-          )}
-        </div>
-        <Link href="/forgot-password">Забули пароль?</Link>
-      </Flex>
-    ),
-    [errors.password],
-  );
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+
+    if (res.ok) {
+      router.push('/users');
+    } else {
+      setFormError('password', { message: 'Неправильний пароль або електронна адреса' });
+      setLoading(false);
+    }
+  };
 
   return (
     <Flex vertical gap={20} align="center">
+      <Spin spinning={loading} fullscreen />
       <Title level={2}>Вхід</Title>
 
       <Form layout="vertical" className={styles.form} onFinish={handleSubmit(onSubmit)}>
@@ -55,7 +61,10 @@ const Page = () => {
             )}
           />
         </Item>
-        <Item label="Пароль" extra={renderPasswordExtra()}>
+        <Item
+          label="Пароль"
+          extra={errors.password?.message && <span className={styles.error}>{errors.password.message}</span>}
+        >
           <Controller
             name="password"
             control={control}
@@ -64,9 +73,12 @@ const Page = () => {
             )}
           />
         </Item>
-        <Button block type="primary" htmlType="submit" disabled={isSubmitting}>
-          Увійти
-        </Button>
+        <Flex vertical gap={10}>
+          <Link href="/forgot-password">Забули пароль?</Link>
+          <Button block type="primary" htmlType="submit" disabled={isSubmitting}>
+            Увійти
+          </Button>
+        </Flex>
       </Form>
     </Flex>
   );

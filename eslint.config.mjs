@@ -38,7 +38,7 @@ const eslintConfig = [
     },
     rules: {
       'prettier/prettier': 'error',
-      'no-console': 'error',
+      'no-console': 'warn',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
       'no-useless-return': 'warn',

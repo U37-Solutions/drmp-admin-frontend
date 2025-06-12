@@ -1,5 +1,5 @@
 import { HomeOutlined } from '@ant-design/icons';
-import { Flex, Menu, MenuProps } from 'antd';
+import { Menu, MenuProps } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import React from 'react';
 

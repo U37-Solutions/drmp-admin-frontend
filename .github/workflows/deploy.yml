@@ -2,7 +2,7 @@ name: Push develop and Deploy
  
 on:
   push:
-    branches: ["develop"]
+    branches: ["ci/86c3td7p8/add-deployment"]
 
 env:
   NAMESPACE: drmp

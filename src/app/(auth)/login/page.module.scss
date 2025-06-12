@@ -1,4 +1,4 @@
-@import "src/shared/ui/styles/utils";
+@use "src/shared/ui/styles/utils/mixins";
 
 .form {
   max-width: 400px;
@@ -6,5 +6,5 @@
 }
 
 .error {
-  @include input-error-message;
+  @include mixins.input-error-message;
 }

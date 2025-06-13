@@ -2,6 +2,8 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { refreshSession } from '@/features/session/api';
+
 const ALLOWED_PATHS = ['/login', '/forgot-password'];
 
 export async function middleware(request: NextRequest) {
@@ -17,9 +19,29 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // If the route is not protected or the user has an access token, allow the request to proceed
-  if (accessToken || refreshToken) {
+  if (accessToken) {
     return NextResponse.next();
+  }
+
+  if (refreshToken) {
+    try {
+      const { accessToken: newAccessToken, accessTokenExpiresAt } = await refreshSession(refreshToken);
+
+      const res = NextResponse.redirect(request.nextUrl);
+      res.cookies.set('accessToken', newAccessToken, {
+        path: '/',
+        expires: new Date(accessTokenExpiresAt),
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: true,
+      });
+
+      return res;
+    } catch (error) {
+      if (error instanceof Error) {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
+    }
   }
 
   // If no access token and no refresh token, redirect to login

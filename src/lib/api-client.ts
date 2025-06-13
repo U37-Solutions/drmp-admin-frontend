@@ -1,7 +1,5 @@
 import { cookies } from 'next/headers';
 
-import { refreshSession } from '@/features/session/api';
-
 const Api = () => {
   const formatHeaders = (accessToken?: string, headers?: RequestInit['headers']): RequestInit['headers'] => ({
     ...headers,
@@ -18,22 +16,19 @@ const Api = () => {
     const accessToken = cookieStore.get('accessToken')?.value;
     const refreshToken = cookieStore.get('refreshToken')?.value;
 
-    let response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
       ...options,
       method,
       headers: formatHeaders(accessToken, options?.headers),
     });
 
+    // TODO: Implement error handling for these errors
     if (!response.ok && response.status !== 401 && response.status !== 403) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     if ((response.status === 401 || response.status === 403) && refreshToken) {
-      const newToken = await refreshSession();
-      response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
-        ...options,
-        headers: { ...options?.headers, Authorization: `Bearer ${newToken}` },
-      });
+      throw new Error('Refresh token expired');
     }
 
     return response.json();

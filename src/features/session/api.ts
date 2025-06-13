@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { SessionInfo } from '@/features/session/types';
@@ -14,10 +13,9 @@ export const getSessionInfo = async () => {
   return response;
 };
 
-export const refreshSession = async (): Promise<string> => {
-  const cookieStore = await cookies();
-  const refreshToken = cookieStore.get('refreshToken')?.value;
-
+export const refreshSession = async (
+  refreshToken: string,
+): Promise<{ accessToken: string; accessTokenExpiresAt: string }> => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
     method: 'POST',
     headers: {
@@ -30,15 +28,5 @@ export const refreshSession = async (): Promise<string> => {
     redirect('/login');
   }
 
-  const { accessToken, accessTokenExpiresAt } = await response.json();
-
-  await fetch(`${process.env.NEXT_PUBLIC_URL}/api/auth/refresh-session`, {
-    method: 'POST',
-    body: JSON.stringify({
-      accessToken,
-      accessTokenExpiresAt,
-    }),
-  });
-
-  return accessToken;
+  return response.json();
 };

@@ -11,10 +11,6 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
 /build
 
@@ -22,6 +18,11 @@
 .DS_Store
 /.idea
 *.pem
+
+# vite
+dist/
+.vite/
+.vitepress/
 
 # debug
 npm-debug.log*

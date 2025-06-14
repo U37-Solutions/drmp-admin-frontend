@@ -1,6 +1,5 @@
+import { SessionInfo } from '@features/session/types';
 import { create } from 'zustand';
-
-import { SessionInfo } from '@/features/session/types';
 
 type SessionStore = {
   data: SessionInfo | null;

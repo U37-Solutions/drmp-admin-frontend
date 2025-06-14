@@ -6,7 +6,7 @@ export type SessionInfo = {
   roles: Array<{ id: Role; name: keyof Role }>;
 };
 
-enum Role {
+export enum Role {
   ADMIN = 1,
   USER = 2,
 }

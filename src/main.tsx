@@ -1,14 +1,16 @@
 import './index.css';
 import 'antd/dist/reset.css';
 import '@ant-design/v5-patch-for-react-19';
-import { AuthProvider, useAuth } from '@features/auth/AuthProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
-import { CookiesProvider } from 'react-cookie';
 import { createRoot } from 'react-dom/client';
 
+import AppProvider from '@/shared/providers/AppProvider';
+
 import { routeTree } from './routeTree.gen';
+
+import { useAuth } from '@features/auth/AuthProvider';
 
 const queryClient = new QueryClient();
 
@@ -22,19 +24,9 @@ declare module '@tanstack/react-router' {
   }
 }
 
-export function InnerApp() {
+export function App() {
   const auth = useAuth();
   return <RouterProvider router={router} context={{ auth }} />;
-}
-
-function App() {
-  return (
-    <CookiesProvider>
-      <AuthProvider>
-        <InnerApp />
-      </AuthProvider>
-    </CookiesProvider>
-  );
 }
 
 // Render the app
@@ -44,7 +36,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <AppProvider>
+          <App />
+        </AppProvider>
       </QueryClientProvider>
     </StrictMode>,
   );

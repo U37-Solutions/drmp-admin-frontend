@@ -2,7 +2,7 @@ import { CookiesProvider } from 'react-cookie';
 
 import { AuthProvider } from '@features/auth/AuthProvider';
 
-import ThemeProvider from '@/shared/providers/ThemeProvider';
+import ThemeProvider from '@shared/providers/ThemeProvider';
 
 const COOKIE_SET_OPTIONS: { path: string; sameSite: 'strict'; secure: boolean } = {
   path: '/',

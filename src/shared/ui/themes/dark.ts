@@ -1,5 +1,5 @@
 import { theme } from 'antd';
-import { ThemeConfig } from 'antd/lib';
+import type { ThemeConfig } from 'antd/lib';
 
 export default {
   cssVar: true,

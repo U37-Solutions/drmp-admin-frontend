@@ -5,9 +5,10 @@ import { Avatar, Button, Dropdown, type MenuProps, Spin } from 'antd';
 import { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 
-import apiClient from '@/services/api-client';
 import { useAuth } from '@features/auth/AuthProvider';
-import { SessionInfo } from '@features/session/types';
+import type { SessionInfo } from '@features/session/types';
+
+import apiClient from '@/services/api-client';
 
 type IProps = {
   sessionInfo?: SessionInfo;

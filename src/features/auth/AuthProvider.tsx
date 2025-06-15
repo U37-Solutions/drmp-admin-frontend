@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useCookies } from 'react-cookie';
 
-import { LoginResponse } from '@features/auth/types';
+import type { LoginResponse } from '@features/auth/types';
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -17,21 +17,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const isAuthenticated = !!cookies.accessToken || !!cookies.refreshToken;
 
-  const login = async (data: LoginResponse) => {
-    setCookie('accessToken', data.accessToken, {
-      expires: dayjs(data.accessTokenExpiresAt?.replace('EEST', '+03:00')).toDate(),
-    });
-    setCookie('refreshToken', data.refreshToken, {
-      expires: dayjs(data.refreshTokenExpiresAt?.replace('EEST', '+03:00')).toDate(),
-    });
-  };
+  const login = React.useCallback(
+    async (data: LoginResponse) => {
+      setCookie('accessToken', data.accessToken, {
+        expires: dayjs(data.accessTokenExpiresAt?.replace('EEST', '+03:00')).toDate(),
+      });
+      setCookie('refreshToken', data.refreshToken, {
+        expires: dayjs(data.refreshTokenExpiresAt?.replace('EEST', '+03:00')).toDate(),
+      });
+    },
+    [setCookie],
+  );
 
-  const logout = () => {
+  const logout = React.useCallback(() => {
     removeCookie('accessToken', { path: '/' });
     removeCookie('refreshToken', { path: '/' });
-  };
+  }, [removeCookie]);
 
-  return <AuthContext.Provider value={{ isAuthenticated, login, logout }}>{children}</AuthContext.Provider>;
+  const contextValue = React.useMemo(
+    () => ({
+      isAuthenticated,
+      login,
+      logout,
+    }),
+    [isAuthenticated, login, logout],
+  );
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components

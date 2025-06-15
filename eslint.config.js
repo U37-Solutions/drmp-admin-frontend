@@ -62,7 +62,22 @@ export default tseslint.config(
           pathGroups: [
             {
               group: 'external',
-              pattern: '@/shared/**',
+              pattern: '@features/**',
+              position: 'after',
+            },
+            {
+              group: 'external',
+              pattern: '@components/**',
+              position: 'after',
+            },
+            {
+              group: 'external',
+              pattern: '@services/**',
+              position: 'after',
+            },
+            {
+              group: 'external',
+              pattern: '@shared/**',
               position: 'after',
             },
             {

@@ -5,9 +5,12 @@ import { Layout } from 'antd';
 
 import { type AuthContext } from '@features/auth/AuthProvider';
 
+import type { UserRoleContext } from '@shared/providers/UserRoleProvider.tsx';
+
 export interface MyRouterContext {
   queryClient: QueryClient;
   auth?: AuthContext;
+  userRole?: UserRoleContext;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

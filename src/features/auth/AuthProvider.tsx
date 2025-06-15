@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCookies } from 'react-cookie';
 
 import type { LoginResponse } from '@features/auth/types';
@@ -15,7 +15,7 @@ const AuthContext = React.createContext<AuthContext | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cookies, setCookie, removeCookie] = useCookies(['accessToken', 'refreshToken']);
 
-  const isAuthenticated = !!cookies.accessToken || !!cookies.refreshToken;
+  const isAuthenticated = useMemo(() => !!cookies.accessToken || !!cookies.refreshToken, [cookies]);
 
   const login = React.useCallback(
     async (data: LoginResponse) => {

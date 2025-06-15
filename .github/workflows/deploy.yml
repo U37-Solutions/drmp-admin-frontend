@@ -2,7 +2,7 @@ name: Push develop and Deploy
  
 on:
   push:
-    branches: ["develop"]
+    branches: ["ci/update-dockerfile-to-react"]
 
 env:
   NAMESPACE: drmp

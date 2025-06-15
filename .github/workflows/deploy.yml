@@ -2,7 +2,7 @@ name: Push develop and Deploy
  
 on:
   push:
-    branches: ["develop"]
+    branches: ["ci/update-dcokerfile-to-use-env"]
 
 env:
   NAMESPACE: drmp
@@ -34,7 +34,9 @@ jobs:
           push: true
           tags: |
             ${{ vars.DOCKER_REGISTRY_NAME }}/${{ env.NAMESPACE }}/${{ env.PROJECT_NAME }}:latest
-          platforms: linux/amd64 
+          platforms: linux/amd64
+          build-args: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
 
   deploy:
     needs: build-and-push

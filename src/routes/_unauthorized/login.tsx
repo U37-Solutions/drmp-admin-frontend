@@ -2,11 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Flex, Spin, Typography } from 'antd';
 
-import apiClient from '@/services/api-client';
 import { useAuth } from '@features/auth/AuthProvider';
 import LoginForm from '@features/auth/components/LoginForm/LoginForm';
-import { LoginResponse } from '@features/auth/types';
-import { TLoginForm } from '@features/auth/validation';
+import type { LoginResponse } from '@features/auth/types';
+import type { TLoginForm } from '@features/auth/validation';
+
+import apiClient from '@/services/api-client';
 
 const { Title } = Typography;
 
@@ -23,7 +24,7 @@ function RouteComponent() {
   const auth = useAuth();
   const router = useRouter();
 
-  const { mutate: signInMutation, isPending } = useMutation<LoginResponse, Error, TLoginForm>({
+  const { mutate: signInMutation, isPending } = useMutation<{ data: LoginResponse }, Error, TLoginForm>({
     mutationFn: ({ email, password }) => apiClient.post('/auth/login', { email, password }),
     onSuccess: ({ data }) => {
       auth.login(data);

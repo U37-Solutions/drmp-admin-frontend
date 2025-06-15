@@ -6,11 +6,11 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import AppProvider from '@/shared/providers/AppProvider';
+import { useAuth } from '@features/auth/AuthProvider'; // Ensure this path is correct
+
+import AppProvider from '@shared/providers/AppProvider';
 
 import { routeTree } from './routeTree.gen';
-
-import { useAuth } from '@features/auth/AuthProvider';
 
 const queryClient = new QueryClient();
 

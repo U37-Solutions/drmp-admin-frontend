@@ -3,15 +3,15 @@ import { Link } from '@tanstack/react-router';
 import { Button, Flex, Form, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 
-import styles from './LoginForm.module.scss';
+import { type TLoginForm, loginSchema } from '@features/auth/validation';
 
-import { TLoginForm, loginSchema } from '@features/auth/validation';
+import styles from './LoginForm.module.scss';
 
 const { Password } = Input;
 const { Item } = Form;
 
 type IProps = {
-  onSubmit: (data: TLoginForm) => Promise<void>;
+  onSubmit: (data: TLoginForm) => void;
 };
 
 const LoginForm = ({ onSubmit }: IProps) => {

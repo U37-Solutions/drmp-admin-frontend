@@ -31,6 +31,7 @@
     "@tanstack/eslint-plugin-query": "^5.78.0",
     "@tanstack/eslint-plugin-router": "^1.120.17",
     "@tanstack/router-plugin": "^1.121.12",
+    "@tanstack/zod-adapter": "^1.121.12",
     "@types/node": "^24.0.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",

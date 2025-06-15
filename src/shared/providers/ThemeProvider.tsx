@@ -1,7 +1,7 @@
 import { ConfigProvider } from 'antd';
 import React, { useEffect } from 'react';
 
-import { DarkTheme, LightTheme } from '@/shared/ui/themes';
+import { DarkTheme, LightTheme } from '@shared/ui/themes';
 
 type ThemeType = 'light' | 'dark';
 

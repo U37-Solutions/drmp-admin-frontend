@@ -9,13 +9,14 @@ import { createRoot } from 'react-dom/client';
 import { useAuth } from '@features/auth/AuthProvider'; // Ensure this path is correct
 
 import AppProvider from '@shared/providers/AppProvider';
+import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 import { routeTree } from './routeTree.gen';
 
 const queryClient = new QueryClient();
 
 // Create a new router instance
-const router = createRouter({ routeTree, context: { queryClient, auth: undefined } });
+const router = createRouter({ routeTree, context: { queryClient, auth: undefined, userRole: undefined } });
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -26,7 +27,9 @@ declare module '@tanstack/react-router' {
 
 export function App() {
   const auth = useAuth();
-  return <RouterProvider router={router} context={{ auth }} />;
+  const userRole = useRoleContext();
+
+  return <RouterProvider router={router} context={{ auth, userRole: userRole ?? undefined }} />;
 }
 
 // Render the app

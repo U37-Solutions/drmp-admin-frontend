@@ -13,8 +13,9 @@ import { Route as UnauthorizedRouteRouteImport } from './routes/_unauthorized/ro
 import { Route as AuthorizedRouteRouteImport } from './routes/_authorized/route'
 import { Route as UnauthorizedLoginRouteImport } from './routes/_unauthorized/login'
 import { Route as UnauthorizedForgotPasswordRouteImport } from './routes/_unauthorized/forgot-password'
-import { Route as AuthorizedUsersRouteImport } from './routes/_authorized/users'
 import { Route as AuthorizedProfileRouteImport } from './routes/_authorized/profile'
+import { Route as AuthorizedAdminRouteRouteImport } from './routes/_authorized/_admin/route'
+import { Route as AuthorizedAdminUsersRouteImport } from './routes/_authorized/_admin/users'
 
 const UnauthorizedRouteRoute = UnauthorizedRouteRouteImport.update({
   id: '/_unauthorized',
@@ -35,51 +36,57 @@ const UnauthorizedForgotPasswordRoute =
     path: '/forgot-password',
     getParentRoute: () => UnauthorizedRouteRoute,
   } as any)
-const AuthorizedUsersRoute = AuthorizedUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AuthorizedRouteRoute,
-} as any)
 const AuthorizedProfileRoute = AuthorizedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
+const AuthorizedAdminRouteRoute = AuthorizedAdminRouteRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => AuthorizedRouteRoute,
+} as any)
+const AuthorizedAdminUsersRoute = AuthorizedAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthorizedAdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/profile': typeof AuthorizedProfileRoute
-  '/users': typeof AuthorizedUsersRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
   '/login': typeof UnauthorizedLoginRoute
+  '/users': typeof AuthorizedAdminUsersRoute
 }
 export interface FileRoutesByTo {
   '/profile': typeof AuthorizedProfileRoute
-  '/users': typeof AuthorizedUsersRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
   '/login': typeof UnauthorizedLoginRoute
+  '/users': typeof AuthorizedAdminUsersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
   '/_unauthorized': typeof UnauthorizedRouteRouteWithChildren
+  '/_authorized/_admin': typeof AuthorizedAdminRouteRouteWithChildren
   '/_authorized/profile': typeof AuthorizedProfileRoute
-  '/_authorized/users': typeof AuthorizedUsersRoute
   '/_unauthorized/forgot-password': typeof UnauthorizedForgotPasswordRoute
   '/_unauthorized/login': typeof UnauthorizedLoginRoute
+  '/_authorized/_admin/users': typeof AuthorizedAdminUsersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/profile' | '/users' | '/forgot-password' | '/login'
+  fullPaths: '/profile' | '/forgot-password' | '/login' | '/users'
   fileRoutesByTo: FileRoutesByTo
-  to: '/profile' | '/users' | '/forgot-password' | '/login'
+  to: '/profile' | '/forgot-password' | '/login' | '/users'
   id:
     | '__root__'
     | '/_authorized'
     | '/_unauthorized'
+    | '/_authorized/_admin'
     | '/_authorized/profile'
-    | '/_authorized/users'
     | '/_unauthorized/forgot-password'
     | '/_unauthorized/login'
+    | '/_authorized/_admin/users'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,13 +124,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthorizedForgotPasswordRouteImport
       parentRoute: typeof UnauthorizedRouteRoute
     }
-    '/_authorized/users': {
-      id: '/_authorized/users'
-      path: '/users'
-      fullPath: '/users'
-      preLoaderRoute: typeof AuthorizedUsersRouteImport
-      parentRoute: typeof AuthorizedRouteRoute
-    }
     '/_authorized/profile': {
       id: '/_authorized/profile'
       path: '/profile'
@@ -131,17 +131,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedProfileRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
+    '/_authorized/_admin': {
+      id: '/_authorized/_admin'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthorizedAdminRouteRouteImport
+      parentRoute: typeof AuthorizedRouteRoute
+    }
+    '/_authorized/_admin/users': {
+      id: '/_authorized/_admin/users'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthorizedAdminUsersRouteImport
+      parentRoute: typeof AuthorizedAdminRouteRoute
+    }
   }
 }
 
+interface AuthorizedAdminRouteRouteChildren {
+  AuthorizedAdminUsersRoute: typeof AuthorizedAdminUsersRoute
+}
+
+const AuthorizedAdminRouteRouteChildren: AuthorizedAdminRouteRouteChildren = {
+  AuthorizedAdminUsersRoute: AuthorizedAdminUsersRoute,
+}
+
+const AuthorizedAdminRouteRouteWithChildren =
+  AuthorizedAdminRouteRoute._addFileChildren(AuthorizedAdminRouteRouteChildren)
+
 interface AuthorizedRouteRouteChildren {
+  AuthorizedAdminRouteRoute: typeof AuthorizedAdminRouteRouteWithChildren
   AuthorizedProfileRoute: typeof AuthorizedProfileRoute
-  AuthorizedUsersRoute: typeof AuthorizedUsersRoute
 }
 
 const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
+  AuthorizedAdminRouteRoute: AuthorizedAdminRouteRouteWithChildren,
   AuthorizedProfileRoute: AuthorizedProfileRoute,
-  AuthorizedUsersRoute: AuthorizedUsersRoute,
 }
 
 const AuthorizedRouteRouteWithChildren = AuthorizedRouteRoute._addFileChildren(

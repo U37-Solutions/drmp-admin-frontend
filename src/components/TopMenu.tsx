@@ -6,14 +6,9 @@ import { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { useAuth } from '@features/auth/AuthProvider';
-import type { SessionInfo } from '@features/session/types';
+import { useSessionInfo, useSetSessionInfo } from '@features/session/store.ts';
 
 import apiClient from '@/services/api-client';
-
-type IProps = {
-  sessionInfo?: SessionInfo;
-  setLoading: (loading: boolean) => void;
-};
 
 const menuItems: MenuProps['items'] = [
   {
@@ -34,15 +29,20 @@ const menuItems: MenuProps['items'] = [
   },
 ];
 
-const TopMenu = ({ sessionInfo }: IProps) => {
+const TopMenu = () => {
   const [cookies] = useCookies(['accessToken']);
-  const router = useRouter();
+  const sessionInfo = useSessionInfo();
+  const setSessionInfo = useSetSessionInfo();
   const auth = useAuth();
+  const router = useRouter();
+
   const { mutate: logOut, isPending } = useMutation({
     mutationKey: ['logout'],
     mutationFn: async () => await apiClient.post('/auth/logout', { accessToken: cookies.accessToken }),
     onSuccess: () => {
       auth.logout();
+    },
+    onSettled: () => {
       router.navigate({ to: '/login' });
     },
   });
@@ -55,6 +55,11 @@ const TopMenu = ({ sessionInfo }: IProps) => {
     window.location.reload();
   };
 
+  const handleLogout = useCallback(() => {
+    logOut();
+    setSessionInfo(null);
+  }, [logOut, setSessionInfo]);
+
   const handleMenuItemClick: MenuProps['onClick'] = useCallback(
     async ({ key }: { key: string }) => {
       switch (key) {
@@ -62,13 +67,13 @@ const TopMenu = ({ sessionInfo }: IProps) => {
           handleThemeSwitch();
           break;
         case 'logout':
-          logOut();
+          handleLogout();
           break;
         default:
           break;
       }
     },
-    [logOut],
+    [handleLogout],
   );
 
   if (!sessionInfo) return null;

@@ -36,7 +36,7 @@ jobs:
             ${{ vars.DOCKER_REGISTRY_NAME }}/${{ env.NAMESPACE }}/${{ env.PROJECT_NAME }}:latest
           platforms: linux/amd64
           build-args: |
-            VITE_API_URL=${{ vars.VITE_API_URL }}
+            "VITE_API_URL=${{ vars.VITE_API_URL }}"
 
   deploy:
     needs: build-and-push

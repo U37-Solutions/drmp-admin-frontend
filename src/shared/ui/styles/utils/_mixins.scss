@@ -1,5 +1,23 @@
+@import "variables";
+
 @mixin input-error-message {
   color: var(--ant-color-error);
   font-size: 0.75rem;
   margin-top: 0.25rem;
+}
+
+@mixin respond-to($breakpoint) {
+  $breakpoint-values: map-get($breakpoints, $breakpoint);
+  $breakpoint-min: map-get($breakpoint-values, min);
+  $breakpoint-max: map-get($breakpoint-values, max);
+
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: $breakpoint-min) and (max-width: $breakpoint-max) {
+      @content;
+    }
+  }
+  @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map-keys($breakpoints)}.";
+  }
 }

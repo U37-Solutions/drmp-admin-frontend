@@ -1,0 +1,30 @@
+@import "@shared/ui/styles/global";
+
+.layout {
+  height: 100%;
+  padding: 5%;
+
+  @include respond-to('desktop') {
+    padding: 20%;
+  }
+
+  .wrapperCard {
+    width: 100%;
+
+    :global(.ant-card-body) {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      @include respond-to('desktop') {
+        max-width: 70%;
+      }
+
+      &:before, &:after {
+        content: none;
+      }
+    }
+  }
+}

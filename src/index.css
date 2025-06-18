@@ -12,3 +12,7 @@ body {
 #root {
     flex-grow: 1;
 }
+
+.ant-responsive-table {
+    overflow: scroll;
+}

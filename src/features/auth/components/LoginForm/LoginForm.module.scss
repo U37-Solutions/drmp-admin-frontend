@@ -1,10 +1,11 @@
+@import '@shared/ui/styles/global';
+
 .form {
   max-width: 400px;
   width: 100%;
+  justify-content: space-between;
 }
 
 .error {
-    color: var(--ant-color-error);
-    font-size: 12px;
-    margin-top: 4px;
+  @include input-error-message;
 }

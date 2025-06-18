@@ -1,6 +1,7 @@
 import { ConfigProvider } from 'antd';
 import React, { useEffect } from 'react';
 
+import antProviderAttributes from '@shared/ui/ant-provider-attributes.ts';
 import { DarkTheme, LightTheme } from '@shared/ui/themes';
 
 type ThemeType = 'light' | 'dark';
@@ -19,7 +20,11 @@ const ThemeProvider = ({ children }: IProps) => {
     setTheme(storedTheme);
   }, []);
 
-  return <ConfigProvider theme={themeConfig}>{children}</ConfigProvider>;
+  return (
+    <ConfigProvider theme={themeConfig} {...antProviderAttributes}>
+      {children}
+    </ConfigProvider>
+  );
 };
 
 export default ThemeProvider;

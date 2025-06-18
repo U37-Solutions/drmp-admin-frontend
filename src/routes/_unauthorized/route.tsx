@@ -2,6 +2,8 @@ import { Outlet, createFileRoute } from '@tanstack/react-router';
 import { Card, Flex } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 
+import styles from './index.module.scss';
+
 export const Route = createFileRoute('/_unauthorized')({
   component: RouteComponent,
 });
@@ -9,8 +11,8 @@ export const Route = createFileRoute('/_unauthorized')({
 function RouteComponent() {
   return (
     <Content>
-      <Flex justify="center" align="center" style={{ height: '100%' }}>
-        <Card style={{ width: 400 }} variant="borderless">
+      <Flex justify="center" align="center" className={styles.layout}>
+        <Card variant="borderless" className={styles.wrapperCard}>
           <Outlet />
         </Card>
       </Flex>

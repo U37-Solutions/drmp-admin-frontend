@@ -13,7 +13,13 @@ import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 import { routeTree } from './routeTree.gen';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+});
 
 // Create a new router instance
 const router = createRouter({ routeTree, context: { queryClient, auth: undefined, userRole: undefined } });

@@ -1,5 +1,5 @@
-@use 'base';
-@use 'utils';
+@import 'base';
+@import 'utils';
 
 html, body, #__next {
   height: 100%;

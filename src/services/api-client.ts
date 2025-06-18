@@ -30,7 +30,9 @@ let isRefreshingSession = false;
 apiClient.interceptors.response.use(
   (response) => response,
   async (err) => {
-    if (isRefreshingSession) return;
+    const isAuthFlow = err.config.url?.includes('/auth/');
+
+    if (isRefreshingSession || isAuthFlow) return Promise.reject(err);
 
     if (err.response?.status === 403 || err.response?.status === 401) {
       isRefreshingSession = true;

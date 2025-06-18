@@ -37,6 +37,7 @@ const UsersTable = ({ data, isLoading }: IProps) => {
       extra={<Input.Search defaultValue={search} placeholder="Пошук" onSearch={changeSearch} />}
     >
       <Table
+        className="ant-responsive-table"
         loading={{ spinning: isLoading }}
         dataSource={pageFilteredData}
         columns={mapColumnsWithSort(columns, sortBy, sortAsc)}

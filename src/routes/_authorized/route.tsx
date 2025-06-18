@@ -43,7 +43,7 @@ function AuthorizedLayout() {
       <Layout>
         <Sidebar />
         <Layout>
-          <Content style={{ padding: 20 }}>
+          <Content>
             <Suspense fallback={<Skeleton />}>
               <Outlet />
             </Suspense>

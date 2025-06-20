@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { Button, Flex, Form, Input } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -15,6 +15,7 @@ type IProps = {
 };
 
 const LoginForm = ({ onSubmit }: IProps) => {
+  const navigate = useNavigate({ from: '/login' });
   const {
     handleSubmit,
     control,
@@ -24,7 +25,7 @@ const LoginForm = ({ onSubmit }: IProps) => {
   });
 
   return (
-    <Form layout="vertical" className={styles.form} onFinish={handleSubmit(onSubmit)}>
+    <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
       <Item
         label="Електронна адреса"
         extra={errors.email ? <span className={styles.error}>{errors.email.message}</span> : null}
@@ -47,10 +48,12 @@ const LoginForm = ({ onSubmit }: IProps) => {
           render={({ field }) => <Password status={errors.password ? 'error' : ''} placeholder="********" {...field} />}
         />
       </Item>
-      <Flex vertical gap={10}>
-        <Link to="/forgot-password">Забули пароль?</Link>
+      <Flex vertical gap={5}>
         <Button block type="primary" htmlType="submit" disabled={isSubmitting}>
           Увійти
+        </Button>
+        <Button type="link" onClick={() => navigate({ to: '/forgot-password' })}>
+          Забули пароль?
         </Button>
       </Flex>
     </Form>

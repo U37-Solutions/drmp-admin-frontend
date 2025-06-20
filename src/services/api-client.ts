@@ -1,7 +1,10 @@
 import { redirect } from '@tanstack/react-router';
 import axios from 'axios';
 
+import { refreshSession } from '@features/session/api.ts';
+
 import { getCookie } from '@services/cookie-client';
+import { handleError } from '@services/handle-error.ts';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -25,35 +28,30 @@ apiClient.interceptors.request.use(
   },
 );
 
-let isRefreshingSession = false;
-
 apiClient.interceptors.response.use(
   (response) => response,
   async (err) => {
-    const isAuthFlow = err.config.url?.includes('/auth/');
+    const originalRequest = err.config;
+    const isAuthFlow = originalRequest.url?.includes('/auth/');
 
-    if (isRefreshingSession || isAuthFlow) return Promise.reject(err);
-
-    if (err.response?.status === 403 || err.response?.status === 401) {
-      isRefreshingSession = true;
+    if ((err.response?.status === 401 || err.response?.status === 403) && !originalRequest._retry && !isAuthFlow) {
+      originalRequest._retry = true;
       const refreshToken = getCookie('refreshToken');
 
       if (!refreshToken) return redirect({ to: '/login' });
 
-      const { accessToken: newAccessToken } = await apiClient
-        .post('/auth/refresh', { refreshToken })
-        .then((res) => res.data)
-        .catch(() => redirect({ to: '/login' }));
-
-      if (newAccessToken) {
-        document.cookie = `accessToken=${newAccessToken}; path=/;`;
-        err.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        isRefreshingSession = false;
-        return await apiClient(err.config);
+      try {
+        const newToken = await refreshSession(refreshToken);
+        document.cookie = `accessToken=${newToken}; path=/;`;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+        return apiClient(originalRequest);
+      } catch (error) {
+        redirect({ to: '/login' });
+        return Promise.reject(error);
       }
     }
 
-    return Promise.reject(err);
+    return Promise.reject(handleError(err));
   },
 );
 

@@ -20,7 +20,7 @@ export const UserRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       return null;
     }
 
-    const { id: roleId } = sessionInfo.roles[0] || {};
+    const { id: roleId } = sessionInfo.roles?.[0] || {};
 
     return {
       userId: sessionInfo.id,

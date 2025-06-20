@@ -19,7 +19,7 @@ export const resetPassword = async (token: string, password: string): Promise<vo
     if (error instanceof AxiosError) {
       throw error.response?.status === 401
         ? new Error('Посилання для скидання паролю недійсне або прострочене. Спробуйте ще раз')
-        : new Error('Сталася помилка при оновленні паролю. Спробуйте ще раз.');
+        : new Error('Сталася помилка при оновленні паролю. Спробуйте ще раз');
     }
   }
 };

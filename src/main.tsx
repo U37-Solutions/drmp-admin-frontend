@@ -16,6 +16,7 @@ import { routeTree } from './routeTree.gen';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      refetchOnWindowFocus: false,
       retry: false,
     },
   },

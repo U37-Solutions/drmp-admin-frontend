@@ -37,11 +37,7 @@ const ForgotPasswordForm = () => {
   }, [error, setError]);
 
   return (
-    <Form
-      layout="vertical"
-      style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-      onFinish={handleSubmit((data) => mutate(data.email))}
-    >
+    <Form layout="vertical" onFinish={handleSubmit((data) => mutate(data.email))}>
       <Spin spinning={isPending} fullscreen />
       <Form.Item
         label="Електронна адреса"

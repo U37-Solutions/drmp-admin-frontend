@@ -1,39 +1,40 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { Layout, Skeleton, Spin } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { Suspense, useEffect } from 'react';
 
+import { getSessionInfo } from '@features/session/api.ts';
 import { useSetSessionInfo } from '@features/session/store';
-import type { SessionInfo } from '@features/session/types';
 
 import Header from '@components/Header';
 import Sidebar from '@components/Sidebar';
 
-import apiClient from '@services/api-client';
+const sessionInfoQuery = {
+  queryKey: ['sessionInfo'],
+  queryFn: async () => await getSessionInfo(),
+};
 
 export const Route = createFileRoute('/_authorized')({
   component: AuthorizedLayout,
+  errorComponent: () => <Skeleton />,
   loader: ({ context }) => {
     if (!context.auth?.isAuthenticated) {
       throw redirect({
         to: '/login',
       });
     }
+
+    return context.queryClient.ensureQueryData(sessionInfoQuery);
   },
 });
 
 function AuthorizedLayout() {
   const setSessionInfo = useSetSessionInfo();
-  const { data, isLoading } = useQuery<SessionInfo>({
-    queryKey: ['sessionInfo'],
-    queryFn: async () => await apiClient.get<SessionInfo>('/session-info').then((res) => res.data),
-  });
+  const { data, isLoading } = useSuspenseQuery(sessionInfoQuery);
 
   useEffect(() => {
-    if (data) {
-      setSessionInfo(data);
-    }
+    setSessionInfo(data ?? null);
   }, [data, setSessionInfo]);
 
   return (

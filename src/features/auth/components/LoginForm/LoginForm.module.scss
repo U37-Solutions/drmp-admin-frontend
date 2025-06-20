@@ -1,11 +1,5 @@
 @import '@shared/ui/styles/global';
 
-.form {
-  max-width: 400px;
-  width: 100%;
-  justify-content: space-between;
-}
-
 .error {
   @include input-error-message;
 }

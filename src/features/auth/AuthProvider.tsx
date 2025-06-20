@@ -19,9 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = React.useCallback(
     async (data: LoginResponse) => {
-      setCookie('accessToken', data.accessToken, {
-        expires: dayjs(data.accessTokenExpiresAt?.replace('EEST', '+03:00')).toDate(),
-      });
+      setCookie('accessToken', data.accessToken);
       setCookie('refreshToken', data.refreshToken, {
         expires: dayjs(data.refreshTokenExpiresAt?.replace('EEST', '+03:00')).toDate(),
       });

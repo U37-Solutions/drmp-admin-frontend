@@ -1,18 +1,20 @@
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { zodValidator } from '@tanstack/zod-adapter';
+import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { Alert, Spin, Typography } from 'antd';
+import { useMemo } from 'react';
 import { z } from 'zod';
 
 import { useAuth } from '@features/auth/AuthProvider';
 import LoginForm from '@features/auth/components/LoginForm/LoginForm';
+import { LOGIN_PREV_STATE_FEEDBACK, LoginPrevStateFeedback } from '@features/auth/constants.ts';
 import type { LoginResponse } from '@features/auth/types';
 import type { TLoginForm } from '@features/auth/validation';
 
 import apiClient from '@/services/api-client';
 
 const searchSchema = z.object({
-  passwordReset: z.boolean().optional(),
+  from: fallback(z.nativeEnum(LoginPrevStateFeedback).optional(), undefined),
 });
 
 export const Route = createFileRoute('/_unauthorized/login')({
@@ -38,19 +40,21 @@ function RouteComponent() {
     },
   });
 
+  const prevStateAlert = useMemo(() => {
+    if (!search.from) {
+      return null;
+    }
+
+    const alertConfig = LOGIN_PREV_STATE_FEEDBACK[search.from as LoginPrevStateFeedback];
+
+    return <Alert style={{ marginBottom: '1em' }} showIcon {...alertConfig} />;
+  }, [search.from]);
+
   return (
     <>
       <Spin spinning={isPending} fullscreen />
       <Typography.Title level={2}>Вхід</Typography.Title>
-      {search.passwordReset && (
-        <Alert
-          style={{ marginBottom: '1em' }}
-          message="Пароль успішно змінено"
-          description="Тепер ви можете увійти, використовуючи новий пароль."
-          type="success"
-          showIcon
-        />
-      )}
+      {prevStateAlert}
       <LoginForm onSubmit={signInMutation} />
     </>
   );

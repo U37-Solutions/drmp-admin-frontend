@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { resetPassword } from '@features/auth/api.ts';
 import styles from '@features/auth/components/LoginForm/LoginForm.module.scss';
+import { LoginPrevStateFeedback } from '@features/auth/constants.ts';
 import { type TResetPasswordForm, resetPasswordSchema } from '@features/auth/validation.ts';
 
 const ResetPasswordForm = ({ token }: { token: string }) => {
@@ -15,7 +16,8 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
     mutationKey: ['resetPassword'],
     mutationFn: async ({ newPassword, token }: { newPassword: string; token: string }) =>
       await resetPassword(token, newPassword),
-    onSuccess: () => navigate({ to: '/login', search: { passwordReset: true }, replace: true }),
+    onSuccess: () =>
+      navigate({ to: '/login', search: { from: LoginPrevStateFeedback.resetPasswordSuccess }, replace: true }),
     onError: (error) => error,
   });
 
@@ -75,7 +77,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
         </Form.Item>
       </div>
 
-      <Flex vertical gap={5}>
+      <Flex vertical gap={4}>
         <Button block type="primary" htmlType="submit" disabled={isSubmitting}>
           Оновити пароль
         </Button>

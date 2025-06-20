@@ -3,10 +3,11 @@ export type SessionInfo = {
   email: string;
   firstName: string | null;
   lastName: string | null;
-  roles: Array<{ id: Role; name: keyof Role }>;
+  role: Role;
 };
 
 export enum Role {
-  ADMIN = 1,
-  USER = 2,
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  EDITOR = 'EDITOR',
 }

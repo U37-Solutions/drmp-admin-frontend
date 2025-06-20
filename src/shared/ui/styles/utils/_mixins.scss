@@ -9,10 +9,9 @@
 @mixin respond-to($breakpoint) {
   $breakpoint-values: map-get($breakpoints, $breakpoint);
   $breakpoint-min: map-get($breakpoint-values, min);
-  $breakpoint-max: map-get($breakpoint-values, max);
 
   @if map-has-key($breakpoints, $breakpoint) {
-    @media (min-width: $breakpoint-min) and (max-width: $breakpoint-max) {
+    @media (min-width: $breakpoint-min) {
       @content;
     }
   }

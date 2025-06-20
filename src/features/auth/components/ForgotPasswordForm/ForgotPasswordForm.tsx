@@ -52,7 +52,7 @@ const ForgotPasswordForm = () => {
         />
       </Form.Item>
 
-      <Flex vertical gap={5}>
+      <Flex vertical gap={4}>
         <Button block type="primary" htmlType="submit" disabled={isSubmitting}>
           Надіслати інструкції
         </Button>

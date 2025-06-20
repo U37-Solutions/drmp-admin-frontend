@@ -2,14 +2,14 @@
 
 .layout {
   height: 100%;
-  padding: 5%;
-
-  @include respond-to('desktop') {
-    padding: 20%;
-  }
 
   .wrapperCard {
     width: 100%;
+    max-width: 95%;
+
+    @include respond-to('desktop') {
+      max-width: 700px;
+    }
 
     :global(.ant-card-body) {
       margin: auto;

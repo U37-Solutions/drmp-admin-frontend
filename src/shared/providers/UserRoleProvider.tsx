@@ -5,9 +5,10 @@ import { Role } from '@features/session/types.ts';
 
 export interface UserRoleContext {
   userId: number;
-  roleId: number;
+  role: Role;
   isAdmin: boolean;
   isUser: boolean;
+  isEditor: boolean;
 }
 
 const UserRoleContext = React.createContext<UserRoleContext | null>(null);
@@ -20,13 +21,14 @@ export const UserRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       return null;
     }
 
-    const { id: roleId } = sessionInfo.roles?.[0] || {};
+    const { role } = sessionInfo;
 
     return {
       userId: sessionInfo.id,
-      roleId,
-      isAdmin: roleId === Role.ADMIN,
-      isUser: roleId === Role.USER,
+      role,
+      isAdmin: role === Role.ADMIN,
+      isEditor: role === Role.EDITOR,
+      isUser: role === Role.USER,
     };
   }, [sessionInfo]);
 

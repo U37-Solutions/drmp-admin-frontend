@@ -48,7 +48,7 @@ const LoginForm = ({ onSubmit }: IProps) => {
           render={({ field }) => <Password status={errors.password ? 'error' : ''} placeholder="********" {...field} />}
         />
       </Item>
-      <Flex vertical gap={5}>
+      <Flex vertical gap={4}>
         <Button block type="primary" htmlType="submit" disabled={isSubmitting}>
           Увійти
         </Button>

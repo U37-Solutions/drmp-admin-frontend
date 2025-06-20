@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorizedRouteRouteImport } from './routes/_unauthorized/route'
 import { Route as AuthorizedRouteRouteImport } from './routes/_authorized/route'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnauthorizedLoginRouteImport } from './routes/_unauthorized/login'
 import { Route as UnauthorizedForgotPasswordRouteImport } from './routes/_unauthorized/forgot-password'
 import { Route as UnauthorizedCheckEmailRouteImport } from './routes/_unauthorized/check-email'
 import { Route as AuthorizedProfileRouteImport } from './routes/_authorized/profile'
 import { Route as AuthorizedAdminRouteRouteImport } from './routes/_authorized/_admin/route'
+import { Route as UnauthorizedSignUpTokenRouteImport } from './routes/_unauthorized/sign-up.$token'
 import { Route as UnauthorizedResetPasswordTokenRouteImport } from './routes/_unauthorized/reset-password.$token'
 import { Route as AuthorizedAdminUsersRouteImport } from './routes/_authorized/_admin/users'
 
@@ -25,6 +27,11 @@ const UnauthorizedRouteRoute = UnauthorizedRouteRouteImport.update({
 } as any)
 const AuthorizedRouteRoute = AuthorizedRouteRouteImport.update({
   id: '/_authorized',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UnauthorizedLoginRoute = UnauthorizedLoginRouteImport.update({
@@ -52,6 +59,11 @@ const AuthorizedAdminRouteRoute = AuthorizedAdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
+const UnauthorizedSignUpTokenRoute = UnauthorizedSignUpTokenRouteImport.update({
+  id: '/sign-up/$token',
+  path: '/sign-up/$token',
+  getParentRoute: () => UnauthorizedRouteRoute,
+} as any)
 const UnauthorizedResetPasswordTokenRoute =
   UnauthorizedResetPasswordTokenRouteImport.update({
     id: '/reset-password/$token',
@@ -65,23 +77,28 @@ const AuthorizedAdminUsersRoute = AuthorizedAdminUsersRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/profile': typeof AuthorizedProfileRoute
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
   '/login': typeof UnauthorizedLoginRoute
   '/users': typeof AuthorizedAdminUsersRoute
   '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
+  '/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/profile': typeof AuthorizedProfileRoute
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
   '/login': typeof UnauthorizedLoginRoute
   '/users': typeof AuthorizedAdminUsersRoute
   '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
+  '/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
   '/_unauthorized': typeof UnauthorizedRouteRouteWithChildren
   '/_authorized/_admin': typeof AuthorizedAdminRouteRouteWithChildren
@@ -91,26 +108,32 @@ export interface FileRoutesById {
   '/_unauthorized/login': typeof UnauthorizedLoginRoute
   '/_authorized/_admin/users': typeof AuthorizedAdminUsersRoute
   '/_unauthorized/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
+  '/_unauthorized/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/profile'
     | '/check-email'
     | '/forgot-password'
     | '/login'
     | '/users'
     | '/reset-password/$token'
+    | '/sign-up/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/profile'
     | '/check-email'
     | '/forgot-password'
     | '/login'
     | '/users'
     | '/reset-password/$token'
+    | '/sign-up/$token'
   id:
     | '__root__'
+    | '/'
     | '/_authorized'
     | '/_unauthorized'
     | '/_authorized/_admin'
@@ -120,9 +143,11 @@ export interface FileRouteTypes {
     | '/_unauthorized/login'
     | '/_authorized/_admin/users'
     | '/_unauthorized/reset-password/$token'
+    | '/_unauthorized/sign-up/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthorizedRouteRoute: typeof AuthorizedRouteRouteWithChildren
   UnauthorizedRouteRoute: typeof UnauthorizedRouteRouteWithChildren
 }
@@ -141,6 +166,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthorizedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_unauthorized/login': {
@@ -177,6 +209,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthorizedAdminRouteRouteImport
       parentRoute: typeof AuthorizedRouteRoute
+    }
+    '/_unauthorized/sign-up/$token': {
+      id: '/_unauthorized/sign-up/$token'
+      path: '/sign-up/$token'
+      fullPath: '/sign-up/$token'
+      preLoaderRoute: typeof UnauthorizedSignUpTokenRouteImport
+      parentRoute: typeof UnauthorizedRouteRoute
     }
     '/_unauthorized/reset-password/$token': {
       id: '/_unauthorized/reset-password/$token'
@@ -225,6 +264,7 @@ interface UnauthorizedRouteRouteChildren {
   UnauthorizedForgotPasswordRoute: typeof UnauthorizedForgotPasswordRoute
   UnauthorizedLoginRoute: typeof UnauthorizedLoginRoute
   UnauthorizedResetPasswordTokenRoute: typeof UnauthorizedResetPasswordTokenRoute
+  UnauthorizedSignUpTokenRoute: typeof UnauthorizedSignUpTokenRoute
 }
 
 const UnauthorizedRouteRouteChildren: UnauthorizedRouteRouteChildren = {
@@ -232,12 +272,14 @@ const UnauthorizedRouteRouteChildren: UnauthorizedRouteRouteChildren = {
   UnauthorizedForgotPasswordRoute: UnauthorizedForgotPasswordRoute,
   UnauthorizedLoginRoute: UnauthorizedLoginRoute,
   UnauthorizedResetPasswordTokenRoute: UnauthorizedResetPasswordTokenRoute,
+  UnauthorizedSignUpTokenRoute: UnauthorizedSignUpTokenRoute,
 }
 
 const UnauthorizedRouteRouteWithChildren =
   UnauthorizedRouteRoute._addFileChildren(UnauthorizedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthorizedRouteRoute: AuthorizedRouteRouteWithChildren,
   UnauthorizedRouteRoute: UnauthorizedRouteRouteWithChildren,
 }

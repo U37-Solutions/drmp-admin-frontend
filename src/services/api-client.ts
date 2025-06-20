@@ -6,6 +6,8 @@ import { refreshSession } from '@features/session/api.ts';
 import { getCookie } from '@services/cookie-client';
 import { handleError } from '@services/handle-error.ts';
 
+const ALLOWED_REQUESTS = ['/auth/', 'confirm-registration', '/temporary'];
+
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -32,7 +34,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (err) => {
     const originalRequest = err.config;
-    const isAuthFlow = originalRequest.url?.includes('/auth/');
+    const isAuthFlow = ALLOWED_REQUESTS.some((url) => originalRequest.url?.includes(url));
 
     if ((err.response?.status === 401 || err.response?.status === 403) && !originalRequest._retry && !isAuthFlow) {
       originalRequest._retry = true;

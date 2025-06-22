@@ -12,8 +12,8 @@ import mapColumnsWithSort from '@services/sort-columns';
 
 import useTableState from '@shared/hooks/useTableState';
 
-import DeleteUserAction from './DeleteUser/DeleteUserAction/DeleteUserAction';
-import ViewUserAction from './ViewUser/ViewUserAction/ViewUserAction';
+import DeleteUserAction from './DeleteUser/DeleteUserAction';
+import ViewUserAction from './ViewUser/ViewUserAction';
 
 type IProps = {
   data: Array<UserDTO>;

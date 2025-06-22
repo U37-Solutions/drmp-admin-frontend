@@ -7,6 +7,8 @@ import apiClient from '@services/api-client.ts';
 
 export const getUsers = async () => await apiClient.get('/users').then((res) => res.data);
 
+export const deleteUser = async (id: number) => await apiClient.delete(`/users/${id}`).then((res) => res.data);
+
 export const inviteUser = async (data: TInviteUserForm) =>
   await apiClient
     .post('/invite', {

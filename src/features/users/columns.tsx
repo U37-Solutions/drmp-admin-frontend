@@ -1,7 +1,14 @@
+import { type MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React from 'react';
 
-export const getColumns = (actions: React.ReactNode): ColumnsType => [
+import UsersTableActions from './components/UsersTableActions';
+import type { UserDTO } from './types';
+
+export const getColumns = ({
+  getActions,
+}: {
+  getActions: (record: UserDTO) => MenuProps['items'];
+}): ColumnsType<UserDTO> => [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -37,6 +44,6 @@ export const getColumns = (actions: React.ReactNode): ColumnsType => [
   {
     title: 'Дії',
     key: 'actions',
-    render: () => actions,
+    render: (_, record) => <UsersTableActions actions={getActions(record)} />,
   },
 ];

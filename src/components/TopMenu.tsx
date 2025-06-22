@@ -82,7 +82,7 @@ const TopMenu = () => {
     <>
       <Spin spinning={isPending} fullscreen />
       <Dropdown menu={{ items: menuItems, onClick: handleMenuItemClick }}>
-        <Button ghost iconPosition="end" icon={<Avatar size="small" icon={<UserOutlined />} />}>
+        <Button color="primary" iconPosition="end" icon={<Avatar size="small" icon={<UserOutlined />} />}>
           {sessionInfo.firstName} {sessionInfo.lastName}
         </Button>
       </Dropdown>

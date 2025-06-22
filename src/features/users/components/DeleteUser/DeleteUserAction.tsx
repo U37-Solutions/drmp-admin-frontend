@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import DeleteUserModal from '../DeleteUserModal/DeleteUserModal';
+import DeleteUserModal from './DeleteUserModal';
 
 type IProps = {
   userId: number;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import ViewUserModal from '../ViewUserModal/ViewUserModal';
+import ViewUserModal from './ViewUserModal';
 
 type IProps = {
   userId: number;

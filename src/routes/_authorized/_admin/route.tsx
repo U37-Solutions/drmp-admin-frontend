@@ -12,9 +12,5 @@ export const Route = createFileRoute('/_authorized/_admin')({
 });
 
 function AdminLayout() {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 }

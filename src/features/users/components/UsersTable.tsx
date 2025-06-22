@@ -13,6 +13,7 @@ import mapColumnsWithSort from '@services/sort-columns';
 import useTableState from '@shared/hooks/useTableState';
 
 import DeleteUserAction from './DeleteUser/DeleteUserAction/DeleteUserAction';
+import ViewUserAction from './ViewUser/ViewUserAction/ViewUserAction';
 
 type IProps = {
   data: Array<UserDTO>;
@@ -32,12 +33,16 @@ const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
       getColumns({
         getActions: (record) => [
           {
+            key: 'view',
+            label: <ViewUserAction userId={record.id} />,
+          },
+          {
             key: 'delete',
             label: <DeleteUserAction userId={record.id} onSuccess={refetchData} />,
           },
         ],
       }),
-    [],
+    [refetchData],
   );
   const { pageFilteredData, total } = useMemo(
     () => filterTableData(data, page, pageSize, search, ['firstName', 'lastName', 'email']),

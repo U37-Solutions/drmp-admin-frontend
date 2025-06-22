@@ -5,6 +5,8 @@ import type { TInviteUserForm } from '@features/users/validation.ts';
 
 import apiClient from '@services/api-client.ts';
 
+export const getUser = async (id: number) => await apiClient.get(`/users/${id}`).then((res) => res.data);
+
 export const getUsers = async () => await apiClient.get('/users').then((res) => res.data);
 
 export const deleteUser = async (id: number) => await apiClient.delete(`/users/${id}`).then((res) => res.data);

@@ -30,9 +30,5 @@ function UsersPage() {
     queryFn: async () => await getUsers(),
   });
 
-  return (
-    <>
-      <UsersTable data={users!} isLoading={isPending} refetchData={refetch} />
-    </>
-  );
+  return <UsersTable data={users!} isLoading={isPending} refetchData={refetch} />;
 }

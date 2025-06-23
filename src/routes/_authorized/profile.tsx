@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import UserProfilePage from '@/features/users/components/UserProfilePage';
+import UserProfilePage from '@features/users/components/UserProfilePage/UserProfilePage';
 
 export const Route = createFileRoute('/_authorized/profile')({
   component: RouteComponent,

@@ -11,4 +11,7 @@ export const refreshSession = async (refreshToken: string) =>
     .post<{ accessToken: string }>(`${import.meta.env.VITE_API_URL}/auth/refresh`, {
       refreshToken,
     })
+    .catch((err) => {
+      throw new Error(err.message);
+    })
     .then((res) => res.data?.accessToken);

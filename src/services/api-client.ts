@@ -40,7 +40,9 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       const refreshToken = getCookie('refreshToken');
 
-      if (!refreshToken) return redirect({ to: '/login' });
+      if (!refreshToken) {
+        throw redirect({ to: '/login' });
+      }
 
       try {
         const newToken = await refreshSession(refreshToken);

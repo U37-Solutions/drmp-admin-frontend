@@ -3,13 +3,15 @@ import { Button, Flex, Modal, Typography } from 'antd';
 
 import { deleteUser } from '@features/users/api.ts';
 
+import type { UserDTO } from '../../types';
+
 type IProps = {
-  userId: number;
+  user: UserDTO;
   open: boolean;
   handleClose: (success: boolean) => void;
 };
 
-const DeleteUserModal = ({ userId, open, handleClose }: IProps) => {
+const DeleteUserModal = ({ user, open, handleClose }: IProps) => {
   const { mutate, isPending } = useMutation({
     mutationKey: ['delete-user'],
     mutationFn: async (userId: number) => await deleteUser(userId),
@@ -28,10 +30,13 @@ const DeleteUserModal = ({ userId, open, handleClose }: IProps) => {
       title="Видалити користувача"
     >
       <Flex vertical gap={24}>
-        <Typography.Text type="secondary">Ви дійсно хочете видалити даного користувача?</Typography.Text>
+        <Typography.Text type="secondary">
+          Ви дійсно хочете видалити{' '}
+          <Typography.Text strong>{`${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()}</Typography.Text>?
+        </Typography.Text>
         <Flex justify="flex-end" gap={12}>
           <Button onClick={() => handleClose(false)}>Скасувати</Button>
-          <Button type="primary" variant="solid" color="red" onClick={() => mutate(userId)}>
+          <Button type="primary" variant="solid" color="danger" onClick={() => mutate(user.id)}>
             Видалити
           </Button>
         </Flex>

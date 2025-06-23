@@ -1,15 +1,14 @@
-import { MoreOutlined } from '@ant-design/icons';
-import { Button, Dropdown, type MenuProps } from 'antd';
+import { Flex } from 'antd';
 
 type IProps = {
-  actions: MenuProps['items'];
+  actions: React.ReactElement[];
 };
 
 const UsersTableActions = ({ actions }: IProps) => {
   return (
-    <Dropdown trigger={['click']} menu={{ items: actions }}>
-      <Button color="primary" icon={<MoreOutlined />} />
-    </Dropdown>
+    <Flex align="center" gap={8}>
+      {actions}
+    </Flex>
   );
 };
 

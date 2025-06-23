@@ -4,3 +4,8 @@ export interface UserDTO {
   lastName: string;
   email: string;
 }
+
+export interface UserResetPassword {
+  oldPassword: string;
+  newPassword: string;
+}

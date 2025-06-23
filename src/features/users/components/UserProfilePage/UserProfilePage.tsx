@@ -22,7 +22,7 @@ const UserProfilePage = () => {
     enabled: !!sessionInfo?.id,
   });
 
-  const [editMode, setEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const items: TabsProps['items'] = useMemo(
     () =>
@@ -31,31 +31,45 @@ const UserProfilePage = () => {
             {
               key: 'info',
               label: 'Основна інформація',
-              children: <UserProfileInfoTab user={user} refetchUser={refetchUser} />,
+              children: (
+                <UserProfileInfoTab
+                  isEditMode={isEditMode}
+                  user={user}
+                  refetchUser={refetchUser}
+                  onSubmit={(success) => success && setIsEditMode(false)}
+                />
+              ),
             },
             {
               key: 'security',
               label: 'Безпека',
-              children: <UserProfileSecurityTab userId={user.id} refetchUser={refetchUser} />,
+              children: (
+                <UserProfileSecurityTab
+                  isEditMode={isEditMode}
+                  userId={user.id}
+                  refetchUser={refetchUser}
+                  onSubmit={(success) => success && setIsEditMode(false)}
+                />
+              ),
             },
           ]
         : [],
-    [user, refetchUser],
+    [user, isEditMode, refetchUser],
   );
 
   return (
     <Card
       title={
-        <Flex gap={12}>
+        <Flex align="center" justify="space-between" gap={12}>
           <Typography.Title level={3} style={{ marginBottom: 0 }}>
             Профіль
           </Typography.Title>
-          {!editMode ? (
-            <Button type="primary" onClick={() => setEditMode(true)}>
+          {!isEditMode ? (
+            <Button type="primary" onClick={() => setIsEditMode(true)}>
               Редагувати
             </Button>
           ) : (
-            <Button type="primary" variant="outlined" onClick={() => setEditMode(false)}>
+            <Button variant="outlined" color="red" onClick={() => setIsEditMode(false)}>
               Закрити редагування
             </Button>
           )}

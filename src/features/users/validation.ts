@@ -9,15 +9,16 @@ export const inviteUserSchema = z.object({
 });
 
 export const updateUserInfoSchema = z.object({
-  firstName: z.string().max(20).regex(FIRST_NAME_REGEX, 'Імʼя повинне бути одним словом'),
+  firstName: z.string().max(20).regex(FIRST_NAME_REGEX, 'Імʼя повинне бути одним словом та без цифр'),
   lastName: z.string().max(20).optional(),
   email: z.string({ message: 'Введіть електронну адресу' }).email('Неправильна електронна адреса'),
 });
 
 export const updateUserSecuritySchema = z
   .object({
+    oldPassword: z.string({ message: 'Старий пароль обовʼязковий' }),
     newPassword: z
-      .string({ message: 'Пароль обовʼязковий' })
+      .string({ message: 'Новий пароль обовʼязковий' })
       .min(8, 'Пароль має містити не менше 8 символів')
       .max(20, 'Пароль має містити не більше 20 символів'),
     confirmNewPassword: z.string({ message: 'Підтвердження паролю обовʼязкове' }),

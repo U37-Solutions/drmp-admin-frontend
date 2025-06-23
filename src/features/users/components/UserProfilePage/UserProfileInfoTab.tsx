@@ -11,26 +11,34 @@ import { updateUser } from '../../api';
 import { type TUpdateUserInfoForm, updateUserInfoSchema } from '../../validation';
 
 type IProps = {
+  isEditMode?: boolean;
   user: UserDTO;
   refetchUser: () => void;
+  onSubmit: (success: boolean) => void;
 };
 
-const UserProfileInfoTab = ({ user, refetchUser }: IProps) => {
-  const { mutate, isPending, error } = useMutation({
-    mutationKey: ['update-user'],
-    mutationFn: async (data: TUpdateUserInfoForm) => await updateUser(user.id, data),
-    onError: (error) => error,
-    onSuccess: () => refetchUser(),
-  });
-
+const UserProfileInfoTab = ({ isEditMode, user, refetchUser, onSubmit }: IProps) => {
   const {
     handleSubmit,
     control,
-    setError,
     setValue,
-    formState: { errors },
+    formState: { errors, touchedFields, isDirty },
   } = useForm<TUpdateUserInfoForm>({
     resolver: zodResolver(updateUserInfoSchema),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['update-user'],
+    mutationFn: async (data: TUpdateUserInfoForm) =>
+      await updateUser(user.id, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }),
+    onError: (error) => error,
+    onSuccess: () => {
+      onSubmit(true);
+      refetchUser();
+    },
   });
 
   useEffect(() => {
@@ -38,14 +46,6 @@ const UserProfileInfoTab = ({ user, refetchUser }: IProps) => {
     setValue('lastName', user.lastName || '');
     setValue('email', user.email || '');
   }, [user, setValue]);
-
-  useEffect(() => {
-    if (error) {
-      setError('email', {
-        message: error.message,
-      });
-    }
-  }, [error, setError]);
 
   return (
     <Form layout="vertical" onFinish={handleSubmit((data) => mutate(data))}>
@@ -56,6 +56,7 @@ const UserProfileInfoTab = ({ user, refetchUser }: IProps) => {
         <Controller
           control={control}
           name="firstName"
+          disabled={!isEditMode}
           render={({ field }) => <Input placeholder="Імʼя" type="text" {...field} />}
         />
       </Form.Item>
@@ -66,6 +67,7 @@ const UserProfileInfoTab = ({ user, refetchUser }: IProps) => {
         <Controller
           control={control}
           name="lastName"
+          disabled={!isEditMode}
           render={({ field }) => <Input placeholder="Прізвище" type="text" {...field} />}
         />
       </Form.Item>
@@ -76,14 +78,22 @@ const UserProfileInfoTab = ({ user, refetchUser }: IProps) => {
         <Controller
           control={control}
           name="email"
+          disabled
           render={({ field }) => <Input status={errors.email ? 'error' : ''} type="email" {...field} />}
         />
       </Form.Item>
-      <Flex justify="flex-end" gap={12}>
-        <Button type="primary" htmlType="submit">
-          Зберегти
-        </Button>
-      </Flex>
+      {isEditMode && (
+        <Flex justify="flex-end" gap={12}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isPending}
+            disabled={!touchedFields.firstName && !touchedFields.lastName && !touchedFields.email && !isDirty}
+          >
+            Зберегти
+          </Button>
+        </Flex>
+      )}
     </Form>
   );
 };

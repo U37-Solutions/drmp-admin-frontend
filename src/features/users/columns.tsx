@@ -1,5 +1,5 @@
-import { type MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type React from 'react';
 
 import UsersTableActions from './components/UsersTableActions';
 import type { UserDTO } from './types';
@@ -7,7 +7,7 @@ import type { UserDTO } from './types';
 export const getColumns = ({
   getActions,
 }: {
-  getActions: (record: UserDTO) => MenuProps['items'];
+  getActions: (record: UserDTO) => React.ReactElement[];
 }): ColumnsType<UserDTO> => [
   {
     title: 'ID',

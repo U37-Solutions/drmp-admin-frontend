@@ -32,14 +32,8 @@ const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
     () =>
       getColumns({
         getActions: (record) => [
-          {
-            key: 'view',
-            label: <ViewUserAction userId={record.id} />,
-          },
-          {
-            key: 'delete',
-            label: <DeleteUserAction userId={record.id} onSuccess={refetchData} />,
-          },
+          <ViewUserAction key="view-user" userId={record.id} />,
+          <DeleteUserAction key="delete-user" userId={record.id} onSuccess={refetchData} />,
         ],
       }),
     [refetchData],

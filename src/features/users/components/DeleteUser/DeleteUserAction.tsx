@@ -1,3 +1,5 @@
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from 'antd';
 import { useState } from 'react';
 
 import DeleteUserModal from './DeleteUserModal';
@@ -11,7 +13,9 @@ const DeleteUserAction = ({ userId, onSuccess }: IProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
-      <a onClick={() => setIsModalOpen(true)}>Видалити користувача</a>
+      <Tooltip title="Видалити користувача">
+        <Button color="primary" icon={<DeleteOutlined />} onClick={() => setIsModalOpen(true)} />
+      </Tooltip>
       <DeleteUserModal
         userId={userId}
         open={isModalOpen}

@@ -21,14 +21,14 @@ export const Route = createFileRoute('/_authorized/_admin/users')({
 });
 
 function UsersPage() {
-  const { data: users, isPending } = useQuery<Array<UserDTO>>({
+  const {
+    data: users,
+    isPending,
+    refetch,
+  } = useQuery<Array<UserDTO>>({
     queryKey: ['users'],
     queryFn: async () => await getUsers(),
   });
 
-  return (
-    <>
-      <UsersTable data={users!} isLoading={isPending} />
-    </>
-  );
+  return <UsersTable data={users!} isLoading={isPending} refetchData={refetch} />;
 }

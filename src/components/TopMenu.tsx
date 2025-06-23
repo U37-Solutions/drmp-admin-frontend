@@ -61,7 +61,7 @@ const TopMenu = () => {
   }, [logOut, setSessionInfo]);
 
   const handleMenuItemClick: MenuProps['onClick'] = useCallback(
-    async ({ key }: { key: string }) => {
+    ({ key }: { key: string }) => {
       switch (key) {
         case 'theme-switch':
           handleThemeSwitch();

@@ -1,8 +1,8 @@
-import { Button, Card, Input, Table, message } from 'antd';
+import { Card, Input, Table, message } from 'antd';
 import type { SorterResult } from 'antd/es/table/interface';
 import { useCallback, useMemo, useState } from 'react';
 
-import { getColumns } from '@features/users/columns';
+import { getColumns } from '@features/users/columns.tsx';
 import InviteUserModal from '@features/users/components/InviteUserModal/InviteUserModal.tsx';
 import UserHeader from '@features/users/components/UserHeader.tsx';
 import type { UserDTO } from '@features/users/types.ts';
@@ -12,23 +12,38 @@ import mapColumnsWithSort from '@services/sort-columns';
 
 import useTableState from '@shared/hooks/useTableState';
 
+import DeleteUserAction from './DeleteUser/DeleteUserAction';
+import ViewUserAction from './ViewUser/ViewUserAction';
+
 type IProps = {
   data: Array<UserDTO>;
   isLoading: boolean;
+  refetchData: () => void;
 };
 
-const UsersTable = ({ data, isLoading }: IProps) => {
+const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { changePage, page, pageSize, changeSearch, search, changeSorting, sortBy, sortAsc } =
     useTableState('/_authorized/_admin/users');
 
   const [showInviteModal, setShowInviteModal] = useState(false);
 
-  const rowActions = useMemo(() => {
-    return <Button type="link">Редагувати</Button>;
-  }, []);
-
-  const columns = useMemo(() => getColumns(rowActions), [rowActions]);
+  const columns = useMemo(
+    () =>
+      getColumns({
+        getActions: (record) => [
+          {
+            key: 'view',
+            label: <ViewUserAction userId={record.id} />,
+          },
+          {
+            key: 'delete',
+            label: <DeleteUserAction userId={record.id} onSuccess={refetchData} />,
+          },
+        ],
+      }),
+    [refetchData],
+  );
   const { pageFilteredData, total } = useMemo(
     () => filterTableData(data, page, pageSize, search, ['firstName', 'lastName', 'email']),
     [data, page, pageSize, search],
@@ -61,7 +76,7 @@ const UsersTable = ({ data, isLoading }: IProps) => {
           className="ant-responsive-table"
           loading={{ spinning: isLoading }}
           dataSource={pageFilteredData}
-          columns={mapColumnsWithSort(columns, sortBy, sortAsc)}
+          columns={mapColumnsWithSort<UserDTO>(columns, sortBy, sortAsc)}
           onChange={(_pagination, _filters, sorter, { action }) => {
             changeSorting(action, sorter as SorterResult<unknown>);
           }}

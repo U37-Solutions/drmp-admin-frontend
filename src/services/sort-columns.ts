@@ -1,10 +1,11 @@
 import type { ColumnGroupType, ColumnType, ColumnsType } from 'antd/es/table';
 
-const isGroupedColumn = (column: ColumnType | ColumnGroupType): column is ColumnGroupType => !('dataIndex' in column);
+const isGroupedColumn = <T>(column: ColumnType<T> | ColumnGroupType<T>): column is ColumnGroupType<T> =>
+  !('dataIndex' in column);
 
-const mapColumnsWithSort = (columns: ColumnsType, sortBy: string, sortAsc: boolean): ColumnsType =>
+const mapColumnsWithSort = <T>(columns: ColumnsType<T>, sortBy: string, sortAsc: boolean): ColumnsType<T> =>
   columns.map((column) => {
-    if (isGroupedColumn(column)) return column;
+    if (isGroupedColumn<T>(column)) return column;
 
     const columnKey = column.key || column.dataIndex;
 

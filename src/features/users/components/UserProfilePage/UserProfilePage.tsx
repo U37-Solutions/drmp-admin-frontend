@@ -69,7 +69,7 @@ const UserProfilePage = () => {
               Редагувати
             </Button>
           ) : (
-            <Button variant="outlined" color="red" onClick={() => setIsEditMode(false)}>
+            <Button variant="outlined" color="danger" onClick={() => setIsEditMode(false)}>
               Закрити редагування
             </Button>
           )}

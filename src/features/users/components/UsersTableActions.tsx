@@ -6,7 +6,7 @@ type IProps = {
 
 const UsersTableActions = ({ actions }: IProps) => {
   return (
-    <Flex align="center" justify="center" gap={8}>
+    <Flex align="center" gap={8}>
       {actions}
     </Flex>
   );

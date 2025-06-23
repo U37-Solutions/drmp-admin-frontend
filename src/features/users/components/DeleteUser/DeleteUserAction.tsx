@@ -4,20 +4,22 @@ import { useState } from 'react';
 
 import DeleteUserModal from './DeleteUserModal';
 
+import type { UserDTO } from '../../types';
+
 type IProps = {
-  userId: number;
+  user: UserDTO;
   onSuccess?: () => void;
 };
 
-const DeleteUserAction = ({ userId, onSuccess }: IProps) => {
+const DeleteUserAction = ({ user, onSuccess }: IProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
       <Tooltip title="Видалити користувача">
-        <Button color="primary" icon={<DeleteOutlined />} onClick={() => setIsModalOpen(true)} />
+        <Button variant="outlined" color="danger" icon={<DeleteOutlined />} onClick={() => setIsModalOpen(true)} />
       </Tooltip>
       <DeleteUserModal
-        userId={userId}
+        user={user}
         open={isModalOpen}
         handleClose={(success) => {
           setIsModalOpen(false);

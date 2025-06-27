@@ -33,10 +33,20 @@ const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
       getColumns({
         getActions: (record) => [
           <ViewUserAction key="view-user" userId={record.id} />,
-          <DeleteUserAction key="delete-user" user={record} onSuccess={refetchData} />,
+          <DeleteUserAction
+            key="delete-user"
+            user={record}
+            onSuccess={() => {
+              messageApi.open({
+                type: 'success',
+                content: 'Користувача успішно видалено',
+              });
+              refetchData();
+            }}
+          />,
         ],
       }),
-    [refetchData],
+    [messageApi, refetchData],
   );
   const { pageFilteredData, total } = useMemo(
     () => filterTableData(data, page, pageSize, search, ['firstName', 'lastName', 'email']),

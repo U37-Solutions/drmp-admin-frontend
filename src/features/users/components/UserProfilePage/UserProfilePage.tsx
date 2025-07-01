@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Button, Card, Flex, Tabs, type TabsProps, Typography } from 'antd';
+import { Button, Card, Flex, Tabs, type TabsProps, Typography, message } from 'antd';
 import { useMemo, useState } from 'react';
 
 import { useSessionInfo } from '@features/session/store';
@@ -11,6 +11,7 @@ import UserProfileSecurityTab from './UserProfileSecurityTab';
 import { getUser } from '../../api';
 
 const UserProfilePage = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const sessionInfo = useSessionInfo();
   const {
     data: user,
@@ -36,7 +37,15 @@ const UserProfilePage = () => {
                   isEditMode={isEditMode}
                   user={user}
                   refetchUser={refetchUser}
-                  onSubmit={(success) => success && setIsEditMode(false)}
+                  onSubmit={(success) => {
+                    if (success) {
+                      messageApi.open({
+                        type: 'success',
+                        content: 'Профіль успішно оновлено',
+                      });
+                      setIsEditMode(false);
+                    }
+                  }}
                 />
               ),
             },
@@ -48,38 +57,49 @@ const UserProfilePage = () => {
                   isEditMode={isEditMode}
                   userId={user.id}
                   refetchUser={refetchUser}
-                  onSubmit={(success) => success && setIsEditMode(false)}
+                  onSubmit={(success) => {
+                    if (success) {
+                      messageApi.open({
+                        type: 'success',
+                        content: 'Пароль успішно оновлено',
+                      });
+                      setIsEditMode(false);
+                    }
+                  }}
                 />
               ),
             },
           ]
         : [],
-    [user, isEditMode, refetchUser],
+    [user, isEditMode, refetchUser, messageApi],
   );
 
   return (
-    <Card
-      title={
-        <Flex align="center" justify="space-between" gap={12}>
-          <Typography.Title level={3} style={{ marginBottom: 0 }}>
-            Профіль
-          </Typography.Title>
-          {!isEditMode ? (
-            <Button type="primary" onClick={() => setIsEditMode(true)}>
-              Редагувати
-            </Button>
-          ) : (
-            <Button variant="outlined" color="danger" onClick={() => setIsEditMode(false)}>
-              Закрити редагування
-            </Button>
-          )}
-        </Flex>
-      }
-      style={{ margin: 20 }}
-      loading={isUserPending}
-    >
-      <Tabs defaultActiveKey={items[0]?.key} items={items} />
-    </Card>
+    <>
+      {contextHolder}
+      <Card
+        title={
+          <Flex align="center" justify="space-between" gap={12}>
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Профіль
+            </Typography.Title>
+            {!isEditMode ? (
+              <Button type="primary" onClick={() => setIsEditMode(true)}>
+                Редагувати
+              </Button>
+            ) : (
+              <Button variant="outlined" color="danger" onClick={() => setIsEditMode(false)}>
+                Закрити редагування
+              </Button>
+            )}
+          </Flex>
+        }
+        style={{ margin: 20 }}
+        loading={isUserPending}
+      >
+        <Tabs defaultActiveKey={items[0]?.key} items={items} />
+      </Card>
+    </>
   );
 };
 

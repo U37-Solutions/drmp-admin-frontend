@@ -21,4 +21,15 @@ export default defineConfig({
     }),
     react(),
   ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        loadPaths: [
+          path.resolve(__dirname, 'src/shared/ui/styles/utils'),
+          path.resolve(__dirname, 'src/shared/ui/styles'),
+        ],
+        additionalData: `@use "mixins" as *;`,
+      },
+    }
+  }
 });

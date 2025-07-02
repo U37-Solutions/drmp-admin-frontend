@@ -1,17 +1,32 @@
-@import 'base';
-@import 'utils';
+@forward 'base';
+@forward 'utils';
 
-html, body, #__next {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-main {
-  flex-grow: 1;
+#root {
+    flex-grow: 1;
+}
+
+.ant-responsive-table {
+    overflow: scroll;
+}
+
+.ant-form-layout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }

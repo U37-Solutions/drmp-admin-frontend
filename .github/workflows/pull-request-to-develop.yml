@@ -2,7 +2,7 @@ name: Main [develop] Pull Request
  
 on:
   pull_request:
-    branches: ["feature/CU-86c49wwty/update-github-actions-and-workflows"]
+    branches: ["develop"]
 
 env:
   NAMESPACE: drmp

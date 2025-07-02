@@ -2,7 +2,7 @@ name: Push develop and Deploy
  
 on:
   push:
-    branches: ["develop"]
+    branches: ["fix/update-styles-configuration-and-update-eslint-rules"]
 
 env:
   NAMESPACE: drmp

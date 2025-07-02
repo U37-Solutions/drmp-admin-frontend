@@ -11,13 +11,13 @@ import { updateUser } from '../../api';
 import { type TUpdateUserInfoForm, updateUserInfoSchema } from '../../validation';
 
 type IProps = {
-  isEditMode?: boolean;
   user: UserDTO;
   refetchUser: () => void;
   onSubmit: (success: boolean) => void;
+  setIsDirty: (isDirty: boolean) => void;
 };
 
-const UserProfileInfoTab = ({ isEditMode, user, refetchUser, onSubmit }: IProps) => {
+const UserProfileInfoTab = ({ user, refetchUser, onSubmit, setIsDirty }: IProps) => {
   const {
     handleSubmit,
     control,
@@ -47,6 +47,12 @@ const UserProfileInfoTab = ({ isEditMode, user, refetchUser, onSubmit }: IProps)
     setValue('email', user.email || '');
   }, [user, setValue]);
 
+  useEffect(() => {
+    setIsDirty(isDirty);
+
+    return () => setIsDirty(false);
+  }, [isDirty, setIsDirty]);
+
   return (
     <Form layout="vertical" onFinish={handleSubmit((data) => mutate(data))}>
       <Form.Item
@@ -56,7 +62,6 @@ const UserProfileInfoTab = ({ isEditMode, user, refetchUser, onSubmit }: IProps)
         <Controller
           control={control}
           name="firstName"
-          disabled={!isEditMode}
           render={({ field }) => <Input placeholder="Імʼя" type="text" {...field} />}
         />
       </Form.Item>
@@ -67,7 +72,6 @@ const UserProfileInfoTab = ({ isEditMode, user, refetchUser, onSubmit }: IProps)
         <Controller
           control={control}
           name="lastName"
-          disabled={!isEditMode}
           render={({ field }) => <Input placeholder="Прізвище" type="text" {...field} />}
         />
       </Form.Item>
@@ -82,18 +86,16 @@ const UserProfileInfoTab = ({ isEditMode, user, refetchUser, onSubmit }: IProps)
           render={({ field }) => <Input status={errors.email ? 'error' : ''} type="email" {...field} />}
         />
       </Form.Item>
-      {isEditMode && (
-        <Flex justify="flex-end" gap={12}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={isPending}
-            disabled={!touchedFields.firstName && !touchedFields.lastName && !touchedFields.email && !isDirty}
-          >
-            Зберегти
-          </Button>
-        </Flex>
-      )}
+      <Flex justify="flex-end" gap={12}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={isPending}
+          disabled={!touchedFields.firstName && !touchedFields.lastName && !touchedFields.email && !isDirty}
+        >
+          Зберегти
+        </Button>
+      </Flex>
     </Form>
   );
 };

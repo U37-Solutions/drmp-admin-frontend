@@ -1,0 +1,20 @@
+name: Main [develop] Pull Request
+ 
+on:
+  pull_request:
+    branches: ["feature/CU-86c49wwty/update-github-actions-and-workflows"]
+
+env:
+  NAMESPACE: drmp
+  PROJECT_NAME: admin-frontend
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Lint
+        uses: ./.github/actions/lint/

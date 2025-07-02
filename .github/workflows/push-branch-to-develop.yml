@@ -1,0 +1,46 @@
+name: Main [develop] Push
+ 
+on:
+  push:
+    branches: ["feature/CU-86c49wwty/update-github-actions-and-workflows"]
+
+env:
+  NAMESPACE: drmp
+  PROJECT_NAME: admin-frontend
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to private registry
+        uses: ./.github/actions/login-to-docker-registry
+        with:
+          DOCKER_REGISTRY_URL: ${{ vars.DOCKER_REGISTRY_URL }}
+          DOCKER_REGISTRY_USERNAME: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
+          DOCKER_REGISTRY_PASSWORD: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: ./.github/actions/build-and-push
+        with:
+          DOCKER_REGISTRY_NAME: ${{ vars.DOCKER_REGISTRY_NAME }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          NAMESPACE: ${{ env.NAMESPACE }}
+          PROJECT_NAME: ${{ env.PROJECT_NAME }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Trigger Dokploy deployment and Check deployment trigger
+        uses: ./.github/actions/deploy
+        with:
+          DOKPLOY_URL: ${{ vars.DOKPLOY_URL }}
+          DEPLOY_APP_ID: ${{ secrets.DEPLOY_APP_ID }}

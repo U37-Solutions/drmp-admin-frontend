@@ -2,7 +2,7 @@ name: 🚀📤 Push [develop]
  
 on:
   push:
-    branches: ["feature/CU-86c49wwty/update-github-actions-and-workflows"]
+    branches: ["develop"]
 
 env:
   NAMESPACE: drmp

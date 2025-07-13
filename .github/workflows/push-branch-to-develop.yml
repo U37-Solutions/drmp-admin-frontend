@@ -39,6 +39,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: develop
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Trigger Dokploy deployment and Check deployment trigger
         uses: ./.github/actions/deploy
         with:

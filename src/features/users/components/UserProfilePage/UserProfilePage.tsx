@@ -1,9 +1,12 @@
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
-import { Button, Card, Flex, Tabs, type TabsProps, Typography, message } from 'antd';
+import { Card, Flex, Tabs, type TabsProps, Typography, message } from 'antd';
 import { useMemo, useState } from 'react';
 
 import { useSessionInfo } from '@features/session/store';
 import type { UserDTO } from '@features/users/types.ts';
+
+import { useConfirmNavigation } from '@shared/hooks/useConfirmNavigation';
 
 import UserProfileInfoTab from './UserProfileInfoTab';
 import UserProfileSecurityTab from './UserProfileSecurityTab';
@@ -23,7 +26,14 @@ const UserProfilePage = () => {
     enabled: !!sessionInfo?.id,
   });
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+
+  useConfirmNavigation({
+    message: 'Зміни не збережено! Ви впевнені, що хочете залишити сторінку?',
+    shouldBlock: isDirty,
+    onConfirm: () => setIsDirty(false),
+    onCancel: () => ({}),
+  });
 
   const items: TabsProps['items'] = useMemo(
     () =>
@@ -32,9 +42,9 @@ const UserProfilePage = () => {
             {
               key: 'info',
               label: 'Основна інформація',
+              icon: <UserOutlined />,
               children: (
                 <UserProfileInfoTab
-                  isEditMode={isEditMode}
                   user={user}
                   refetchUser={refetchUser}
                   onSubmit={(success) => {
@@ -43,19 +53,18 @@ const UserProfilePage = () => {
                         type: 'success',
                         content: 'Профіль успішно оновлено',
                       });
-                      setIsEditMode(false);
                     }
                   }}
+                  setIsDirty={setIsDirty}
                 />
               ),
             },
             {
               key: 'security',
               label: 'Безпека',
+              icon: <LockOutlined />,
               children: (
                 <UserProfileSecurityTab
-                  isEditMode={isEditMode}
-                  userId={user.id}
                   refetchUser={refetchUser}
                   onSubmit={(success) => {
                     if (success) {
@@ -63,15 +72,15 @@ const UserProfilePage = () => {
                         type: 'success',
                         content: 'Пароль успішно оновлено',
                       });
-                      setIsEditMode(false);
                     }
                   }}
+                  setIsDirty={setIsDirty}
                 />
               ),
             },
           ]
         : [],
-    [user, isEditMode, refetchUser, messageApi],
+    [user, setIsDirty, refetchUser, messageApi],
   );
 
   return (
@@ -83,15 +92,6 @@ const UserProfilePage = () => {
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Профіль
             </Typography.Title>
-            {!isEditMode ? (
-              <Button type="primary" onClick={() => setIsEditMode(true)}>
-                Редагувати
-              </Button>
-            ) : (
-              <Button variant="outlined" color="danger" onClick={() => setIsEditMode(false)}>
-                Закрити редагування
-              </Button>
-            )}
           </Flex>
         }
         style={{ margin: 20 }}

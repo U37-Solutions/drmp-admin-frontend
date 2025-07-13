@@ -11,19 +11,18 @@ import { resetUserPassword } from '../../api';
 import { type TUpdateUserSecurityForm, updateUserSecuritySchema } from '../../validation';
 
 type IProps = {
-  isEditMode?: boolean;
-  userId: number;
   refetchUser: () => void;
   onSubmit: (success: boolean) => void;
+  setIsDirty: (isDirty: boolean) => void;
 };
 
-const UserProfileSecurityTab = ({ isEditMode, refetchUser, onSubmit }: IProps) => {
+const UserProfileSecurityTab = ({ refetchUser, onSubmit, setIsDirty }: IProps) => {
   const {
     handleSubmit,
     control,
     setError,
     reset,
-    formState: { errors, touchedFields, isDirty },
+    formState: { errors, touchedFields, isDirty, isValid },
   } = useForm<TUpdateUserSecurityForm>({
     resolver: zodResolver(updateUserSecuritySchema),
   });
@@ -52,6 +51,12 @@ const UserProfileSecurityTab = ({ isEditMode, refetchUser, onSubmit }: IProps) =
     }
   }, [error, setError]);
 
+  useEffect(() => {
+    setIsDirty(isDirty);
+
+    return () => setIsDirty(false);
+  }, [isDirty, setIsDirty]);
+
   return (
     <Form layout="vertical" onFinish={handleSubmit((data) => mutate(data))}>
       <Form.Item
@@ -61,7 +66,6 @@ const UserProfileSecurityTab = ({ isEditMode, refetchUser, onSubmit }: IProps) =
         <Controller
           control={control}
           name="oldPassword"
-          disabled={!isEditMode}
           render={({ field }) => (
             <Password status={errors.oldPassword ? 'error' : ''} placeholder="********" {...field} />
           )}
@@ -74,7 +78,6 @@ const UserProfileSecurityTab = ({ isEditMode, refetchUser, onSubmit }: IProps) =
         <Controller
           control={control}
           name="newPassword"
-          disabled={!isEditMode}
           render={({ field }) => (
             <Password status={errors.newPassword ? 'error' : ''} placeholder="********" {...field} />
           )}
@@ -89,24 +92,21 @@ const UserProfileSecurityTab = ({ isEditMode, refetchUser, onSubmit }: IProps) =
         <Controller
           control={control}
           name="confirmNewPassword"
-          disabled={!isEditMode}
           render={({ field }) => (
             <Password status={errors.confirmNewPassword ? 'error' : ''} placeholder="********" {...field} />
           )}
         />
       </Form.Item>
-      {isEditMode && (
-        <Flex justify="flex-end" gap={12}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={isPending}
-            disabled={!touchedFields.newPassword && !touchedFields.confirmNewPassword && !isDirty}
-          >
-            Зберегти
-          </Button>
-        </Flex>
-      )}
+      <Flex justify="flex-end" gap={12}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={isPending}
+          disabled={(!touchedFields.newPassword && !touchedFields.confirmNewPassword && !isDirty) || !isValid}
+        >
+          Зберегти
+        </Button>
+      </Flex>
     </Form>
   );
 };

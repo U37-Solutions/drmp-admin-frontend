@@ -23,6 +23,10 @@ export const updateUserSecuritySchema = z
       .max(20, 'Пароль має містити не більше 20 символів'),
     confirmNewPassword: z.string({ message: 'Підтвердження паролю обовʼязкове' }),
   })
+  .refine(({ oldPassword, newPassword }) => oldPassword !== newPassword, {
+    message: 'Новий пароль не повинен співпадати зі старим',
+    path: ['newPassword'],
+  })
   .refine(({ newPassword, confirmNewPassword }) => newPassword === confirmNewPassword, {
     message: 'Паролі не збігаються',
     path: ['confirmNewPassword'],

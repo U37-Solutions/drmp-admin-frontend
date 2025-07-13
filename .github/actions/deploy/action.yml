@@ -13,6 +13,7 @@ runs:
   steps:
     - name: Trigger Dokploy deployment
       id: trigger
+      shell: bash
       run: |
         URL="${{ inputs.DOKPLOY_URL }}/api/deploy/${{ inputs.DEPLOY_APP_ID }}"
         status=$(curl --silent --output /dev/null --write-out "%{http_code}" "$URL")
@@ -20,6 +21,7 @@ runs:
 
     - name: Check deployment trigger
       if: steps.trigger.outputs.response != '200'
+      shell: bash
       run: |
         echo "::error::Deployment webhook fall with HTTP ${{ steps.trigger.outputs.response }}"
         exit 1

@@ -3,5 +3,4 @@ export interface LoginResponse {
   refreshToken: string;
   accessTokenExpiresAt: string;
   refreshTokenExpiresAt: string;
-  
 }

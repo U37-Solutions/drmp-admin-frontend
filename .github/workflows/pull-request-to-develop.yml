@@ -17,4 +17,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Lint
-        uses: ./.github/actions/lint/
+        uses: ./.github/actions/lint

@@ -1,0 +1,13 @@
+name: Lint
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+        npm install
+
+    - name: Lint
+      run: npm run lint
+      shell: bash

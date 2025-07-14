@@ -33,6 +33,7 @@ export default tseslint.config(
         typescript: {
           project: './tsconfig.json',
         },
+        node: {},
       },
     },
     rules: {

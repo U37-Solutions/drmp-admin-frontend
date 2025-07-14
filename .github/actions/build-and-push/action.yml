@@ -1,0 +1,30 @@
+name: Build
+
+inputs:
+  DOCKER_REGISTRY_NAME:
+    type: string
+    required: true
+  NAMESPACE:
+    type: string
+    required: true
+  PROJECT_NAME:
+    type: string
+    required: true
+  VITE_API_URL:
+    type: string
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+          ${{ inputs.DOCKER_REGISTRY_NAME }}/${{ inputs.NAMESPACE }}/${{ inputs.PROJECT_NAME }}:latest
+        platforms: linux/amd64
+        build-args: |
+          VITE_API_URL=${{ inputs.VITE_API_URL }}

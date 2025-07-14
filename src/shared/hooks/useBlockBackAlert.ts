@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
-export const useConfirmNavigation
- = (message: string, shouldBlock: boolean) => {
+export const useConfirmNavigation = (message: string, shouldBlock: boolean) => {
   useEffect(() => {
     const onPopState = (e: PopStateEvent) => {
       if (!shouldBlock) return;

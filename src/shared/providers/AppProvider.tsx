@@ -2,6 +2,7 @@ import { CookiesProvider } from 'react-cookie';
 
 import { AuthProvider } from '@features/auth/AuthProvider';
 
+import { AlertProvider } from '@shared/providers/AlertProvider.tsx';
 import ThemeProvider from '@shared/providers/ThemeProvider';
 import { UserRoleProvider } from '@shared/providers/UserRoleProvider.tsx';
 
@@ -16,7 +17,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     <ThemeProvider>
       <CookiesProvider defaultSetOptions={COOKIE_SET_OPTIONS}>
         <AuthProvider>
-          <UserRoleProvider>{children}</UserRoleProvider>
+          <UserRoleProvider>
+            <AlertProvider>{children}</AlertProvider>
+          </UserRoleProvider>
         </AuthProvider>
       </CookiesProvider>
     </ThemeProvider>

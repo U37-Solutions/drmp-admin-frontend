@@ -41,7 +41,7 @@ apiClient.interceptors.response.use(
       const refreshToken = getCookie('refreshToken');
 
       if (!refreshToken) {
-        throw redirect({ to: '/login' });
+        throw redirect({ to: '/login', throw: true });
       }
 
       try {

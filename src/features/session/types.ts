@@ -8,6 +8,6 @@ export type SessionInfo = {
 
 export enum Role {
   ADMIN = 'ADMIN',
-  USER = 'USER',
+  USER = 'COMPANY_USER',
   EDITOR = 'EDITOR',
 }

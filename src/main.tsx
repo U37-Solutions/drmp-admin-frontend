@@ -23,7 +23,10 @@ const queryClient = new QueryClient({
 });
 
 // Create a new router instance
-const router = createRouter({ routeTree, context: { queryClient, auth: undefined, userRole: undefined } });
+const router = createRouter({
+  routeTree,
+  context: { queryClient, auth: undefined, userRole: undefined, alert: undefined },
+});
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {

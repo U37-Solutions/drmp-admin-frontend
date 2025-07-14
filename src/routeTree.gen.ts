@@ -16,6 +16,7 @@ import { Route as UnauthorizedLoginRouteImport } from './routes/_unauthorized/lo
 import { Route as UnauthorizedForgotPasswordRouteImport } from './routes/_unauthorized/forgot-password'
 import { Route as UnauthorizedCheckEmailRouteImport } from './routes/_unauthorized/check-email'
 import { Route as AuthorizedProfileRouteImport } from './routes/_authorized/profile'
+import { Route as AuthorizedChatsRouteImport } from './routes/_authorized/chats'
 import { Route as AuthorizedAdminRouteRouteImport } from './routes/_authorized/_admin/route'
 import { Route as UnauthorizedSignUpTokenRouteImport } from './routes/_unauthorized/sign-up.$token'
 import { Route as UnauthorizedResetPasswordTokenRouteImport } from './routes/_unauthorized/reset-password.$token'
@@ -55,6 +56,11 @@ const AuthorizedProfileRoute = AuthorizedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
+const AuthorizedChatsRoute = AuthorizedChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => AuthorizedRouteRoute,
+} as any)
 const AuthorizedAdminRouteRoute = AuthorizedAdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => AuthorizedRouteRoute,
@@ -78,6 +84,7 @@ const AuthorizedAdminUsersRoute = AuthorizedAdminUsersRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/chats': typeof AuthorizedChatsRoute
   '/profile': typeof AuthorizedProfileRoute
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chats': typeof AuthorizedChatsRoute
   '/profile': typeof AuthorizedProfileRoute
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
   '/_unauthorized': typeof UnauthorizedRouteRouteWithChildren
   '/_authorized/_admin': typeof AuthorizedAdminRouteRouteWithChildren
+  '/_authorized/chats': typeof AuthorizedChatsRoute
   '/_authorized/profile': typeof AuthorizedProfileRoute
   '/_unauthorized/check-email': typeof UnauthorizedCheckEmailRoute
   '/_unauthorized/forgot-password': typeof UnauthorizedForgotPasswordRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/chats'
     | '/profile'
     | '/check-email'
     | '/forgot-password'
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/chats'
     | '/profile'
     | '/check-email'
     | '/forgot-password'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '/_authorized'
     | '/_unauthorized'
     | '/_authorized/_admin'
+    | '/_authorized/chats'
     | '/_authorized/profile'
     | '/_unauthorized/check-email'
     | '/_unauthorized/forgot-password'
@@ -203,6 +215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedProfileRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
+    '/_authorized/chats': {
+      id: '/_authorized/chats'
+      path: '/chats'
+      fullPath: '/chats'
+      preLoaderRoute: typeof AuthorizedChatsRouteImport
+      parentRoute: typeof AuthorizedRouteRoute
+    }
     '/_authorized/_admin': {
       id: '/_authorized/_admin'
       path: ''
@@ -247,11 +266,13 @@ const AuthorizedAdminRouteRouteWithChildren =
 
 interface AuthorizedRouteRouteChildren {
   AuthorizedAdminRouteRoute: typeof AuthorizedAdminRouteRouteWithChildren
+  AuthorizedChatsRoute: typeof AuthorizedChatsRoute
   AuthorizedProfileRoute: typeof AuthorizedProfileRoute
 }
 
 const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
   AuthorizedAdminRouteRoute: AuthorizedAdminRouteRouteWithChildren,
+  AuthorizedChatsRoute: AuthorizedChatsRoute,
   AuthorizedProfileRoute: AuthorizedProfileRoute,
 }
 

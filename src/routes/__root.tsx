@@ -5,12 +5,14 @@ import { Layout } from 'antd';
 
 import { type AuthContext } from '@features/auth/AuthProvider';
 
+import type { AlertContext } from '@shared/providers/AlertProvider.tsx';
 import type { UserRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 export interface MyRouterContext {
   queryClient: QueryClient;
   auth?: AuthContext;
   userRole?: UserRoleContext;
+  alert?: AlertContext;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({

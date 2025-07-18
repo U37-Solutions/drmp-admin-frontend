@@ -15,7 +15,7 @@ const searchSchema = z.object({
   sortAsc: fallback(z.boolean(), true).default(true),
 });
 
-export const Route = createFileRoute('/_authorized/_admin/users')({
+export const Route = createFileRoute('/_authorized/_editor/users')({
   component: UsersPage,
   validateSearch: zodValidator(searchSchema),
 });

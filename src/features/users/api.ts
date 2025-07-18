@@ -9,7 +9,8 @@ import type { UserDTO, UserResetPassword } from './types';
 
 export const getUser = async (id: number) => await apiClient.get(`/users/${id}`).then((res) => res.data);
 
-export const getUsers = async () => await apiClient.get('/users').then((res) => res.data);
+export const getUsers = async (role?: Role) =>
+  await apiClient.get('/users', { params: { role } }).then((res) => res.data);
 
 export const updateUser = async (id: number, updatedUser: Partial<Omit<UserDTO, 'id'>>) =>
   await apiClient.put(`/users/${id}`, updatedUser).then((res) => res.data);

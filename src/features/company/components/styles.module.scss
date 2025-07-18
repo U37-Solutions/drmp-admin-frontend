@@ -1,0 +1,17 @@
+.form {
+  justify-content: flex-start;
+  height: 100%;
+
+  .actionBtnWrapper {
+    width: 100%;
+    margin: auto auto 0 auto;
+  }
+}
+
+.error {
+  @include input-error-message
+}
+
+.socMediaSelect {
+  max-width: 125px;
+}

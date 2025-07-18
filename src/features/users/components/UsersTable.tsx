@@ -24,7 +24,7 @@ type IProps = {
 const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const { changePage, page, pageSize, changeSearch, search, changeSorting, sortBy, sortAsc } =
-    useTableState('/_authorized/_admin/users');
+    useTableState('/_authorized/_editor/users');
 
   const [showInviteModal, setShowInviteModal] = useState(false);
 

@@ -4,10 +4,12 @@ export type SessionInfo = {
   firstName: string | null;
   lastName: string | null;
   role: Role;
+  companyId: number | null;
 };
 
 export enum Role {
   ADMIN = 'ADMIN',
-  USER = 'COMPANY_USER',
+  COMPANY_USER = 'COMPANY_USER',
+  COMPANY_ADMIN = 'COMPANY_ADMIN',
   EDITOR = 'EDITOR',
 }

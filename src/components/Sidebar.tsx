@@ -1,7 +1,8 @@
-import { MessageOutlined, UserOutlined } from '@ant-design/icons';
+import { BankOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useLocation } from '@tanstack/react-router';
 import { Menu, type MenuProps } from 'antd';
 import Sider from 'antd/es/layout/Sider';
+import { useMemo } from 'react';
 
 import type { Role } from '@features/session/types.ts';
 
@@ -20,11 +21,28 @@ const navItems: Record<Role, MenuProps['items']> = {
       icon: <MessageOutlined />,
     },
   ],
+  COMPANY_ADMIN: [
+    {
+      key: '/chats',
+      label: <Link to="/chats">Чати</Link>,
+      icon: <MessageOutlined />,
+    },
+    {
+      key: '/company',
+      label: <Link to="/company">Організація</Link>,
+      icon: <BankOutlined />,
+    },
+  ],
   ADMIN: [
     {
       key: '/users',
       label: <Link to="/users">Користувачі</Link>,
       icon: <UserOutlined />,
+    },
+    {
+      key: '/companies',
+      label: <Link to="/companies">Організації</Link>,
+      icon: <BankOutlined />,
     },
   ],
   EDITOR: [
@@ -33,12 +51,30 @@ const navItems: Record<Role, MenuProps['items']> = {
       label: <Link to="/users">Користувачі</Link>,
       icon: <UserOutlined />,
     },
+    {
+      key: '/companies',
+      label: <Link to="/companies">Організації</Link>,
+      icon: <BankOutlined />,
+    },
   ],
 };
 
 const Sidebar = () => {
   const location = useLocation();
   const roleContext = useRoleContext();
+
+  const items = useMemo(() => {
+    if (!roleContext) {
+      return [];
+    }
+
+    return navItems[roleContext.role] || [];
+  }, [roleContext]);
+
+  const activeKey: string = useMemo(
+    () => (items.find((item) => location.pathname.includes(String(item?.key)))?.key as string) || '',
+    [items, location.pathname],
+  );
 
   if (!roleContext) {
     return null;
@@ -50,8 +86,8 @@ const Sidebar = () => {
         style={{ height: '100%' }}
         items={navItems[roleContext.role]}
         mode="inline"
-        activeKey={location.pathname}
-        defaultSelectedKeys={[location.pathname]}
+        activeKey={activeKey}
+        defaultSelectedKeys={[activeKey]}
       />
     </Sider>
   );

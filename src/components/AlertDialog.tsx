@@ -2,15 +2,16 @@ import { Button, Flex, Modal, Typography } from 'antd';
 
 import type { AlertProps } from '@shared/providers/AlertProvider.tsx';
 
-const AlertDialog = ({ title, message, kind, reject, resolve }: AlertProps) => {
+const AlertDialog = ({ title, message, kind, confirm, cancel, reject, resolve, children }: AlertProps) => {
   return (
     <Modal centered open={true} footer={null} destroyOnHidden onCancel={reject} title={title}>
       <Flex vertical gap={24}>
         <Typography.Text type="secondary">{message}</Typography.Text>
+        {children}
         <Flex justify="flex-end" gap={12}>
-          <Button onClick={reject}>Скасувати</Button>
+          <Button onClick={reject}>{cancel || 'Скасувати'}</Button>
           <Button type="primary" variant="solid" color={kind} onClick={resolve}>
-            Видалити
+            {confirm}
           </Button>
         </Flex>
       </Flex>

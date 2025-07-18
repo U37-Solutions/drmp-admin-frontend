@@ -7,8 +7,10 @@ export interface UserRoleContext {
   userId: number;
   role: Role;
   isAdmin: boolean;
-  isUser: boolean;
+  isCompanyUser: boolean;
+  isCompanyAdmin: boolean;
   isEditor: boolean;
+  companyId: number | null;
 }
 
 const UserRoleContext = React.createContext<UserRoleContext | null>(null);
@@ -28,7 +30,9 @@ export const UserRoleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       role,
       isAdmin: role === Role.ADMIN,
       isEditor: role === Role.EDITOR,
-      isUser: role === Role.USER,
+      isCompanyUser: role === Role.COMPANY_USER,
+      isCompanyAdmin: role === Role.COMPANY_ADMIN,
+      companyId: sessionInfo.companyId,
     };
   }, [sessionInfo]);
 

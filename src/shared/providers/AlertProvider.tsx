@@ -6,11 +6,12 @@ import AlertDialog from '@components/AlertDialog.tsx';
 export interface AlertProps {
   title: string | React.ReactNode;
   message: string | React.ReactNode;
-  kind: 'danger';
+  kind: 'danger' | 'primary';
+  children?: React.ReactNode;
   confirm: string;
-  cancel: string | null;
+  cancel?: string | null;
   resolve(): void;
-  reject(): void;
+  reject?(): void;
 }
 
 type NotificationKind = 'success' | 'error' | 'warning';
@@ -40,6 +41,9 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         type: kind,
         content,
         duration,
+        style: {
+          marginTop: '3vh',
+        },
       });
     },
     [messageApi],
@@ -55,7 +59,9 @@ export const AlertProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             {...alert}
             reject={() => {
               closeAlert();
-              alert.reject();
+              if (alert.reject) {
+                alert.reject();
+              }
             }}
             resolve={() => {
               closeAlert();

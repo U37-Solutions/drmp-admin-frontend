@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { zodValidator } from '@tanstack/zod-adapter';
 import { Badge, Card, Col, Empty, Flex, Row, Skeleton, Tabs, Typography } from 'antd';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { z } from 'zod';
 
 import { getChats } from '@features/chat/api.ts';
 import ChatContent from '@features/chat/components/ChatContent/ChatContent.tsx';
@@ -10,8 +12,13 @@ import type { ChatDTO, ChatStatus } from '@features/chat/types.ts';
 
 import styles from './chats.module.scss';
 
+const searchSchema = z.object({
+  chatId: z.number().optional(),
+});
+
 export const Route = createFileRoute('/_authorized/chats')({
   component: RouteComponent,
+  validateSearch: zodValidator(searchSchema),
 });
 
 const chatTabs = [
@@ -36,13 +43,28 @@ const chatTabs = [
 ];
 
 function RouteComponent() {
+  const { chatId } = Route.useSearch();
+  const navigate = Route.useNavigate();
   const [chatsMode, setChatsMode] = useState<ChatStatus>('active');
+
   const { data: chats, isPending } = useQuery<Array<ChatDTO>>({
     queryKey: ['chat', chatsMode],
     queryFn: async () => await getChats(chatsMode),
   });
 
   const [activeChat, setActiveChat] = useState<ChatDTO | undefined>();
+
+  useEffect(() => {
+    const chat = chats?.find((chat) => chat.id === chatId);
+    setActiveChat(chat);
+  }, [chatId, chats]);
+
+  const changeActiveChat = useCallback(
+    async (chat?: ChatDTO) => {
+      await navigate({ search: { chatId: chat?.id } });
+    },
+    [navigate],
+  );
 
   return (
     <Skeleton loading={isPending}>
@@ -59,8 +81,8 @@ function RouteComponent() {
                 className={styles.tabs}
                 defaultActiveKey={chatsMode}
                 items={chatTabs}
-                onChange={(activeKey) => {
-                  setActiveChat(undefined);
+                onChange={async (activeKey) => {
+                  await changeActiveChat(undefined);
                   setChatsMode(activeKey as ChatStatus);
                 }}
               />
@@ -74,11 +96,11 @@ function RouteComponent() {
           ) : (
             <Row style={{ height: '100%' }}>
               <Col className={styles.menuCol} span={6}>
-                <ChatMenu chats={chats} activeChat={activeChat?.accessToken} handleChangeChat={setActiveChat} />
+                <ChatMenu chats={chats} activeChat={chatId} handleChangeChat={changeActiveChat} />
               </Col>
               <Col span={18}>
                 {activeChat ? (
-                  <ChatContent chat={activeChat} handleClose={() => setActiveChat(undefined)} />
+                  <ChatContent chat={activeChat} handleClose={async () => await changeActiveChat(undefined)} />
                 ) : (
                   <Empty description="Оберіть чат в меню ліворуч, щоб побачити історію листування" />
                 )}

@@ -31,6 +31,7 @@ jobs:
         with:
           DOCKER_REGISTRY_NAME: ${{ vars.DOCKER_REGISTRY_NAME }}
           VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_SOCKET_URL: ${{ vars.VITE_SOCKET_URL }}
           NAMESPACE: ${{ env.NAMESPACE }}
           PROJECT_NAME: ${{ env.PROJECT_NAME }}
 

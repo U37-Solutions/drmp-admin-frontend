@@ -6,13 +6,13 @@ import styles from './ChatMenu.module.scss';
 
 type IProps = {
   chats: Array<ChatDTO>;
-  handleChangeChat(value?: ChatDTO): void;
-  activeChat?: string;
+  handleChangeChat(value?: ChatDTO): Promise<void>;
+  activeChat?: number;
 };
 
 const ChatMenu = ({ chats, activeChat, handleChangeChat }: IProps) => {
   const items: MenuProps['items'] = chats.map((chat: ChatDTO) => ({
-    key: chat.accessToken,
+    key: chat.id,
     type: 'item',
     label: `Чат ID: ${chat.id}`,
   }));
@@ -20,12 +20,13 @@ const ChatMenu = ({ chats, activeChat, handleChangeChat }: IProps) => {
   return (
     <Menu
       className={styles.menu}
+      defaultSelectedKeys={[String(activeChat)]}
       activeKey={String(activeChat)}
       items={items}
-      onClick={({ key }) => {
-        const newChat = chats.find((chat) => chat.accessToken === key);
+      onClick={async ({ key }) => {
+        const newChat = chats.find((chat) => String(chat.id) === key);
 
-        return handleChangeChat(newChat);
+        return await handleChangeChat(newChat);
       }}
     />
   );

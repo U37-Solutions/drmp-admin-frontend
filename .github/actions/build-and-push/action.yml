@@ -13,6 +13,9 @@ inputs:
   VITE_API_URL:
     type: string
     required: true
+  VITE_SOCKET_URL:
+    type: string
+    required: true
 
 runs:
   using: 'composite'
@@ -28,3 +31,4 @@ runs:
         platforms: linux/amd64
         build-args: |
           VITE_API_URL=${{ inputs.VITE_API_URL }}
+          VITE_SOCKET_URL=${{ inputs.VITE_SOCKET_URL }}

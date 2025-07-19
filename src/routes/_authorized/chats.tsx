@@ -94,11 +94,11 @@ function RouteComponent() {
               description={`На даний момент у вас немає ${chatsMode === 'active' ? 'активних' : 'архівованих'} чатів`}
             />
           ) : (
-            <Row style={{ height: '100%' }}>
-              <Col className={styles.menuCol} span={6}>
+            <Row style={{ height: '100%' }} className={styles.content}>
+              <Col className={styles.menuCol} md={6}>
                 <ChatMenu chats={chats} activeChat={chatId} handleChangeChat={changeActiveChat} />
               </Col>
-              <Col span={18}>
+              <Col md={18} flex={1}>
                 {activeChat ? (
                   <ChatContent chat={activeChat} handleClose={async () => await changeActiveChat(undefined)} />
                 ) : (

@@ -16,14 +16,14 @@
 
     .message {
       @include message;
-      background-color: #b3d4fc;
+      background-color: var(--ant-blue-2);
     }
 
     &Reversed {
       flex-direction: row-reverse;
 
       .message {
-        background-color: blueviolet;
+        background-color: var(--ant-purple-6);
         color: rgba(255, 255, 255, 0.85);
       }
     }
@@ -36,7 +36,7 @@
 
     .timeStamp {
       font-size: 0.75em;
-      color: rgba(0, 0, 0, 0.4);
+      color: var(--ant-color-text-tertiary);
     }
   }
 }

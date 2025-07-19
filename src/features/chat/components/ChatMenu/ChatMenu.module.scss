@@ -1,4 +1,36 @@
 .menu {
-  max-height: 600px;
+  max-height: 30svh;
   overflow-y: scroll;
+  @include respond-to('desktop') {
+    max-height: 600px;
+  }
+
+  li.menuItem:not(:global(.ant-menu-item-active)) {
+    display: flex;
+    max-width: 100%;
+
+    :global(.ant-menu-title-content) {
+      display: flex;
+      align-items: center;
+      max-width: 100%;
+
+      .chatMenuItem {
+        max-width: 100%;
+
+        &Title {
+          color: var(--ant-color-text-tertiary);
+          font-size: 0.6rem;
+          line-height: 0.6rem;
+        }
+
+        &Text {
+          font-size: 0.85rem;
+          line-height: 0.85rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
 }

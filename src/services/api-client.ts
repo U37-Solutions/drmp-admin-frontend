@@ -19,8 +19,9 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const accessToken = getCookie('accessToken');
+    const isLoginRequest = !!config.url?.includes('login');
 
-    if (accessToken) {
+    if (accessToken && !isLoginRequest) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
@@ -36,7 +37,7 @@ apiClient.interceptors.response.use(
     const originalRequest = err.config;
     const isAuthFlow = ALLOWED_REQUESTS.some((url) => originalRequest.url?.includes(url));
 
-    if ((err.response?.status === 401 || err.response?.status === 403) && !originalRequest._retry && !isAuthFlow) {
+    if (err.response?.status === 401 && !originalRequest._retry && !isAuthFlow) {
       originalRequest._retry = true;
       const refreshToken = getCookie('refreshToken');
 

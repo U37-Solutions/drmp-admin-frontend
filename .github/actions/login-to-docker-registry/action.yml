@@ -1,4 +1,4 @@
-name: Build
+name: Login to Docker Registry
 
 inputs:
   DOCKER_REGISTRY_URL:

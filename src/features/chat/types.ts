@@ -5,6 +5,8 @@ export interface ChatDTO {
   expiresAt: string;
   archived: boolean;
   notifyCompanyUser: boolean;
+  updatedAt: string;
+  lastMessage?: string;
   company: {
     id: number;
     name: string;

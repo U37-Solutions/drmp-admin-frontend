@@ -9,6 +9,14 @@
 
     &Body {
       flex: 1;
+
+      .content {
+        flex-direction: column;
+
+        @include respond-to('desktop') {
+          flex-direction: row;
+        }
+      }
     }
 
     &Header {
@@ -17,8 +25,12 @@
     }
 
     .menuCol ul {
-      height: 100%;
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      border-right: none;
+
+      @include respond-to('desktop') {
+        height: 100%;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+      }
     }
 
     .tabs :global(.ant-tabs-tab) {

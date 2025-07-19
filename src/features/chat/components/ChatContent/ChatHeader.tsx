@@ -1,11 +1,13 @@
 import { DeleteOutlined, NotificationOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Flex } from 'antd';
+import { Button, Flex, Tooltip } from 'antd';
 
 import { deleteChat, unsubscribeFromChat } from '@features/chat/api.ts';
 import type { ChatDTO } from '@features/chat/types.ts';
 
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
+
+import styles from './ChatContent.module.scss';
 
 const ChatHeader = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void }) => {
   const queryClient = useQueryClient();
@@ -50,17 +52,18 @@ const ChatHeader = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void 
   };
 
   return (
-    <Flex justify="flex-end" gap={4} wrap="wrap">
-      <Button
-        disabled={chat.archived || !chat.notifyCompanyUser}
-        icon={<NotificationOutlined />}
-        onClick={() => muteNotification()}
-      >
-        Вимкнути сповіщення
-      </Button>
-      <Button variant="outlined" color="danger" icon={<DeleteOutlined />} onClick={() => handleDeleteChat()}>
-        Видалити чат
-      </Button>
+    <Flex justify="flex-end" gap={4} wrap="wrap" className={styles.header}>
+      <Tooltip title="Вимкнути сповіщення">
+        <Button
+          disabled={chat.archived || !chat.notifyCompanyUser}
+          icon={<NotificationOutlined />}
+          onClick={() => muteNotification()}
+          className={styles.actionBtn}
+        />
+      </Tooltip>
+      <Tooltip title="Видалити чат">
+        <Button variant="outlined" color="danger" icon={<DeleteOutlined />} onClick={() => handleDeleteChat()} />
+      </Tooltip>
     </Flex>
   );
 };

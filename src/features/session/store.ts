@@ -8,7 +8,7 @@ type SessionStore = {
   setData: (data: SessionInfo | null) => void;
 };
 
-const useSessionStore = create<SessionStore>()(
+export const useSessionStore = create<SessionStore>()(
   persist(
     (set) => ({
       data: null,

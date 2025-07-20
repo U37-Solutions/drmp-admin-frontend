@@ -9,18 +9,18 @@ export type SessionInfo = {
 
 export enum Role {
   ADMIN = 'ADMIN',
-  COMPANY_USER = 'COMPANY_USER',
   COMPANY_ADMIN = 'COMPANY_ADMIN',
+  COMPANY_USER = 'COMPANY_USER',
   EDITOR = 'EDITOR',
 }
 
 export enum Permission {
-  // Chats
+  // Chat
   CHAT_VIEW = 'chat:view',
   CHAT_CREATE = 'chat:create',
   CHAT_DELETE = 'chat:delete',
   CHAT_SEND_MESSAGE = 'chat:send_message',
-  // Users
+  // User
   USERS_VIEW = 'users:view',
   USER_VIEW = 'user:view',
   USER_INVITE = 'user:invite',
@@ -28,13 +28,19 @@ export enum Permission {
   USER_UPDATE = 'user:update',
   USER_DELETE = 'user:delete',
   USER_RESET_PASSWORD = 'user:reset_password',
-  // Companies
+  // Company
   COMPANIES_VIEW = 'companies:view',
   COMPANY_VIEW = 'company:view',
   COMPANY_CREATE = 'company:create',
   COMPANY_UPDATE = 'company:update',
   COMPANY_DELETE = 'company:delete',
-  // Offices
+  // Company Office
+  COMPANY_OFFICES_VIEW = 'company-offices:view',
+  COMPANY_OFFICE_VIEW = 'company-office:view',
+  COMPANY_OFFICE_CREATE = 'company-office:create',
+  COMPANY_OFFICE_UPDATE = 'company-office:update',
+  COMPANY_OFFICE_DELETE = 'company-office:delete',
+  // Office
   OFFICES_VIEW = 'offices:view',
   OFFICE_VIEW = 'office:view',
   OFFICE_CREATE = 'office:create',

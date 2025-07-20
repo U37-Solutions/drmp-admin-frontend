@@ -1,0 +1,70 @@
+import { DeleteOutlined } from '@ant-design/icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Tooltip } from 'antd';
+import { useCallback } from 'react';
+
+import { deleteOffice } from '@features/office/api.ts';
+
+import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
+
+import type { OfficeDTO } from '../types';
+
+const DeleteOfficeAction = ({ showText, office }: { showText?: boolean; office: OfficeDTO }) => {
+  const alertContext = useAlertContext();
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteMutation } = useMutation({
+    mutationKey: ['delete-office', office.id],
+    mutationFn: async () => {
+      await deleteOffice(office.id);
+      return true;
+    },
+    onSuccess: async () => {
+      if (alertContext) {
+        alertContext.openNotification('Офіс успішно видалено', 'success');
+        await queryClient.refetchQueries({ queryKey: ['companies'], type: 'all' });
+      }
+    },
+    onError: () => {
+      if (alertContext) {
+        alertContext.openNotification('Не вдалося видалити організацію. Спробуйте ще раз', 'error');
+      }
+    },
+  });
+
+  const onDelete = useCallback(() => {
+    if (alertContext) {
+      alertContext.openDialog({
+        title: (
+          <p>
+            Ви дійсно бажаєте видалити офіс за адресою <strong>{office.locationName}</strong>?
+          </p>
+        ),
+        kind: 'danger',
+        message: "Всі дані пов'язані з цим офісом, будуть видалені без можливості відновлення.",
+        confirm: 'Видалити',
+        cancel: 'Скасувати',
+        resolve: deleteMutation,
+        reject: () => {},
+      });
+    }
+  }, [alertContext, office.locationName, deleteMutation]);
+
+  return (
+    <Tooltip title="Видалити офіс">
+      <Button
+        variant="outlined"
+        color="danger"
+        icon={<DeleteOutlined />}
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete();
+        }}
+      >
+        {showText && 'Видалити'}
+      </Button>
+    </Tooltip>
+  );
+};
+
+export default DeleteOfficeAction;

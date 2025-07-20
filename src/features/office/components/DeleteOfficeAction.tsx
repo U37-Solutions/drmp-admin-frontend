@@ -9,7 +9,13 @@ import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import type { OfficeDTO } from '../types';
 
-const DeleteOfficeAction = ({ showText, office }: { showText?: boolean; office: OfficeDTO }) => {
+type DeleteOfficeActionProps = {
+  showText?: boolean;
+  office: OfficeDTO;
+  isCompanyOffice?: boolean;
+};
+
+const DeleteOfficeAction: React.FC<DeleteOfficeActionProps> = ({ showText, office, isCompanyOffice }) => {
   const alertContext = useAlertContext();
   const queryClient = useQueryClient();
 
@@ -22,12 +28,16 @@ const DeleteOfficeAction = ({ showText, office }: { showText?: boolean; office: 
     onSuccess: async () => {
       if (alertContext) {
         alertContext.openNotification('Офіс успішно видалено', 'success');
-        await queryClient.refetchQueries({ queryKey: ['companies'], type: 'all' });
+        if (isCompanyOffice) {
+          await queryClient.refetchQueries({ queryKey: ['offices', office.companyId], type: 'all' });
+        } else {
+          await queryClient.refetchQueries({ queryKey: ['offices'], type: 'all' });
+        }
       }
     },
     onError: () => {
       if (alertContext) {
-        alertContext.openNotification('Не вдалося видалити організацію. Спробуйте ще раз', 'error');
+        alertContext.openNotification('Не вдалося видалити офіс. Спробуйте ще раз', 'error');
       }
     },
   });

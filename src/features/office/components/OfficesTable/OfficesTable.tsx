@@ -45,7 +45,7 @@ const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, isCompanyOffic
           </Tooltip>
 
           {currentUserHasPermissions(isCompanyOffice ? Permission.COMPANY_OFFICE_DELETE : Permission.OFFICE_DELETE) && (
-            <DeleteOfficeAction office={row} />
+            <DeleteOfficeAction office={row} isCompanyOffice={isCompanyOffice} />
           )}
         </Flex>
       );

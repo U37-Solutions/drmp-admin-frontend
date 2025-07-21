@@ -30,7 +30,7 @@ const CompanyPage = ({ data }: { data: CompanyDTO }) => {
   const { mutate, isPending } = useMutation({
     mutationKey: ['update-company', data?.id],
     mutationFn: async (body: CompanyInfoSchema | CompanyContactSchema) => {
-      if (!data || !data?.id) return;
+      if (!data?.id) return;
       return await updateCompany(data.id, {
         ...data,
         ...body,
@@ -78,7 +78,7 @@ const CompanyPage = ({ data }: { data: CompanyDTO }) => {
         <Alert
           type="warning"
           showIcon
-          message="Перевірте дані та вкажіть результат перевірки за допомогою кнопки 'Верифікувати'"
+          message={'Перевірте дані та вкажіть результат перевірки за допомогою кнопки "Верифікувати"'}
         />
       )}
       {data.status === 'REJECTED' && (

@@ -8,7 +8,10 @@ export interface DictionaryDTO {
 }
 
 export enum DICTIONARY_KEYS {
+  services = 'services',
+  conditions = 'conditions',
   companyTypes = 'company-types',
+  categories = 'categories',
 }
 
 const getDictionaryQueryOptions = (key: DICTIONARY_KEYS) => ({

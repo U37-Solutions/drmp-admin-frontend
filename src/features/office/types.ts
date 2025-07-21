@@ -12,4 +12,5 @@ export interface OfficeDTO {
   serviceIds: number[];
   categoryIds: number[];
   conditionIds: number[];
+  customFields: unknown[];
 }

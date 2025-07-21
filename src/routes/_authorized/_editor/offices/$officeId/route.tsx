@@ -1,5 +1,7 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
+import OfficePage from '@/features/office/components/OfficePage/OfficePage';
 import { createOfficeByIdQueryOptions } from '@/features/office/queries';
 
 export const Route = createFileRoute('/_authorized/_editor/offices/$officeId')({
@@ -18,9 +20,8 @@ export const Route = createFileRoute('/_authorized/_editor/offices/$officeId')({
 });
 
 function RouteComponent() {
-  // TODO: Implement office page
-  // const { officeId } = Route.useParams();
-  // const { data } = useSuspenseQuery(createOfficeByIdQueryOptions(+officeId));
+  const { officeId } = Route.useParams();
+  const { data } = useSuspenseQuery(createOfficeByIdQueryOptions(+officeId));
 
-  return <>Офісісі</>;
+  return <OfficePage data={data} />;
 }

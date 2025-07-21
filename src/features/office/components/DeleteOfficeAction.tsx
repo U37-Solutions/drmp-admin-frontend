@@ -26,13 +26,14 @@ const DeleteOfficeAction: React.FC<DeleteOfficeActionProps> = ({ showText, offic
       return true;
     },
     onSuccess: async () => {
-      if (alertContext) {
-        alertContext.openNotification('Офіс успішно видалено', 'success');
-        if (isCompanyOffice) {
-          await queryClient.refetchQueries({ queryKey: ['offices', office.companyId], type: 'all' });
-        } else {
-          await queryClient.refetchQueries({ queryKey: ['offices'], type: 'all' });
-        }
+      if (!alertContext) return;
+
+      alertContext.openNotification('Офіс успішно видалено', 'success');
+
+      if (isCompanyOffice) {
+        await queryClient.refetchQueries({ queryKey: ['offices', office.companyId], type: 'all' });
+      } else {
+        await queryClient.refetchQueries({ queryKey: ['offices'], type: 'all' });
       }
     },
     onError: () => {
@@ -55,7 +56,6 @@ const DeleteOfficeAction: React.FC<DeleteOfficeActionProps> = ({ showText, offic
         confirm: 'Видалити',
         cancel: 'Скасувати',
         resolve: deleteMutation,
-        reject: () => {},
       });
     }
   }, [alertContext, office.locationName, deleteMutation]);

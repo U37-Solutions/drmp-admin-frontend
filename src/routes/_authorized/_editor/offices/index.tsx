@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_authorized/_editor/offices/')({
     return context.queryClient.ensureQueryData(createOfficesQueryOptions());
   },
   onError: () => {
-    throw redirect({ to: '/offices' });
+    throw redirect({ to: '/' });
   },
 });
 

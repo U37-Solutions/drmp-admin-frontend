@@ -1,4 +1,4 @@
-import { ApartmentOutlined, BankOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
+import { ApartmentOutlined, BankOutlined, FormOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useLocation } from '@tanstack/react-router';
 import { Menu, type MenuProps } from 'antd';
 import Sider from 'antd/es/layout/Sider';
@@ -43,6 +43,11 @@ const navItems: Record<Role, MenuProps['items']> = {
       key: '/companies',
       label: <Link to="/companies">Організації</Link>,
       icon: <BankOutlined />,
+    },
+    {
+      key: '/form-edit',
+      label: <Link to="/form-edit">Анкета реєстрації</Link>,
+      icon: <FormOutlined />,
     },
     {
       key: '/offices',

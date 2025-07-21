@@ -3,6 +3,8 @@ import type { ThemeConfig } from 'antd/lib';
 export default {
   cssVar: true,
   components: {
-    Form: {},
+    Form: {
+      verticalLabelPadding: '0 0 2px',
+    },
   },
 } as ThemeConfig;

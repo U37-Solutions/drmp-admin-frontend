@@ -30,3 +30,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.field-error {
+    @include input-error-message;
+}

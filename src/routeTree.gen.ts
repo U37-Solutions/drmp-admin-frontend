@@ -24,6 +24,7 @@ import { Route as UnauthorizedSignUpTokenRouteImport } from './routes/_unauthori
 import { Route as UnauthorizedResetPasswordTokenRouteImport } from './routes/_unauthorized/reset-password.$token'
 import { Route as AuthorizedEditorUsersRouteImport } from './routes/_authorized/_editor/users'
 import { Route as AuthorizedCompanyAdminCompanyRouteImport } from './routes/_authorized/_companyAdmin/company'
+import { Route as AuthorizedAdminFormEditRouteImport } from './routes/_authorized/_admin/form-edit'
 import { Route as AuthorizedEditorOfficesRouteRouteImport } from './routes/_authorized/_editor/offices/route'
 import { Route as AuthorizedEditorCompaniesRouteRouteImport } from './routes/_authorized/_editor/companies/route'
 import { Route as AuthorizedEditorOfficesIndexRouteImport } from './routes/_authorized/_editor/offices/index'
@@ -108,6 +109,11 @@ const AuthorizedCompanyAdminCompanyRoute =
     path: '/company',
     getParentRoute: () => AuthorizedCompanyAdminRouteRoute,
   } as any)
+const AuthorizedAdminFormEditRoute = AuthorizedAdminFormEditRouteImport.update({
+  id: '/form-edit',
+  path: '/form-edit',
+  getParentRoute: () => AuthorizedAdminRouteRoute,
+} as any)
 const AuthorizedEditorOfficesRouteRoute =
   AuthorizedEditorOfficesRouteRouteImport.update({
     id: '/offices',
@@ -172,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof UnauthorizedLoginRoute
   '/companies': typeof AuthorizedEditorCompaniesRouteRouteWithChildren
   '/offices': typeof AuthorizedEditorOfficesRouteRouteWithChildren
+  '/form-edit': typeof AuthorizedAdminFormEditRoute
   '/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/users': typeof AuthorizedEditorUsersRoute
   '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
   '/login': typeof UnauthorizedLoginRoute
+  '/form-edit': typeof AuthorizedAdminFormEditRoute
   '/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/users': typeof AuthorizedEditorUsersRoute
   '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
@@ -207,7 +215,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
   '/_unauthorized': typeof UnauthorizedRouteRouteWithChildren
-  '/_authorized/_admin': typeof AuthorizedAdminRouteRoute
+  '/_authorized/_admin': typeof AuthorizedAdminRouteRouteWithChildren
   '/_authorized/_companyAdmin': typeof AuthorizedCompanyAdminRouteRouteWithChildren
   '/_authorized/_editor': typeof AuthorizedEditorRouteRouteWithChildren
   '/_authorized/chats': typeof AuthorizedChatsRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/_unauthorized/login': typeof UnauthorizedLoginRoute
   '/_authorized/_editor/companies': typeof AuthorizedEditorCompaniesRouteRouteWithChildren
   '/_authorized/_editor/offices': typeof AuthorizedEditorOfficesRouteRouteWithChildren
+  '/_authorized/_admin/form-edit': typeof AuthorizedAdminFormEditRoute
   '/_authorized/_companyAdmin/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/_authorized/_editor/users': typeof AuthorizedEditorUsersRoute
   '/_unauthorized/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/companies'
     | '/offices'
+    | '/form-edit'
     | '/company'
     | '/users'
     | '/reset-password/$token'
@@ -259,6 +269,7 @@ export interface FileRouteTypes {
     | '/check-email'
     | '/forgot-password'
     | '/login'
+    | '/form-edit'
     | '/company'
     | '/users'
     | '/reset-password/$token'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/_unauthorized/login'
     | '/_authorized/_editor/companies'
     | '/_authorized/_editor/offices'
+    | '/_authorized/_admin/form-edit'
     | '/_authorized/_companyAdmin/company'
     | '/_authorized/_editor/users'
     | '/_unauthorized/reset-password/$token'
@@ -410,6 +422,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedCompanyAdminCompanyRouteImport
       parentRoute: typeof AuthorizedCompanyAdminRouteRoute
     }
+    '/_authorized/_admin/form-edit': {
+      id: '/_authorized/_admin/form-edit'
+      path: '/form-edit'
+      fullPath: '/form-edit'
+      preLoaderRoute: typeof AuthorizedAdminFormEditRouteImport
+      parentRoute: typeof AuthorizedAdminRouteRoute
+    }
     '/_authorized/_editor/offices': {
       id: '/_authorized/_editor/offices'
       path: '/offices'
@@ -475,6 +494,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthorizedAdminRouteRouteChildren {
+  AuthorizedAdminFormEditRoute: typeof AuthorizedAdminFormEditRoute
+}
+
+const AuthorizedAdminRouteRouteChildren: AuthorizedAdminRouteRouteChildren = {
+  AuthorizedAdminFormEditRoute: AuthorizedAdminFormEditRoute,
+}
+
+const AuthorizedAdminRouteRouteWithChildren =
+  AuthorizedAdminRouteRoute._addFileChildren(AuthorizedAdminRouteRouteChildren)
 
 interface AuthorizedCompanyAdminRouteRouteChildren {
   AuthorizedCompanyAdminCompanyRoute: typeof AuthorizedCompanyAdminCompanyRoute
@@ -565,7 +595,7 @@ const AuthorizedEditorRouteRouteWithChildren =
   )
 
 interface AuthorizedRouteRouteChildren {
-  AuthorizedAdminRouteRoute: typeof AuthorizedAdminRouteRoute
+  AuthorizedAdminRouteRoute: typeof AuthorizedAdminRouteRouteWithChildren
   AuthorizedCompanyAdminRouteRoute: typeof AuthorizedCompanyAdminRouteRouteWithChildren
   AuthorizedEditorRouteRoute: typeof AuthorizedEditorRouteRouteWithChildren
   AuthorizedChatsRoute: typeof AuthorizedChatsRoute
@@ -573,7 +603,7 @@ interface AuthorizedRouteRouteChildren {
 }
 
 const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
-  AuthorizedAdminRouteRoute: AuthorizedAdminRouteRoute,
+  AuthorizedAdminRouteRoute: AuthorizedAdminRouteRouteWithChildren,
   AuthorizedCompanyAdminRouteRoute:
     AuthorizedCompanyAdminRouteRouteWithChildren,
   AuthorizedEditorRouteRoute: AuthorizedEditorRouteRouteWithChildren,

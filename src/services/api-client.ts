@@ -4,7 +4,6 @@ import axios from 'axios';
 import { refreshSession } from '@features/session/api.ts';
 
 import { getCookie } from '@services/cookie-client';
-import { handleError } from '@services/handle-error.ts';
 
 const ALLOWED_REQUESTS = ['/auth/', 'confirm-registration', '/temporary'];
 
@@ -56,7 +55,7 @@ apiClient.interceptors.response.use(
       }
     }
 
-    return Promise.reject(handleError(err));
+    return Promise.reject(err);
   },
 );
 

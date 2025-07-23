@@ -16,6 +16,12 @@ inputs:
   VITE_SOCKET_URL:
     type: string
     required: true
+  VITE_MAP_API_KEY:
+    type: string
+    required: true
+  VITE_MAP_ID:
+    type: string
+    required: true
 
 runs:
   using: 'composite'
@@ -29,6 +35,9 @@ runs:
         tags: |
           ${{ inputs.DOCKER_REGISTRY_NAME }}/${{ inputs.NAMESPACE }}/${{ inputs.PROJECT_NAME }}:latest
         platforms: linux/amd64
+        secrets: |
+            VITE_MAP_API_KEY=${{ secrets.VITE_MAP_ID }}
+            VITE_MAP_ID=${{ secrets.VITE_MAP_API_KEY }}
         build-args: |
           VITE_API_URL=${{ inputs.VITE_API_URL }}
           VITE_SOCKET_URL=${{ inputs.VITE_SOCKET_URL }}

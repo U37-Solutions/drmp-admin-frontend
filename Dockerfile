@@ -1,6 +1,10 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
 WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
 
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
@@ -8,15 +12,21 @@ ENV VITE_API_URL=$VITE_API_URL
 ARG VITE_SOCKET_URL
 ENV VITE_SOCKET_URL=$VITE_SOCKET_URL
 
-COPY package.json package-lock.json .
+RUN --mount=type=secret,id=VITE_MAP_API_KEY \
+    export VITE_MAP_API_KEY=$(cat /run/secrets/VITE_MAP_API_KEY) && \
+    npm run build
 
-RUN npm install
+RUN --mount=type=secret,id=VITE_MAP_ID \
+    export VITE_MAP_ID=$(cat /run/secrets/VITE_MAP_ID) && \
+    npm run build
+
+FROM node:18-alpine
+
+WORKDIR /app
 
 RUN npm i -g serve
 
-COPY . .
-
-RUN npm run build
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 5173
 

@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef } from 'react';
 export const useDebounce = <Func extends (...args: Parameters<Func>) => void>(func: Func, wait: number): Func => {
   const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // мемоізована функція-дебаунсер
   const debounced = useCallback(
     (...args: Parameters<Func>) => {
       if (timeout.current) clearTimeout(timeout.current);

@@ -1,5 +1,5 @@
 import { AdvancedMarker, Map as GoogleMap, InfoWindow, useMap } from '@vis.gl/react-google-maps';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { UKRAINE_BOUNDS } from '../constants';
 import type { Bounds, LocationGeometry } from '../types';
@@ -26,7 +26,7 @@ const GeoMap: React.FC<GeoMapProps> = ({ addressGeometry, regionRestriction, onA
   const [markerPosition, setMarkerPosition] = useState<LocationGeometry | null>(null);
   const [infoOpen, setInfoOpen] = useState(false);
 
-  const geocoder = new google.maps.Geocoder();
+  const geocoder = useMemo(() => new google.maps.Geocoder(), []);
 
   useEffect(() => {
     if (!map) return;

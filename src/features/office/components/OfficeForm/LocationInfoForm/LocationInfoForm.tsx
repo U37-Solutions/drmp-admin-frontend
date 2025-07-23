@@ -1,7 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Flex, Form, Spin, Typography } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import type { OfficeDTO } from '@features/office/types';
@@ -21,10 +21,9 @@ type LocationInfoFormProps = {
   office?: OfficeDTO;
   onSubmit?: (data: OfficeLocationInfoSchema) => void;
   isPending?: boolean;
-  submitted?: boolean;
 };
 
-const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, isPending, submitted }) => {
+const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, isPending }) => {
   const [showMap, setShowMap] = useState(false);
   // TODO: Implement region restriction logic if needed
   const [, setRegionRestriction] = useState<Bounds>();
@@ -58,12 +57,6 @@ const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, i
     },
     [onSubmit, reset],
   );
-
-  useEffect(() => {
-    if (submitted) {
-      reset();
-    }
-  }, [submitted, reset]);
 
   const handleUpdateField = (field: keyof OfficeLocationInfoSchema, value: string | number) => {
     setValue(field, value, {

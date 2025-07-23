@@ -5,7 +5,7 @@ import CompanyPage from '@features/company/components/CompanyPage/CompanyPage.ts
 import { companyByIdQueryOptions } from '@features/company/queries.ts';
 import type { CompanyDTO } from '@features/company/types.ts';
 
-export const Route = createFileRoute('/_authorized/_editor/companies/$companyId')({
+export const Route = createFileRoute('/_authorized/_companyAdmin/companies/$companyId')({
   component: RouteComponent,
   beforeLoad: async ({ params, context }) => {
     const { companyId } = params;

@@ -8,6 +8,19 @@ export const inviteUserSchema = z.object({
   lastName: z.string().max(20).optional(),
 });
 
+export const inviteCompanyUserSchema = z.object({
+  email: z.string({ message: 'Введіть електронну адресу' }).email('Неправильна електронна адреса'),
+  firstName: z
+    .string({ message: 'Імʼя обовʼязкове до заповнення' })
+    .min(1, 'Імʼя обовʼязкове до заповнення')
+    .max(20)
+    .regex(FIRST_NAME_REGEX, 'Імʼя повинне бути одним словом'),
+  lastName: z
+    .string({ message: 'Прізвище обовʼязкове до заповнення' })
+    .min(1, 'Прізвище обовʼязкове до заповнення')
+    .max(20),
+});
+
 export const updateUserInfoSchema = z.object({
   firstName: z.string().max(20).regex(FIRST_NAME_REGEX, 'Імʼя повинне бути одним словом та без цифр'),
   lastName: z.string().max(20).optional(),

@@ -70,6 +70,7 @@ const rolePermissions: Record<Role, Permission[]> = {
     Permission.COMPANY_OFFICE_UPDATE,
     Permission.COMPANY_OFFICE_DELETE,
     Permission.FEEDBACKS_VIEW,
+    Permission.COMPANY_USERS_INVITE,
   ],
   [Role.COMPANY_USER]: [Permission.COMPANY_OFFICES_VIEW, Permission.COMPANY_OFFICE_VIEW, Permission.FEEDBACKS_VIEW],
 };

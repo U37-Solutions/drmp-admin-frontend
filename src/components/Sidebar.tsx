@@ -4,7 +4,7 @@ import {
   FormOutlined,
   MailOutlined,
   MessageOutlined,
-  UserOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 import { Link, useLocation } from '@tanstack/react-router';
 import { Menu, type MenuProps } from 'antd';
@@ -20,7 +20,7 @@ const siderStyle: React.CSSProperties = {
   scrollbarGutter: 'stable',
 };
 
-const navItems: Record<Role, MenuProps['items']> = {
+const getNavItems = (companyId?: string): Record<Role, MenuProps['items']> => ({
   COMPANY_USER: [
     {
       key: '/chats',
@@ -39,11 +39,19 @@ const navItems: Record<Role, MenuProps['items']> = {
       label: <Link to="/chats">Чати</Link>,
       icon: <MessageOutlined />,
     },
-    {
-      key: '/company',
-      label: <Link to="/company">Організація</Link>,
-      icon: <BankOutlined />,
-    },
+    ...(companyId
+      ? [
+          {
+            key: '/companies',
+            label: (
+              <Link to="/companies/$companyId" params={{ companyId }}>
+                Організація
+              </Link>
+            ),
+            icon: <BankOutlined />,
+          },
+        ]
+      : []),
     {
       key: '/feedbacks',
       label: <Link to="/feedbacks">Відгуки</Link>,
@@ -54,7 +62,7 @@ const navItems: Record<Role, MenuProps['items']> = {
     {
       key: '/users',
       label: <Link to="/users">Користувачі</Link>,
-      icon: <UserOutlined />,
+      icon: <TeamOutlined />,
     },
     {
       key: '/companies',
@@ -81,7 +89,7 @@ const navItems: Record<Role, MenuProps['items']> = {
     {
       key: '/users',
       label: <Link to="/users">Користувачі</Link>,
-      icon: <UserOutlined />,
+      icon: <TeamOutlined />,
     },
     {
       key: '/companies',
@@ -99,7 +107,7 @@ const navItems: Record<Role, MenuProps['items']> = {
       icon: <MailOutlined />,
     },
   ],
-};
+});
 
 const Sidebar = () => {
   const location = useLocation();
@@ -110,7 +118,7 @@ const Sidebar = () => {
       return [];
     }
 
-    return navItems[roleContext.role] || [];
+    return getNavItems(String(roleContext?.companyId))[roleContext.role] || [];
   }, [roleContext]);
 
   const activeKey: string = useMemo(
@@ -126,7 +134,7 @@ const Sidebar = () => {
     <Sider breakpoint="md" collapsedWidth={0} style={siderStyle}>
       <Menu
         style={{ height: '100%' }}
-        items={navItems[roleContext.role]}
+        items={items}
         mode="inline"
         activeKey={activeKey}
         defaultSelectedKeys={[activeKey]}

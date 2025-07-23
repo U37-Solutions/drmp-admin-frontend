@@ -14,7 +14,7 @@ const searchSchema = z.object({
   sortAsc: fallback(z.boolean(), true).default(true),
 });
 
-export const Route = createFileRoute('/_authorized/_editor/companies/$companyId/')({
+export const Route = createFileRoute('/_authorized/_companyAdmin/companies/$companyId/')({
   component: RouteComponent,
   validateSearch: zodValidator(searchSchema),
   beforeLoad: async ({ params, context }) => {

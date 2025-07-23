@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+
+  .header {
+    flex-direction: column;
+    gap: 20px;
+
+    @include respond-to('desktop') {
+      gap: unset;
+      flex-direction: row;
+    }
+  }
+
+  .card {
+    flex: 1;
+    @include shadowed;
+    :global(.ant-card-body) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
+}

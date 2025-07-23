@@ -1,6 +1,6 @@
 import apiClient from '@services/api-client.ts';
 
-import type { OfficeDTO } from './types';
+import type { CreateOfficeDTO, OfficeDTO } from './types';
 
 export const getOfficeById = async (id: number): Promise<OfficeDTO> => {
   return await apiClient.get(`/offices/${id}`).then((res) => res.data);
@@ -12,6 +12,10 @@ export const getOffices = async (): Promise<OfficeDTO[]> => {
 
 export const getOfficesByCompanyId = async (companyId: number): Promise<OfficeDTO[]> => {
   return await apiClient.get(`/offices/company/${companyId}`).then((res) => res.data);
+};
+
+export const createOffice = async (companyId: number, newOffice: CreateOfficeDTO): Promise<OfficeDTO> => {
+  return await apiClient.post(`/offices/company/${companyId}`, newOffice).then((res) => res.data);
 };
 
 export const updateOffice = async (id: number, updatedOffice: OfficeDTO): Promise<OfficeDTO> => {

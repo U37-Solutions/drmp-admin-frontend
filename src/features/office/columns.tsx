@@ -21,7 +21,13 @@ export const getColumns = (renderActions: (row: OfficeDTO) => React.ReactElement
     key: 'locationName',
     title: 'Адреса',
     dataIndex: 'locationName',
-    sorter: (a, b) => a.locationName.localeCompare(b.locationName),
+    sorter: (a, b) => {
+      // TODO: Remove this logic if locationName always exists
+      if (!a.locationName && !b.locationName) return 0;
+      if (!a.locationName) return -1;
+      if (!b.locationName) return 1;
+      return a.locationName.localeCompare(b.locationName);
+    },
     showSorterTooltip: {
       title: 'Сортувати за адресою',
     },

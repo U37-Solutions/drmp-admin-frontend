@@ -50,84 +50,86 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ office, onSubmit, isPending
 
   return (
     <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
-      <Spin spinning={isPending} fullscreen />
-      <Form.Item
-        label="Опис"
-        extra={
-          errors.additionalDescription ? (
-            <span className={styles.error}>{errors.additionalDescription.message}</span>
-          ) : null
-        }
-      >
-        <Controller
-          name="additionalDescription"
-          control={control}
-          render={({ field }) => (
-            <Input.TextArea
-              autoSize={{ minRows: 2, maxRows: 12 }}
-              placeholder="Приклад: Офіс розташований у центрі міста, має сучасний дизайн та обладнання"
-              status={errors.additionalDescription ? 'error' : ''}
-              {...field}
-            />
-          )}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Робочий графік"
-        extra={errors.workSchedule ? <span className={styles.error}>{errors.workSchedule.message}</span> : null}
-      >
-        <Controller
-          name="workSchedule"
-          control={control}
-          render={({ field }) => (
-            <Input.TextArea
-              autoSize={{ minRows: 2, maxRows: 7 }}
-              placeholder="Приклад: Пн-Пт 9:00-18:00, Сб 10:00-16:00"
-              status={errors.workSchedule ? 'error' : ''}
-              {...field}
-            />
-          )}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Категорії"
-        extra={errors.categoryIds ? <span className={styles.error}>{errors.categoryIds.message}</span> : null}
-      >
-        <Controller
-          name="categoryIds"
-          control={control}
-          render={({ field }) => (
-            <CategoryField error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined} field={field} />
-          )}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Форми власності"
-        extra={errors.conditionIds ? <span className={styles.error}>{errors.conditionIds.message}</span> : null}
-      >
-        <Controller
-          name="conditionIds"
-          control={control}
-          render={({ field }) => (
-            <ConditionField
-              error={Array.isArray(errors.conditionIds) ? errors.conditionIds : undefined}
-              field={field}
-            />
-          )}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Типи організації"
-        extra={errors.serviceIds ? <span className={styles.error}>{errors.serviceIds.message}</span> : null}
-      >
-        <Controller
-          name="serviceIds"
-          control={control}
-          render={({ field }) => (
-            <ServiceField error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined} field={field} />
-          )}
-        />
-      </Form.Item>
+      <Flex style={{ flexDirection: 'column' }}>
+        <Spin spinning={isPending} fullscreen />
+        <Form.Item
+          label="Опис"
+          extra={
+            errors.additionalDescription ? (
+              <span className={styles.error}>{errors.additionalDescription.message}</span>
+            ) : null
+          }
+        >
+          <Controller
+            name="additionalDescription"
+            control={control}
+            render={({ field }) => (
+              <Input.TextArea
+                autoSize={{ minRows: 2, maxRows: 12 }}
+                placeholder="Приклад: Офіс розташований у центрі міста, має сучасний дизайн та обладнання"
+                status={errors.additionalDescription ? 'error' : ''}
+                {...field}
+              />
+            )}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Робочий графік"
+          extra={errors.workSchedule ? <span className={styles.error}>{errors.workSchedule.message}</span> : null}
+        >
+          <Controller
+            name="workSchedule"
+            control={control}
+            render={({ field }) => (
+              <Input.TextArea
+                autoSize={{ minRows: 2, maxRows: 7 }}
+                placeholder="Приклад: Пн-Пт 9:00-18:00, Сб 10:00-16:00"
+                status={errors.workSchedule ? 'error' : ''}
+                {...field}
+              />
+            )}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Категорії"
+          extra={errors.categoryIds ? <span className={styles.error}>{errors.categoryIds.message}</span> : null}
+        >
+          <Controller
+            name="categoryIds"
+            control={control}
+            render={({ field }) => (
+              <CategoryField error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined} field={field} />
+            )}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Форми власності"
+          extra={errors.conditionIds ? <span className={styles.error}>{errors.conditionIds.message}</span> : null}
+        >
+          <Controller
+            name="conditionIds"
+            control={control}
+            render={({ field }) => (
+              <ConditionField
+                error={Array.isArray(errors.conditionIds) ? errors.conditionIds : undefined}
+                field={field}
+              />
+            )}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Типи організації"
+          extra={errors.serviceIds ? <span className={styles.error}>{errors.serviceIds.message}</span> : null}
+        >
+          <Controller
+            name="serviceIds"
+            control={control}
+            render={({ field }) => (
+              <ServiceField error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined} field={field} />
+            )}
+          />
+        </Form.Item>
+      </Flex>
 
       <Flex gap={8} className={styles.actionBtnWrapper}>
         <Button

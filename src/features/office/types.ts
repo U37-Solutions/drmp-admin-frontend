@@ -1,3 +1,5 @@
+import type { Region } from '@components/map/types';
+
 export interface OfficeDTO {
   id: number;
   workSchedule: string;
@@ -6,7 +8,7 @@ export interface OfficeDTO {
   locationName: string;
   latitude: number;
   longitude: number;
-  regionId: number;
+  regionId: Region;
   companyId: number;
   companyName: string;
   serviceIds: number[];

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const officeMainInfoSchema = z.object({
+export const officeSchema = z.object({
   additionalDescription: z
     .string({ message: 'Введіть опис' })
     .min(1, { message: 'Опис не може бути порожнім' })
@@ -16,15 +16,10 @@ export const officeMainInfoSchema = z.object({
     .min(1, { message: 'Виберіть хоча б одну форму власності' }),
   workSchedule: z.string(),
   customFields: z.array(z.any()).optional(),
-});
-
-export type OfficeMainInfoSchema = z.infer<typeof officeMainInfoSchema>;
-
-export const officeLocationInfoSchema = z.object({
   locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }).nullable(),
   latitude: z.number({ message: 'Широта має бути числом' }).nullable(),
   longitude: z.number({ message: 'Довгота має бути числом' }).nullable(),
   regionId: z.number({ message: 'ID регіону має бути числом' }),
 });
 
-export type OfficeLocationInfoSchema = z.infer<typeof officeLocationInfoSchema>;
+export type OfficeSchema = z.infer<typeof officeSchema>;

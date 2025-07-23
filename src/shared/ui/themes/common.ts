@@ -5,6 +5,7 @@ export default {
   components: {
     Form: {
       verticalLabelPadding: '0 0 2px',
+      itemMarginBottom: 16,
     },
   },
 } as ThemeConfig;

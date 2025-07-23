@@ -3,14 +3,14 @@ import type { ControllerRenderProps, FieldError } from 'react-hook-form';
 
 import { DICTIONARY_KEYS, useDictionaryService } from '@services/dictionary-service.tsx';
 
-import type { OfficeMainInfoSchema } from '@/features/office/validation';
+import type { OfficeSchema } from '@/features/office/validation';
 
 const ServiceField = ({
   error,
   field,
 }: {
   error?: FieldError[];
-  field: ControllerRenderProps<OfficeMainInfoSchema, 'serviceIds'>;
+  field: ControllerRenderProps<OfficeSchema, 'serviceIds'>;
 }) => {
   const options = useDictionaryService(DICTIONARY_KEYS.services, true);
 

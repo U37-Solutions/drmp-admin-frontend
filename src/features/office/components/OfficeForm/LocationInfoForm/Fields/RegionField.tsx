@@ -2,7 +2,7 @@ import { Select } from 'antd';
 import { useMemo } from 'react';
 import type { ControllerRenderProps, FieldError } from 'react-hook-form';
 
-import type { OfficeLocationInfoSchema } from '@features/office/validation';
+import type { OfficeSchema } from '@features/office/validation';
 
 import { REGION_TITLE } from '@components/map/constants';
 
@@ -11,7 +11,7 @@ const RegionField = ({
   field,
 }: {
   error?: FieldError;
-  field: ControllerRenderProps<OfficeLocationInfoSchema, 'regionId'>;
+  field: ControllerRenderProps<OfficeSchema, 'regionId'>;
 }) => {
   const options = useMemo(
     () =>

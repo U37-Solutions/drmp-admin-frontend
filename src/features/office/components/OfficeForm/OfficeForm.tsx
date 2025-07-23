@@ -1,39 +1,49 @@
-import { Card, Flex, Typography } from 'antd';
+import { Button, Flex, Form, Typography } from 'antd';
 
 import LocationInfoForm from '../OfficeForm/LocationInfoForm/LocationInfoForm';
 import MainInfoForm from '../OfficeForm/MainInfoForm/MainInfoForm';
 
 import styles from './OfficeForm.module.scss';
-
-import type { OfficeDTO, OfficeSubmittedFormData } from '../../types';
-import type { OfficeLocationInfoSchema, OfficeMainInfoSchema } from '../../validation';
+import type { OfficeFormState } from './useOfficeForm';
 
 type OfficeFormProps = {
-  data?: OfficeDTO;
-  onSubmit: (data: OfficeSubmittedFormData) => void;
-  isPending?: boolean;
+  form: OfficeFormState;
+  onCancel?: () => void;
 };
 
-const OfficeForm = ({ data, onSubmit, isPending }: OfficeFormProps) => {
-  const handleSubmitMainInfo = (data: OfficeMainInfoSchema) => {
-    onSubmit?.({ mainInfo: data });
-  };
-
-  const handleSubmitLocationInfo = (data: OfficeLocationInfoSchema) => {
-    onSubmit?.({ locationInfo: data });
-  };
+const OfficeForm = ({ form, onCancel }: OfficeFormProps) => {
+  const { handleSubmit, isSubmitting, isDirty, reset } = form;
 
   return (
-    <Flex gap={20} wrap="wrap">
-      <Card className={styles.card}>
-        <Typography.Title level={4}>Основна інформація</Typography.Title>
-        <MainInfoForm office={data} onSubmit={handleSubmitMainInfo} isPending={isPending} />
-      </Card>
-      <Card className={styles.card}>
-        <Typography.Title level={4}>Локація</Typography.Title>
-        <LocationInfoForm office={data} onSubmit={handleSubmitLocationInfo} isPending={isPending} />
-      </Card>
-    </Flex>
+    <Form layout="vertical" className={styles.form} onFinish={handleSubmit}>
+      <Flex className={styles.formContent}>
+        <Flex className={styles.formContent__part}>
+          <Typography.Title level={4}>Основна інформація</Typography.Title>
+          <MainInfoForm form={form} />
+        </Flex>
+        <Flex className={styles.formContent__part}>
+          <Typography.Title level={4}>Локація</Typography.Title>
+          <LocationInfoForm form={form} />
+        </Flex>
+      </Flex>
+      <Flex className={styles.actionBtnWrapper}>
+        <Button
+          type="default"
+          variant="outlined"
+          htmlType="button"
+          onClick={() => {
+            reset();
+            onCancel?.();
+          }}
+          disabled={isSubmitting || !isDirty}
+        >
+          Скасувати
+        </Button>
+        <Button type="primary" htmlType="submit" disabled={isSubmitting || !isDirty}>
+          Зберегти
+        </Button>
+      </Flex>
+    </Form>
   );
 };
 

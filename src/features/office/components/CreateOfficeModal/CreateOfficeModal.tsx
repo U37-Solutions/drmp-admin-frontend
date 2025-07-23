@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
-import { Button, Modal } from 'antd';
-import { useState } from 'react';
+import { Modal, Typography } from 'antd';
 
 import { useAlertContext } from '@shared/providers/AlertProvider';
 
 import OfficeForm from '../OfficeForm/OfficeForm';
+import { useOfficeForm } from '../OfficeForm/useOfficeForm';
 
 import { createOffice } from '../../api';
-import type { OfficeSubmittedFormData } from '../../types';
+import type { OfficeSchema } from '../../validation';
 
 type CreateOfficeModalProps = {
   companyId: number;
@@ -18,12 +18,10 @@ type CreateOfficeModalProps = {
 
 const CreateOfficeModal = ({ companyId, open, onClose, onSuccess }: CreateOfficeModalProps) => {
   const alertContext = useAlertContext();
-  const [office, setOffice] = useState<OfficeSubmittedFormData>({});
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ['create-office'],
-    mutationFn: async (body: OfficeSubmittedFormData) =>
-      body.mainInfo && body.locationInfo && (await createOffice(companyId, { ...body.mainInfo, ...body.locationInfo })),
+    mutationFn: async (body: OfficeSchema) => await createOffice(companyId, body),
     onSuccess: async () => {
       if (alertContext) {
         alertContext.openNotification('Офіс створено успішно', 'success');
@@ -32,48 +30,33 @@ const CreateOfficeModal = ({ companyId, open, onClose, onSuccess }: CreateOffice
     },
   });
 
+  const form = useOfficeForm({
+    onSubmit: (data) => {
+      mutate(data);
+    },
+  });
+
   const handleClose = () => {
-    setOffice({});
+    form.reset();
     onClose();
-  };
-
-  const handleSubmit = () => {
-    if (!office.mainInfo || !office.locationInfo) {
-      alertContext?.openNotification('Будь ласка, заповніть всі поля', 'error');
-      return;
-    }
-    mutate(office);
-    handleClose();
-  };
-
-  const onSaveForm = (data: OfficeSubmittedFormData) => {
-    setOffice((prev) => ({ ...prev, ...data }));
   };
 
   return (
     <Modal
       open={open}
-      title="Створити офіс"
+      title={<Typography.Title level={3}>Створити офіс</Typography.Title>}
       onCancel={onClose}
-      footer={[
-        <Button key="back" onClick={onClose}>
-          Закрити
-        </Button>,
-        <Button key="submit" type="primary" loading={isPending} onClick={handleSubmit}>
-          Створити
-        </Button>,
-      ]}
       width={{
         xs: '90%',
-        sm: '80%',
-        md: '70%',
-        lg: '70%',
-        xl: '70%',
-        xxl: '70%',
+        sm: '90%',
+        md: '90%',
+        lg: '80%',
+        xl: '80%',
+        xxl: '80%',
       }}
-      destroyOnHidden
+      footer={null}
     >
-      <OfficeForm onSubmit={onSaveForm} isPending={isPending} />
+      <OfficeForm form={form} onCancel={handleClose} />
     </Modal>
   );
 };

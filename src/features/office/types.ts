@@ -1,7 +1,5 @@
 import type { Region } from '@components/map/types';
 
-import type { OfficeLocationInfoSchema, OfficeMainInfoSchema } from './validation';
-
 export type OfficeDTO = {
   id: number;
   workSchedule: string;
@@ -30,8 +28,3 @@ export type CreateOfficeDTO = {
   conditionIds: number[];
   customFields?: unknown[];
 };
-
-export type OfficeSubmittedFormData = Partial<{
-  mainInfo: OfficeMainInfoSchema;
-  locationInfo: OfficeLocationInfoSchema;
-}>;

@@ -7,12 +7,13 @@ import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import DeleteOfficeAction from '../DeleteOfficeAction';
 import OfficeForm from '../OfficeForm/OfficeForm';
+import { useOfficeForm } from '../OfficeForm/useOfficeForm';
 
 import styles from './OfficePage.module.scss';
 
 import { updateOffice } from '../../api';
 import type { OfficeDTO } from '../../types';
-import type { OfficeLocationInfoSchema, OfficeMainInfoSchema } from '../../validation';
+import type { OfficeSchema } from '../../validation';
 
 type OfficePageProps = {
   data: OfficeDTO;
@@ -24,14 +25,13 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
   const router = useRouter();
   const canGoBack = useCanGoBack();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ['update-office', data.id],
-    mutationFn: async (body: Partial<{ mainInfo: OfficeMainInfoSchema; locationInfo: OfficeLocationInfoSchema }>) => {
+    mutationFn: async (body: OfficeSchema) => {
       if (!data?.id) return;
       return await updateOffice(data.id, {
         ...data,
-        ...body.mainInfo,
-        ...body.locationInfo,
+        ...body,
       });
     },
     onSuccess: async () => {
@@ -40,6 +40,11 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
       }
       await queryClient.refetchQueries({ queryKey: ['office', data.id] });
     },
+  });
+
+  const form = useOfficeForm({
+    office: data,
+    onSubmit: mutate,
   });
 
   return (
@@ -60,7 +65,9 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
           <DeleteOfficeAction office={data} showText />
         </Flex>
       </Card>
-      <OfficeForm data={data} onSubmit={mutate} isPending={isPending} />
+      <Card className={styles.card}>
+        <OfficeForm form={form} />
+      </Card>
     </div>
   );
 };

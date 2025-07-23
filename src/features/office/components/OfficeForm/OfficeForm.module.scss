@@ -1,9 +1,35 @@
-.card {
-  flex: 1;
-  @include shadowed;
-  :global(.ant-card-body) {
+.form {
+  gap: 20px;
+}
+
+.formContent {
+  max-height: calc(100vh - 316px);
+  overflow-y: auto;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  @include respond-to('xl') {
+    gap: 40px;
+  }
+
+  &__part {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    gap: 20px;
+
+    @include respond-to('mobile') {
+      min-width: 200px;
+    }
+
+    @include respond-to('tablet') {
+      min-width: 400px;
+    }
   }
+}
+
+.actionBtnWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }

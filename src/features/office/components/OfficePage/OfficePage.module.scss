@@ -13,4 +13,14 @@
       flex-direction: row;
     }
   }
+
+  .card {
+    flex: 1;
+    @include shadowed;
+    :global(.ant-card-body) {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
 }

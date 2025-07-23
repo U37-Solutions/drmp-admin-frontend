@@ -21,6 +21,7 @@ import { Route as AuthorizedChatsRouteImport } from './routes/_authorized/chats'
 import { Route as AuthorizedEditorRouteRouteImport } from './routes/_authorized/_editor/route'
 import { Route as AuthorizedCompanyAdminRouteRouteImport } from './routes/_authorized/_companyAdmin/route'
 import { Route as AuthorizedAdminRouteRouteImport } from './routes/_authorized/_admin/route'
+import { Route as UnauthorizedSignUpCompanyRouteImport } from './routes/_unauthorized/sign-up.company'
 import { Route as UnauthorizedSignUpTokenRouteImport } from './routes/_unauthorized/sign-up.$token'
 import { Route as UnauthorizedResetPasswordTokenRouteImport } from './routes/_unauthorized/reset-password.$token'
 import { Route as AuthorizedEditorUsersRouteImport } from './routes/_authorized/_editor/users'
@@ -93,6 +94,12 @@ const AuthorizedAdminRouteRoute = AuthorizedAdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
+const UnauthorizedSignUpCompanyRoute =
+  UnauthorizedSignUpCompanyRouteImport.update({
+    id: '/sign-up/company',
+    path: '/sign-up/company',
+    getParentRoute: () => UnauthorizedRouteRoute,
+  } as any)
 const UnauthorizedSignUpTokenRoute = UnauthorizedSignUpTokenRouteImport.update({
   id: '/sign-up/$token',
   path: '/sign-up/$token',
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/users': typeof AuthorizedEditorUsersRoute
   '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
   '/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
+  '/sign-up/company': typeof UnauthorizedSignUpCompanyRoute
   '/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
   '/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
   '/companies/': typeof AuthorizedEditorCompaniesIndexRoute
@@ -211,6 +219,7 @@ export interface FileRoutesByTo {
   '/users': typeof AuthorizedEditorUsersRoute
   '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
   '/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
+  '/sign-up/company': typeof UnauthorizedSignUpCompanyRoute
   '/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
   '/companies': typeof AuthorizedEditorCompaniesIndexRoute
   '/offices': typeof AuthorizedEditorOfficesIndexRoute
@@ -239,6 +248,7 @@ export interface FileRoutesById {
   '/_authorized/_editor/users': typeof AuthorizedEditorUsersRoute
   '/_unauthorized/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
   '/_unauthorized/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
+  '/_unauthorized/sign-up/company': typeof UnauthorizedSignUpCompanyRoute
   '/_authorized/_editor/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
   '/_authorized/_editor/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
   '/_authorized/_editor/companies/': typeof AuthorizedEditorCompaniesIndexRoute
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/reset-password/$token'
     | '/sign-up/$token'
+    | '/sign-up/company'
     | '/companies/$companyId'
     | '/offices/$officeId'
     | '/companies/'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/users'
     | '/reset-password/$token'
     | '/sign-up/$token'
+    | '/sign-up/company'
     | '/offices/$officeId'
     | '/companies'
     | '/offices'
@@ -312,6 +324,7 @@ export interface FileRouteTypes {
     | '/_authorized/_editor/users'
     | '/_unauthorized/reset-password/$token'
     | '/_unauthorized/sign-up/$token'
+    | '/_unauthorized/sign-up/company'
     | '/_authorized/_editor/companies/$companyId'
     | '/_authorized/_editor/offices/$officeId'
     | '/_authorized/_editor/companies/'
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthorizedAdminRouteRouteImport
       parentRoute: typeof AuthorizedRouteRoute
+    }
+    '/_unauthorized/sign-up/company': {
+      id: '/_unauthorized/sign-up/company'
+      path: '/sign-up/company'
+      fullPath: '/sign-up/company'
+      preLoaderRoute: typeof UnauthorizedSignUpCompanyRouteImport
+      parentRoute: typeof UnauthorizedRouteRoute
     }
     '/_unauthorized/sign-up/$token': {
       id: '/_unauthorized/sign-up/$token'
@@ -642,6 +662,7 @@ interface UnauthorizedRouteRouteChildren {
   UnauthorizedLoginRoute: typeof UnauthorizedLoginRoute
   UnauthorizedResetPasswordTokenRoute: typeof UnauthorizedResetPasswordTokenRoute
   UnauthorizedSignUpTokenRoute: typeof UnauthorizedSignUpTokenRoute
+  UnauthorizedSignUpCompanyRoute: typeof UnauthorizedSignUpCompanyRoute
 }
 
 const UnauthorizedRouteRouteChildren: UnauthorizedRouteRouteChildren = {
@@ -650,6 +671,7 @@ const UnauthorizedRouteRouteChildren: UnauthorizedRouteRouteChildren = {
   UnauthorizedLoginRoute: UnauthorizedLoginRoute,
   UnauthorizedResetPasswordTokenRoute: UnauthorizedResetPasswordTokenRoute,
   UnauthorizedSignUpTokenRoute: UnauthorizedSignUpTokenRoute,
+  UnauthorizedSignUpCompanyRoute: UnauthorizedSignUpCompanyRoute,
 }
 
 const UnauthorizedRouteRouteWithChildren =

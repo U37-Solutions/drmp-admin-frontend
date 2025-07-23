@@ -17,7 +17,7 @@ const searchSchema = z.object({
   from: fallback(z.nativeEnum(LoginPrevStateFeedback).optional(), undefined),
 });
 
-export const Route = createFileRoute('/_unauthorized/login')({
+export const Route = createFileRoute('/_unauthorized/_user/login')({
   component: RouteComponent,
   validateSearch: zodValidator(searchSchema),
   beforeLoad: ({ context }) => {

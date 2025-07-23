@@ -5,7 +5,7 @@ import { getUserByTempTokenOptions } from '@features/auth/api.ts';
 import SignUpForm from '@features/auth/components/SignUpForm/SignUpForm.tsx';
 import { LoginPrevStateFeedback } from '@features/auth/constants.ts';
 
-export const Route = createFileRoute('/_unauthorized/sign-up/$token')({
+export const Route = createFileRoute('/_unauthorized/_user/sign-up/$token')({
   loader: async ({ params, context }) => {
     if (!params.token) {
       return redirect({ to: '/login' });

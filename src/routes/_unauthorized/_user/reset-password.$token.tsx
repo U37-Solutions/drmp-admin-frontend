@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 
 import ResetPasswordForm from '@features/auth/components/ResetPasswordForm/ResetPasswordForm.tsx';
 
-export const Route = createFileRoute('/_unauthorized/reset-password/$token')({
+export const Route = createFileRoute('/_unauthorized/_user/reset-password/$token')({
   component: RouteComponent,
   beforeLoad: ({ params }) => {
     if (!params.token) {

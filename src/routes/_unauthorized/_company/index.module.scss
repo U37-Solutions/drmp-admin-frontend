@@ -1,0 +1,24 @@
+.layout {
+  height: 100%;
+
+  .wrapperCard {
+    width: 95%;
+    max-width: 1700px;
+
+    :global(.ant-card-body) {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      @include respond-to('desktop') {
+        max-width: 70%;
+      }
+
+      &:before, &:after {
+        content: none;
+      }
+    }
+  }
+}

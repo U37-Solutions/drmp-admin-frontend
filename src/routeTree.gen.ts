@@ -9,21 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UnauthorizedRouteRouteImport } from './routes/_unauthorized/route'
 import { Route as AuthorizedRouteRouteImport } from './routes/_authorized/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UnauthorizedLoginRouteImport } from './routes/_unauthorized/login'
-import { Route as UnauthorizedForgotPasswordRouteImport } from './routes/_unauthorized/forgot-password'
-import { Route as UnauthorizedCheckEmailRouteImport } from './routes/_unauthorized/check-email'
 import { Route as AuthorizedProfileRouteImport } from './routes/_authorized/profile'
 import { Route as AuthorizedFeedbacksRouteImport } from './routes/_authorized/feedbacks'
 import { Route as AuthorizedChatsRouteImport } from './routes/_authorized/chats'
+import { Route as UnauthorizedUserRouteRouteImport } from './routes/_unauthorized/_user/route'
+import { Route as UnauthorizedCompanyRouteRouteImport } from './routes/_unauthorized/_company/route'
 import { Route as AuthorizedEditorRouteRouteImport } from './routes/_authorized/_editor/route'
 import { Route as AuthorizedCompanyAdminRouteRouteImport } from './routes/_authorized/_companyAdmin/route'
 import { Route as AuthorizedAdminRouteRouteImport } from './routes/_authorized/_admin/route'
-import { Route as UnauthorizedSignUpCompanyRouteImport } from './routes/_unauthorized/sign-up.company'
-import { Route as UnauthorizedSignUpTokenRouteImport } from './routes/_unauthorized/sign-up.$token'
-import { Route as UnauthorizedResetPasswordTokenRouteImport } from './routes/_unauthorized/reset-password.$token'
+import { Route as UnauthorizedUserLoginRouteImport } from './routes/_unauthorized/_user/login'
+import { Route as UnauthorizedUserForgotPasswordRouteImport } from './routes/_unauthorized/_user/forgot-password'
+import { Route as UnauthorizedUserCheckEmailRouteImport } from './routes/_unauthorized/_user/check-email'
 import { Route as AuthorizedEditorUsersRouteImport } from './routes/_authorized/_editor/users'
 import { Route as AuthorizedCompanyAdminCompanyRouteImport } from './routes/_authorized/_companyAdmin/company'
 import { Route as AuthorizedAdminFormEditRouteImport } from './routes/_authorized/_admin/form-edit'
@@ -31,16 +29,15 @@ import { Route as AuthorizedEditorOfficesRouteRouteImport } from './routes/_auth
 import { Route as AuthorizedEditorCompaniesRouteRouteImport } from './routes/_authorized/_editor/companies/route'
 import { Route as AuthorizedEditorOfficesIndexRouteImport } from './routes/_authorized/_editor/offices/index'
 import { Route as AuthorizedEditorCompaniesIndexRouteImport } from './routes/_authorized/_editor/companies/index'
+import { Route as UnauthorizedUserSignUpTokenRouteImport } from './routes/_unauthorized/_user/sign-up.$token'
+import { Route as UnauthorizedUserResetPasswordTokenRouteImport } from './routes/_unauthorized/_user/reset-password.$token'
+import { Route as UnauthorizedCompanySignUpCompanyRouteImport } from './routes/_unauthorized/_company/sign-up.company'
 import { Route as AuthorizedEditorOfficesOfficeIdRouteRouteImport } from './routes/_authorized/_editor/offices/$officeId/route'
 import { Route as AuthorizedEditorCompaniesCompanyIdRouteRouteImport } from './routes/_authorized/_editor/companies/$companyId/route'
 import { Route as AuthorizedEditorCompaniesCompanyIdIndexRouteImport } from './routes/_authorized/_editor/companies/$companyId/index'
 import { Route as AuthorizedEditorCompaniesCompanyIdUsersRouteImport } from './routes/_authorized/_editor/companies/$companyId/users'
 import { Route as AuthorizedEditorCompaniesCompanyIdLogsRouteImport } from './routes/_authorized/_editor/companies/$companyId/logs'
 
-const UnauthorizedRouteRoute = UnauthorizedRouteRouteImport.update({
-  id: '/_unauthorized',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthorizedRouteRoute = AuthorizedRouteRouteImport.update({
   id: '/_authorized',
   getParentRoute: () => rootRouteImport,
@@ -49,22 +46,6 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const UnauthorizedLoginRoute = UnauthorizedLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => UnauthorizedRouteRoute,
-} as any)
-const UnauthorizedForgotPasswordRoute =
-  UnauthorizedForgotPasswordRouteImport.update({
-    id: '/forgot-password',
-    path: '/forgot-password',
-    getParentRoute: () => UnauthorizedRouteRoute,
-  } as any)
-const UnauthorizedCheckEmailRoute = UnauthorizedCheckEmailRouteImport.update({
-  id: '/check-email',
-  path: '/check-email',
-  getParentRoute: () => UnauthorizedRouteRoute,
 } as any)
 const AuthorizedProfileRoute = AuthorizedProfileRouteImport.update({
   id: '/profile',
@@ -81,6 +62,15 @@ const AuthorizedChatsRoute = AuthorizedChatsRouteImport.update({
   path: '/chats',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
+const UnauthorizedUserRouteRoute = UnauthorizedUserRouteRouteImport.update({
+  id: '/_unauthorized/_user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthorizedCompanyRouteRoute =
+  UnauthorizedCompanyRouteRouteImport.update({
+    id: '/_unauthorized/_company',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthorizedEditorRouteRoute = AuthorizedEditorRouteRouteImport.update({
   id: '/_editor',
   getParentRoute: () => AuthorizedRouteRoute,
@@ -94,22 +84,22 @@ const AuthorizedAdminRouteRoute = AuthorizedAdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
-const UnauthorizedSignUpCompanyRoute =
-  UnauthorizedSignUpCompanyRouteImport.update({
-    id: '/sign-up/company',
-    path: '/sign-up/company',
-    getParentRoute: () => UnauthorizedRouteRoute,
-  } as any)
-const UnauthorizedSignUpTokenRoute = UnauthorizedSignUpTokenRouteImport.update({
-  id: '/sign-up/$token',
-  path: '/sign-up/$token',
-  getParentRoute: () => UnauthorizedRouteRoute,
+const UnauthorizedUserLoginRoute = UnauthorizedUserLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => UnauthorizedUserRouteRoute,
 } as any)
-const UnauthorizedResetPasswordTokenRoute =
-  UnauthorizedResetPasswordTokenRouteImport.update({
-    id: '/reset-password/$token',
-    path: '/reset-password/$token',
-    getParentRoute: () => UnauthorizedRouteRoute,
+const UnauthorizedUserForgotPasswordRoute =
+  UnauthorizedUserForgotPasswordRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => UnauthorizedUserRouteRoute,
+  } as any)
+const UnauthorizedUserCheckEmailRoute =
+  UnauthorizedUserCheckEmailRouteImport.update({
+    id: '/check-email',
+    path: '/check-email',
+    getParentRoute: () => UnauthorizedUserRouteRoute,
   } as any)
 const AuthorizedEditorUsersRoute = AuthorizedEditorUsersRouteImport.update({
   id: '/users',
@@ -151,6 +141,24 @@ const AuthorizedEditorCompaniesIndexRoute =
     path: '/',
     getParentRoute: () => AuthorizedEditorCompaniesRouteRoute,
   } as any)
+const UnauthorizedUserSignUpTokenRoute =
+  UnauthorizedUserSignUpTokenRouteImport.update({
+    id: '/sign-up/$token',
+    path: '/sign-up/$token',
+    getParentRoute: () => UnauthorizedUserRouteRoute,
+  } as any)
+const UnauthorizedUserResetPasswordTokenRoute =
+  UnauthorizedUserResetPasswordTokenRouteImport.update({
+    id: '/reset-password/$token',
+    path: '/reset-password/$token',
+    getParentRoute: () => UnauthorizedUserRouteRoute,
+  } as any)
+const UnauthorizedCompanySignUpCompanyRoute =
+  UnauthorizedCompanySignUpCompanyRouteImport.update({
+    id: '/sign-up/company',
+    path: '/sign-up/company',
+    getParentRoute: () => UnauthorizedCompanyRouteRoute,
+  } as any)
 const AuthorizedEditorOfficesOfficeIdRouteRoute =
   AuthorizedEditorOfficesOfficeIdRouteRouteImport.update({
     id: '/$officeId',
@@ -187,19 +195,19 @@ export interface FileRoutesByFullPath {
   '/chats': typeof AuthorizedChatsRoute
   '/feedbacks': typeof AuthorizedFeedbacksRoute
   '/profile': typeof AuthorizedProfileRoute
-  '/check-email': typeof UnauthorizedCheckEmailRoute
-  '/forgot-password': typeof UnauthorizedForgotPasswordRoute
-  '/login': typeof UnauthorizedLoginRoute
   '/companies': typeof AuthorizedEditorCompaniesRouteRouteWithChildren
   '/offices': typeof AuthorizedEditorOfficesRouteRouteWithChildren
   '/form-edit': typeof AuthorizedAdminFormEditRoute
   '/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/users': typeof AuthorizedEditorUsersRoute
-  '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
-  '/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
-  '/sign-up/company': typeof UnauthorizedSignUpCompanyRoute
+  '/check-email': typeof UnauthorizedUserCheckEmailRoute
+  '/forgot-password': typeof UnauthorizedUserForgotPasswordRoute
+  '/login': typeof UnauthorizedUserLoginRoute
   '/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
   '/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
+  '/sign-up/company': typeof UnauthorizedCompanySignUpCompanyRoute
+  '/reset-password/$token': typeof UnauthorizedUserResetPasswordTokenRoute
+  '/sign-up/$token': typeof UnauthorizedUserSignUpTokenRoute
   '/companies/': typeof AuthorizedEditorCompaniesIndexRoute
   '/offices/': typeof AuthorizedEditorOfficesIndexRoute
   '/companies/$companyId/logs': typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
@@ -211,16 +219,16 @@ export interface FileRoutesByTo {
   '/chats': typeof AuthorizedChatsRoute
   '/feedbacks': typeof AuthorizedFeedbacksRoute
   '/profile': typeof AuthorizedProfileRoute
-  '/check-email': typeof UnauthorizedCheckEmailRoute
-  '/forgot-password': typeof UnauthorizedForgotPasswordRoute
-  '/login': typeof UnauthorizedLoginRoute
   '/form-edit': typeof AuthorizedAdminFormEditRoute
   '/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/users': typeof AuthorizedEditorUsersRoute
-  '/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
-  '/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
-  '/sign-up/company': typeof UnauthorizedSignUpCompanyRoute
+  '/check-email': typeof UnauthorizedUserCheckEmailRoute
+  '/forgot-password': typeof UnauthorizedUserForgotPasswordRoute
+  '/login': typeof UnauthorizedUserLoginRoute
   '/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
+  '/sign-up/company': typeof UnauthorizedCompanySignUpCompanyRoute
+  '/reset-password/$token': typeof UnauthorizedUserResetPasswordTokenRoute
+  '/sign-up/$token': typeof UnauthorizedUserSignUpTokenRoute
   '/companies': typeof AuthorizedEditorCompaniesIndexRoute
   '/offices': typeof AuthorizedEditorOfficesIndexRoute
   '/companies/$companyId/logs': typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
@@ -231,26 +239,27 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authorized': typeof AuthorizedRouteRouteWithChildren
-  '/_unauthorized': typeof UnauthorizedRouteRouteWithChildren
   '/_authorized/_admin': typeof AuthorizedAdminRouteRouteWithChildren
   '/_authorized/_companyAdmin': typeof AuthorizedCompanyAdminRouteRouteWithChildren
   '/_authorized/_editor': typeof AuthorizedEditorRouteRouteWithChildren
+  '/_unauthorized/_company': typeof UnauthorizedCompanyRouteRouteWithChildren
+  '/_unauthorized/_user': typeof UnauthorizedUserRouteRouteWithChildren
   '/_authorized/chats': typeof AuthorizedChatsRoute
   '/_authorized/feedbacks': typeof AuthorizedFeedbacksRoute
   '/_authorized/profile': typeof AuthorizedProfileRoute
-  '/_unauthorized/check-email': typeof UnauthorizedCheckEmailRoute
-  '/_unauthorized/forgot-password': typeof UnauthorizedForgotPasswordRoute
-  '/_unauthorized/login': typeof UnauthorizedLoginRoute
   '/_authorized/_editor/companies': typeof AuthorizedEditorCompaniesRouteRouteWithChildren
   '/_authorized/_editor/offices': typeof AuthorizedEditorOfficesRouteRouteWithChildren
   '/_authorized/_admin/form-edit': typeof AuthorizedAdminFormEditRoute
   '/_authorized/_companyAdmin/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/_authorized/_editor/users': typeof AuthorizedEditorUsersRoute
-  '/_unauthorized/reset-password/$token': typeof UnauthorizedResetPasswordTokenRoute
-  '/_unauthorized/sign-up/$token': typeof UnauthorizedSignUpTokenRoute
-  '/_unauthorized/sign-up/company': typeof UnauthorizedSignUpCompanyRoute
+  '/_unauthorized/_user/check-email': typeof UnauthorizedUserCheckEmailRoute
+  '/_unauthorized/_user/forgot-password': typeof UnauthorizedUserForgotPasswordRoute
+  '/_unauthorized/_user/login': typeof UnauthorizedUserLoginRoute
   '/_authorized/_editor/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
   '/_authorized/_editor/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
+  '/_unauthorized/_company/sign-up/company': typeof UnauthorizedCompanySignUpCompanyRoute
+  '/_unauthorized/_user/reset-password/$token': typeof UnauthorizedUserResetPasswordTokenRoute
+  '/_unauthorized/_user/sign-up/$token': typeof UnauthorizedUserSignUpTokenRoute
   '/_authorized/_editor/companies/': typeof AuthorizedEditorCompaniesIndexRoute
   '/_authorized/_editor/offices/': typeof AuthorizedEditorOfficesIndexRoute
   '/_authorized/_editor/companies/$companyId/logs': typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
@@ -264,19 +273,19 @@ export interface FileRouteTypes {
     | '/chats'
     | '/feedbacks'
     | '/profile'
-    | '/check-email'
-    | '/forgot-password'
-    | '/login'
     | '/companies'
     | '/offices'
     | '/form-edit'
     | '/company'
     | '/users'
-    | '/reset-password/$token'
-    | '/sign-up/$token'
-    | '/sign-up/company'
+    | '/check-email'
+    | '/forgot-password'
+    | '/login'
     | '/companies/$companyId'
     | '/offices/$officeId'
+    | '/sign-up/company'
+    | '/reset-password/$token'
+    | '/sign-up/$token'
     | '/companies/'
     | '/offices/'
     | '/companies/$companyId/logs'
@@ -288,16 +297,16 @@ export interface FileRouteTypes {
     | '/chats'
     | '/feedbacks'
     | '/profile'
-    | '/check-email'
-    | '/forgot-password'
-    | '/login'
     | '/form-edit'
     | '/company'
     | '/users'
+    | '/check-email'
+    | '/forgot-password'
+    | '/login'
+    | '/offices/$officeId'
+    | '/sign-up/company'
     | '/reset-password/$token'
     | '/sign-up/$token'
-    | '/sign-up/company'
-    | '/offices/$officeId'
     | '/companies'
     | '/offices'
     | '/companies/$companyId/logs'
@@ -307,26 +316,27 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authorized'
-    | '/_unauthorized'
     | '/_authorized/_admin'
     | '/_authorized/_companyAdmin'
     | '/_authorized/_editor'
+    | '/_unauthorized/_company'
+    | '/_unauthorized/_user'
     | '/_authorized/chats'
     | '/_authorized/feedbacks'
     | '/_authorized/profile'
-    | '/_unauthorized/check-email'
-    | '/_unauthorized/forgot-password'
-    | '/_unauthorized/login'
     | '/_authorized/_editor/companies'
     | '/_authorized/_editor/offices'
     | '/_authorized/_admin/form-edit'
     | '/_authorized/_companyAdmin/company'
     | '/_authorized/_editor/users'
-    | '/_unauthorized/reset-password/$token'
-    | '/_unauthorized/sign-up/$token'
-    | '/_unauthorized/sign-up/company'
+    | '/_unauthorized/_user/check-email'
+    | '/_unauthorized/_user/forgot-password'
+    | '/_unauthorized/_user/login'
     | '/_authorized/_editor/companies/$companyId'
     | '/_authorized/_editor/offices/$officeId'
+    | '/_unauthorized/_company/sign-up/company'
+    | '/_unauthorized/_user/reset-password/$token'
+    | '/_unauthorized/_user/sign-up/$token'
     | '/_authorized/_editor/companies/'
     | '/_authorized/_editor/offices/'
     | '/_authorized/_editor/companies/$companyId/logs'
@@ -337,18 +347,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthorizedRouteRoute: typeof AuthorizedRouteRouteWithChildren
-  UnauthorizedRouteRoute: typeof UnauthorizedRouteRouteWithChildren
+  UnauthorizedCompanyRouteRoute: typeof UnauthorizedCompanyRouteRouteWithChildren
+  UnauthorizedUserRouteRoute: typeof UnauthorizedUserRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_unauthorized': {
-      id: '/_unauthorized'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof UnauthorizedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authorized': {
       id: '/_authorized'
       path: ''
@@ -362,27 +366,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_unauthorized/login': {
-      id: '/_unauthorized/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof UnauthorizedLoginRouteImport
-      parentRoute: typeof UnauthorizedRouteRoute
-    }
-    '/_unauthorized/forgot-password': {
-      id: '/_unauthorized/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof UnauthorizedForgotPasswordRouteImport
-      parentRoute: typeof UnauthorizedRouteRoute
-    }
-    '/_unauthorized/check-email': {
-      id: '/_unauthorized/check-email'
-      path: '/check-email'
-      fullPath: '/check-email'
-      preLoaderRoute: typeof UnauthorizedCheckEmailRouteImport
-      parentRoute: typeof UnauthorizedRouteRoute
     }
     '/_authorized/profile': {
       id: '/_authorized/profile'
@@ -405,6 +388,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedChatsRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
+    '/_unauthorized/_user': {
+      id: '/_unauthorized/_user'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof UnauthorizedUserRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_unauthorized/_company': {
+      id: '/_unauthorized/_company'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof UnauthorizedCompanyRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authorized/_editor': {
       id: '/_authorized/_editor'
       path: ''
@@ -426,26 +423,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedAdminRouteRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
-    '/_unauthorized/sign-up/company': {
-      id: '/_unauthorized/sign-up/company'
-      path: '/sign-up/company'
-      fullPath: '/sign-up/company'
-      preLoaderRoute: typeof UnauthorizedSignUpCompanyRouteImport
-      parentRoute: typeof UnauthorizedRouteRoute
+    '/_unauthorized/_user/login': {
+      id: '/_unauthorized/_user/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof UnauthorizedUserLoginRouteImport
+      parentRoute: typeof UnauthorizedUserRouteRoute
     }
-    '/_unauthorized/sign-up/$token': {
-      id: '/_unauthorized/sign-up/$token'
-      path: '/sign-up/$token'
-      fullPath: '/sign-up/$token'
-      preLoaderRoute: typeof UnauthorizedSignUpTokenRouteImport
-      parentRoute: typeof UnauthorizedRouteRoute
+    '/_unauthorized/_user/forgot-password': {
+      id: '/_unauthorized/_user/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof UnauthorizedUserForgotPasswordRouteImport
+      parentRoute: typeof UnauthorizedUserRouteRoute
     }
-    '/_unauthorized/reset-password/$token': {
-      id: '/_unauthorized/reset-password/$token'
-      path: '/reset-password/$token'
-      fullPath: '/reset-password/$token'
-      preLoaderRoute: typeof UnauthorizedResetPasswordTokenRouteImport
-      parentRoute: typeof UnauthorizedRouteRoute
+    '/_unauthorized/_user/check-email': {
+      id: '/_unauthorized/_user/check-email'
+      path: '/check-email'
+      fullPath: '/check-email'
+      preLoaderRoute: typeof UnauthorizedUserCheckEmailRouteImport
+      parentRoute: typeof UnauthorizedUserRouteRoute
     }
     '/_authorized/_editor/users': {
       id: '/_authorized/_editor/users'
@@ -495,6 +492,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/companies/'
       preLoaderRoute: typeof AuthorizedEditorCompaniesIndexRouteImport
       parentRoute: typeof AuthorizedEditorCompaniesRouteRoute
+    }
+    '/_unauthorized/_user/sign-up/$token': {
+      id: '/_unauthorized/_user/sign-up/$token'
+      path: '/sign-up/$token'
+      fullPath: '/sign-up/$token'
+      preLoaderRoute: typeof UnauthorizedUserSignUpTokenRouteImport
+      parentRoute: typeof UnauthorizedUserRouteRoute
+    }
+    '/_unauthorized/_user/reset-password/$token': {
+      id: '/_unauthorized/_user/reset-password/$token'
+      path: '/reset-password/$token'
+      fullPath: '/reset-password/$token'
+      preLoaderRoute: typeof UnauthorizedUserResetPasswordTokenRouteImport
+      parentRoute: typeof UnauthorizedUserRouteRoute
+    }
+    '/_unauthorized/_company/sign-up/company': {
+      id: '/_unauthorized/_company/sign-up/company'
+      path: '/sign-up/company'
+      fullPath: '/sign-up/company'
+      preLoaderRoute: typeof UnauthorizedCompanySignUpCompanyRouteImport
+      parentRoute: typeof UnauthorizedCompanyRouteRoute
     }
     '/_authorized/_editor/offices/$officeId': {
       id: '/_authorized/_editor/offices/$officeId'
@@ -656,31 +674,48 @@ const AuthorizedRouteRouteWithChildren = AuthorizedRouteRoute._addFileChildren(
   AuthorizedRouteRouteChildren,
 )
 
-interface UnauthorizedRouteRouteChildren {
-  UnauthorizedCheckEmailRoute: typeof UnauthorizedCheckEmailRoute
-  UnauthorizedForgotPasswordRoute: typeof UnauthorizedForgotPasswordRoute
-  UnauthorizedLoginRoute: typeof UnauthorizedLoginRoute
-  UnauthorizedResetPasswordTokenRoute: typeof UnauthorizedResetPasswordTokenRoute
-  UnauthorizedSignUpTokenRoute: typeof UnauthorizedSignUpTokenRoute
-  UnauthorizedSignUpCompanyRoute: typeof UnauthorizedSignUpCompanyRoute
+interface UnauthorizedCompanyRouteRouteChildren {
+  UnauthorizedCompanySignUpCompanyRoute: typeof UnauthorizedCompanySignUpCompanyRoute
 }
 
-const UnauthorizedRouteRouteChildren: UnauthorizedRouteRouteChildren = {
-  UnauthorizedCheckEmailRoute: UnauthorizedCheckEmailRoute,
-  UnauthorizedForgotPasswordRoute: UnauthorizedForgotPasswordRoute,
-  UnauthorizedLoginRoute: UnauthorizedLoginRoute,
-  UnauthorizedResetPasswordTokenRoute: UnauthorizedResetPasswordTokenRoute,
-  UnauthorizedSignUpTokenRoute: UnauthorizedSignUpTokenRoute,
-  UnauthorizedSignUpCompanyRoute: UnauthorizedSignUpCompanyRoute,
+const UnauthorizedCompanyRouteRouteChildren: UnauthorizedCompanyRouteRouteChildren =
+  {
+    UnauthorizedCompanySignUpCompanyRoute:
+      UnauthorizedCompanySignUpCompanyRoute,
+  }
+
+const UnauthorizedCompanyRouteRouteWithChildren =
+  UnauthorizedCompanyRouteRoute._addFileChildren(
+    UnauthorizedCompanyRouteRouteChildren,
+  )
+
+interface UnauthorizedUserRouteRouteChildren {
+  UnauthorizedUserCheckEmailRoute: typeof UnauthorizedUserCheckEmailRoute
+  UnauthorizedUserForgotPasswordRoute: typeof UnauthorizedUserForgotPasswordRoute
+  UnauthorizedUserLoginRoute: typeof UnauthorizedUserLoginRoute
+  UnauthorizedUserResetPasswordTokenRoute: typeof UnauthorizedUserResetPasswordTokenRoute
+  UnauthorizedUserSignUpTokenRoute: typeof UnauthorizedUserSignUpTokenRoute
 }
 
-const UnauthorizedRouteRouteWithChildren =
-  UnauthorizedRouteRoute._addFileChildren(UnauthorizedRouteRouteChildren)
+const UnauthorizedUserRouteRouteChildren: UnauthorizedUserRouteRouteChildren = {
+  UnauthorizedUserCheckEmailRoute: UnauthorizedUserCheckEmailRoute,
+  UnauthorizedUserForgotPasswordRoute: UnauthorizedUserForgotPasswordRoute,
+  UnauthorizedUserLoginRoute: UnauthorizedUserLoginRoute,
+  UnauthorizedUserResetPasswordTokenRoute:
+    UnauthorizedUserResetPasswordTokenRoute,
+  UnauthorizedUserSignUpTokenRoute: UnauthorizedUserSignUpTokenRoute,
+}
+
+const UnauthorizedUserRouteRouteWithChildren =
+  UnauthorizedUserRouteRoute._addFileChildren(
+    UnauthorizedUserRouteRouteChildren,
+  )
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthorizedRouteRoute: AuthorizedRouteRouteWithChildren,
-  UnauthorizedRouteRoute: UnauthorizedRouteRouteWithChildren,
+  UnauthorizedCompanyRouteRoute: UnauthorizedCompanyRouteRouteWithChildren,
+  UnauthorizedUserRouteRoute: UnauthorizedUserRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

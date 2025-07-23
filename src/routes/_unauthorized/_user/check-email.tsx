@@ -2,7 +2,7 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { Flex, Typography } from 'antd';
 
-export const Route = createFileRoute('/_unauthorized/check-email')({
+export const Route = createFileRoute('/_unauthorized/_user/check-email')({
   component: RouteComponent,
 });
 

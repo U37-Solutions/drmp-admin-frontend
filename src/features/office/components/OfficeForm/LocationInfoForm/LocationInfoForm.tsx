@@ -27,8 +27,7 @@ type LocationInfoFormProps = {
 const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, isPending, submitted }) => {
   const [showMap, setShowMap] = useState(false);
   // TODO: Implement region restriction logic if needed
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [regionRestriction, setRegionRestriction] = useState<Bounds>();
+  const [, setRegionRestriction] = useState<Bounds>();
 
   const {
     control,

@@ -59,7 +59,7 @@ const SignUpCompanyPage = () => {
           </Button>
         )}
         {currentStep === steps.length - 1 && (
-          <Button type="primary" onClick={() => console.log('Processing complete!')}>
+          <Button type="primary" onClick={() => ({})}>
             Зареєструватися
           </Button>
         )}

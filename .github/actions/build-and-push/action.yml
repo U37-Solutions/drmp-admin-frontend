@@ -36,8 +36,8 @@ runs:
           ${{ inputs.DOCKER_REGISTRY_NAME }}/${{ inputs.NAMESPACE }}/${{ inputs.PROJECT_NAME }}:latest
         platforms: linux/amd64
         secrets: |
-          VITE_MAP_API_KEY=${{ secrets.VITE_MAP_API_KEY }}
-          VITE_MAP_ID=${{ secrets.VITE_MAP_ID }}
+          VITE_MAP_API_KEY=${{ inputs.VITE_MAP_API_KEY }}
+          VITE_MAP_ID=${{ inputs.VITE_MAP_ID }}
         build-args: |
           VITE_API_URL=${{ inputs.VITE_API_URL }}
           VITE_SOCKET_URL=${{ inputs.VITE_SOCKET_URL }}

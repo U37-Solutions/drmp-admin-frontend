@@ -1,34 +1,50 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Steps, Typography } from 'antd';
-import { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import styles from './SignUpCompanyPage.module.scss';
+import SignUpCompanyStep from './steps/SignUpCompanyStep/SignUpCompanyStep';
+import SignUpOfficeStep from './steps/SignUpOfficeStep/SignUpOfficeStep';
+import SignUpUserStep from './steps/SignUpUserStep/SignUpUserStep';
+import SignUpVerificationStep from './steps/SignUpVerificationStep/SignUpVerificationStep';
+
+import { type SignUpCompanySchema, signUpCompanySchema } from '../../validation';
 
 enum Step {
-  MAIN_INFO = 0,
-  CONTACT_INFO = 1,
-  VERIFICATION = 2,
+  COMPANY_INFO = 0,
+  OFFICE_INFO = 1,
+  USER_INFO = 2,
+  VERIFICATION = 3,
 }
 
-const stepsInfo: Record<Step, { title: string; subtitle: string; content: string }> = {
-  [Step.MAIN_INFO]: {
-    title: 'Інформація про компанію',
-    subtitle: 'Заповніть дані про компанію.',
-    content: 'Заповніть дані про компанію.',
+const stepsInfo: Record<Step, { title: string; subtitle: string; content: React.ReactElement }> = {
+  [Step.COMPANY_INFO]: {
+    title: 'Інформація про організацію',
+    subtitle: 'Заповніть дані про організацію.',
+    content: <SignUpCompanyStep />,
   },
-  [Step.CONTACT_INFO]: {
+  [Step.OFFICE_INFO]: {
     title: 'Інформація про офіс',
-    subtitle: 'Створіть перший офіс компанії.',
-    content: 'Створіть перший офіс компанії.',
+    subtitle: 'Створіть перший офіс організації.',
+    content: <SignUpOfficeStep />,
+  },
+  [Step.USER_INFO]: {
+    title: 'Інформація про контактну особу',
+    subtitle: 'Заповніть дані про контактну особу.',
+    content: <SignUpUserStep />,
   },
   [Step.VERIFICATION]: {
     title: 'Перевірка',
     subtitle: 'Перевірте введені дані.',
-    content: 'Перевірте введені дані.',
+    content: <SignUpVerificationStep />,
   },
 };
 
 const SignUpCompanyPage = () => {
-  const [currentStep, setCurrentStep] = useState(Step.MAIN_INFO);
+  const [currentStep, setCurrentStep] = useState(Step.COMPANY_INFO);
+
+  const steps = useMemo(() => Object.values(stepsInfo), []);
 
   const nextStep = () => {
     setCurrentStep((prev) => prev + 1);
@@ -38,28 +54,42 @@ const SignUpCompanyPage = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
-  const steps = useMemo(() => Object.values(stepsInfo), []);
+  // const {
+  //   control,
+  //   handleSubmit,
+  //   reset,
+  //   formState: { errors, isSubmitting, isDirty },
+  // } = useForm<SignUpCompanySchema>({
+  //   resolver: zodResolver(signUpCompanySchema),
+  // });
+
+  // const submitHandler = useCallback(
+  //   (data: SignUpCompanySchema) => {
+  //     reset(data);
+  //   },
+  //   [onSubmit, reset],
+  // );
 
   return (
     <div className={styles.signUpCompanyPage}>
-      <div className={styles.header}>
-        <Typography.Title level={1}>Реєстрація компанії</Typography.Title>
+      <div className={styles.signUpCompanyPage__header}>
+        <Typography.Title level={1}>Реєстрація організації</Typography.Title>
+        <Steps current={currentStep} items={steps} />
       </div>
-      <Steps current={currentStep} items={steps} />
-      <div>{stepsInfo[currentStep].content}</div>
-      <div style={{ marginTop: 24 }}>
+      <div className={styles.signUpCompanyPage__content}>{stepsInfo[currentStep].content}</div>
+      <div className={styles.signUpCompanyPage__footer}>
         {currentStep > 0 && (
-          <Button style={{ margin: '0 8px' }} onClick={() => prevStep()}>
+          <Button className={styles.signUpCompanyPage__footerPrev} onClick={() => prevStep()}>
             Назад
           </Button>
         )}
         {currentStep < steps.length - 1 && (
-          <Button type="primary" onClick={() => nextStep()}>
+          <Button className={styles.signUpCompanyPage__footerNext} type="primary" onClick={() => nextStep()}>
             Далі
           </Button>
         )}
         {currentStep === steps.length - 1 && (
-          <Button type="primary" onClick={() => ({})}>
+          <Button className={styles.signUpCompanyPage__footerSubmit} type="primary" onClick={() => ({})}>
             Зареєструватися
           </Button>
         )}

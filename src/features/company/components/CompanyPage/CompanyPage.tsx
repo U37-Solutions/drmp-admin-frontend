@@ -101,7 +101,7 @@ const CompanyPage = ({ data }: { data: CompanyDTO }) => {
       </Flex>
 
       <Card className={styles.card} styles={{ body: { paddingTop: 0 } }}>
-        <CompanyTabs />
+        <CompanyTabs companyId={data.id} />
       </Card>
     </div>
   );

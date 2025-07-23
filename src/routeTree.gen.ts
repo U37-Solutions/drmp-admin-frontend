@@ -16,6 +16,7 @@ import { Route as UnauthorizedLoginRouteImport } from './routes/_unauthorized/lo
 import { Route as UnauthorizedForgotPasswordRouteImport } from './routes/_unauthorized/forgot-password'
 import { Route as UnauthorizedCheckEmailRouteImport } from './routes/_unauthorized/check-email'
 import { Route as AuthorizedProfileRouteImport } from './routes/_authorized/profile'
+import { Route as AuthorizedFeedbacksRouteImport } from './routes/_authorized/feedbacks'
 import { Route as AuthorizedChatsRouteImport } from './routes/_authorized/chats'
 import { Route as AuthorizedEditorRouteRouteImport } from './routes/_authorized/_editor/route'
 import { Route as AuthorizedCompanyAdminRouteRouteImport } from './routes/_authorized/_companyAdmin/route'
@@ -67,6 +68,11 @@ const UnauthorizedCheckEmailRoute = UnauthorizedCheckEmailRouteImport.update({
 const AuthorizedProfileRoute = AuthorizedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AuthorizedRouteRoute,
+} as any)
+const AuthorizedFeedbacksRoute = AuthorizedFeedbacksRouteImport.update({
+  id: '/feedbacks',
+  path: '/feedbacks',
   getParentRoute: () => AuthorizedRouteRoute,
 } as any)
 const AuthorizedChatsRoute = AuthorizedChatsRouteImport.update({
@@ -172,6 +178,7 @@ const AuthorizedEditorCompaniesCompanyIdLogsRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chats': typeof AuthorizedChatsRoute
+  '/feedbacks': typeof AuthorizedFeedbacksRoute
   '/profile': typeof AuthorizedProfileRoute
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chats': typeof AuthorizedChatsRoute
+  '/feedbacks': typeof AuthorizedFeedbacksRoute
   '/profile': typeof AuthorizedProfileRoute
   '/check-email': typeof UnauthorizedCheckEmailRoute
   '/forgot-password': typeof UnauthorizedForgotPasswordRoute
@@ -219,6 +227,7 @@ export interface FileRoutesById {
   '/_authorized/_companyAdmin': typeof AuthorizedCompanyAdminRouteRouteWithChildren
   '/_authorized/_editor': typeof AuthorizedEditorRouteRouteWithChildren
   '/_authorized/chats': typeof AuthorizedChatsRoute
+  '/_authorized/feedbacks': typeof AuthorizedFeedbacksRoute
   '/_authorized/profile': typeof AuthorizedProfileRoute
   '/_unauthorized/check-email': typeof UnauthorizedCheckEmailRoute
   '/_unauthorized/forgot-password': typeof UnauthorizedForgotPasswordRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/chats'
+    | '/feedbacks'
     | '/profile'
     | '/check-email'
     | '/forgot-password'
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/chats'
+    | '/feedbacks'
     | '/profile'
     | '/check-email'
     | '/forgot-password'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/_authorized/_companyAdmin'
     | '/_authorized/_editor'
     | '/_authorized/chats'
+    | '/_authorized/feedbacks'
     | '/_authorized/profile'
     | '/_unauthorized/check-email'
     | '/_unauthorized/forgot-password'
@@ -364,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthorizedProfileRouteImport
+      parentRoute: typeof AuthorizedRouteRoute
+    }
+    '/_authorized/feedbacks': {
+      id: '/_authorized/feedbacks'
+      path: '/feedbacks'
+      fullPath: '/feedbacks'
+      preLoaderRoute: typeof AuthorizedFeedbacksRouteImport
       parentRoute: typeof AuthorizedRouteRoute
     }
     '/_authorized/chats': {
@@ -599,6 +618,7 @@ interface AuthorizedRouteRouteChildren {
   AuthorizedCompanyAdminRouteRoute: typeof AuthorizedCompanyAdminRouteRouteWithChildren
   AuthorizedEditorRouteRoute: typeof AuthorizedEditorRouteRouteWithChildren
   AuthorizedChatsRoute: typeof AuthorizedChatsRoute
+  AuthorizedFeedbacksRoute: typeof AuthorizedFeedbacksRoute
   AuthorizedProfileRoute: typeof AuthorizedProfileRoute
 }
 
@@ -608,6 +628,7 @@ const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
     AuthorizedCompanyAdminRouteRouteWithChildren,
   AuthorizedEditorRouteRoute: AuthorizedEditorRouteRouteWithChildren,
   AuthorizedChatsRoute: AuthorizedChatsRoute,
+  AuthorizedFeedbacksRoute: AuthorizedFeedbacksRoute,
   AuthorizedProfileRoute: AuthorizedProfileRoute,
 }
 

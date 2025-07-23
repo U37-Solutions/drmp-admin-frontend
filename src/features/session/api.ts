@@ -1,3 +1,4 @@
+import { redirect } from '@tanstack/react-router';
 import axios from 'axios';
 
 import type { SessionInfo } from '@features/session/types.ts';
@@ -11,7 +12,7 @@ export const refreshSession = async (refreshToken: string) =>
     .post<{ accessToken: string }>(`${import.meta.env.VITE_API_URL}/auth/refresh`, {
       refreshToken,
     })
-    .catch((err) => {
-      throw new Error(err.message);
+    .catch(() => {
+      throw redirect({ to: '/login' });
     })
     .then((res) => res.data?.accessToken);

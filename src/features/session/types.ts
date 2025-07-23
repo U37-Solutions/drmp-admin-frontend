@@ -46,4 +46,8 @@ export enum Permission {
   OFFICE_CREATE = 'office:create',
   OFFICE_UPDATE = 'office:update',
   OFFICE_DELETE = 'office:delete',
+  // Feedback
+  FEEDBACKS_VIEW = 'feedbacks:view',
+  FEEDBACK_ASSIGN = 'feedback:assign',
+  FEEDBACK_DELETE = 'feedback:delete',
 }

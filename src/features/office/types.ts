@@ -8,6 +8,7 @@ export interface OfficeDTO {
   longitude: number;
   regionId: number;
   companyId: number;
+  companyName: string;
   serviceIds: number[];
   categoryIds: number[];
   conditionIds: number[];

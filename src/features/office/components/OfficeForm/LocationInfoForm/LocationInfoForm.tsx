@@ -1,7 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Flex, Form, Spin, Typography } from 'antd';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import type { OfficeDTO } from '@features/office/types';
@@ -18,13 +18,16 @@ import RegionField from './Fields/RegionField';
 import styles from './LocationInfoForm.module.scss';
 
 type LocationInfoFormProps = {
-  office: OfficeDTO;
+  office?: OfficeDTO;
   onSubmit?: (data: OfficeLocationInfoSchema) => void;
   isPending?: boolean;
+  submitted?: boolean;
 };
 
-const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, isPending }) => {
+const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, isPending, submitted }) => {
   const [showMap, setShowMap] = useState(false);
+  // TODO: Implement region restriction logic if needed
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [regionRestriction, setRegionRestriction] = useState<Bounds>();
 
   const {
@@ -56,6 +59,12 @@ const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, i
     },
     [onSubmit, reset],
   );
+
+  useEffect(() => {
+    if (submitted) {
+      reset();
+    }
+  }, [submitted, reset]);
 
   const handleUpdateField = (field: keyof OfficeLocationInfoSchema, value: string | number) => {
     setValue(field, value, {
@@ -90,7 +99,7 @@ const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, i
                 render={({ field }) => (
                   <LocationAutocomplete
                     placeholder="Введіть адресу або оберіть на карті"
-                    location={field.value}
+                    location={field.value ?? ''}
                     onSelectLocation={(address, geometry) =>
                       handleUpdateLocation({ locationName: address, latitude: geometry.lat, longitude: geometry.lng })
                     }
@@ -139,8 +148,9 @@ const LocationInfoForm: React.FC<LocationInfoFormProps> = ({ office, onSubmit, i
             </div>
           ) : (
             <GeoMap
-              addressGeometry={{ lat: values.latitude, lng: values.longitude }}
-              regionRestriction={regionRestriction}
+              addressGeometry={
+                values.latitude && values.longitude ? { lat: values.latitude, lng: values.longitude } : undefined
+              }
               onAddressSelect={(address: string, geometry: LocationGeometry) =>
                 handleUpdateLocation({ locationName: address, latitude: geometry.lat, longitude: geometry.lng })
               }

@@ -3,16 +3,16 @@ import { Button, Flex, Form, Input, Spin } from 'antd';
 import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import type { OfficeDTO } from '@features/office/types';
+import { type OfficeMainInfoSchema, officeMainInfoSchema } from '@features/office/validation';
+
 import CategoryField from './Fields/CategoryField';
 import ConditionField from './Fields/ConditionField';
 import ServiceField from './Fields/ServiceField';
 import styles from './MainInfoForm.module.scss';
 
-import type { OfficeDTO } from '@/features/office/types';
-import { type OfficeMainInfoSchema, officeMainInfoSchema } from '@/features/office/validation';
-
 type MainInfoFormProps = {
-  office: OfficeDTO;
+  office?: OfficeDTO;
   onSubmit?: (data: OfficeMainInfoSchema) => void;
   isPending?: boolean;
 };
@@ -69,6 +69,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ office, onSubmit, isPending
                 placeholder="Приклад: Офіс розташований у центрі міста, має сучасний дизайн та обладнання"
                 status={errors.additionalDescription ? 'error' : ''}
                 {...field}
+                value={field.value ?? ''}
               />
             )}
           />

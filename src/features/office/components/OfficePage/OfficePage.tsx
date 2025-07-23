@@ -6,8 +6,7 @@ import { Button, Card, Flex, Typography } from 'antd';
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import DeleteOfficeAction from '../DeleteOfficeAction';
-import LocationInfoForm from '../Forms/LocationInfoForm/LocationInfoForm';
-import MainInfoForm from '../Forms/MainInfoForm/MainInfoForm';
+import OfficeForm from '../OfficeForm/OfficeForm';
 
 import styles from './OfficePage.module.scss';
 
@@ -27,11 +26,12 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['update-office', data.id],
-    mutationFn: async (body: OfficeMainInfoSchema | OfficeLocationInfoSchema) => {
+    mutationFn: async (body: Partial<{ mainInfo: OfficeMainInfoSchema; locationInfo: OfficeLocationInfoSchema }>) => {
       if (!data?.id) return;
       return await updateOffice(data.id, {
         ...data,
-        ...body,
+        ...body.mainInfo,
+        ...body.locationInfo,
       });
     },
     onSuccess: async () => {
@@ -60,16 +60,7 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
           <DeleteOfficeAction office={data} showText />
         </Flex>
       </Card>
-      <Flex gap={20} wrap="wrap">
-        <Card className={styles.card}>
-          <Typography.Title level={4}>Основна інформація</Typography.Title>
-          <MainInfoForm office={data} onSubmit={mutate} isPending={isPending} />
-        </Card>
-        <Card className={styles.card}>
-          <Typography.Title level={4}>Локація</Typography.Title>
-          <LocationInfoForm office={data} onSubmit={mutate} isPending={isPending} />
-        </Card>
-      </Flex>
+      <OfficeForm data={data} onSubmit={mutate} isPending={isPending} />
     </div>
   );
 };

@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
 export const officeMainInfoSchema = z.object({
-  additionalDescription: z.string({ message: 'Введіть опис' }).min(1, { message: 'Опис не може бути порожнім' }),
+  additionalDescription: z
+    .string({ message: 'Введіть опис' })
+    .min(1, { message: 'Опис не може бути порожнім' })
+    .nullable(),
   serviceIds: z
     .array(z.number({ message: 'ID типу організації має бути числом' }))
     .min(1, { message: 'Виберіть хоча б один тип організації' }),
@@ -18,9 +21,9 @@ export const officeMainInfoSchema = z.object({
 export type OfficeMainInfoSchema = z.infer<typeof officeMainInfoSchema>;
 
 export const officeLocationInfoSchema = z.object({
-  locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }),
-  latitude: z.number({ message: 'Широта має бути числом' }),
-  longitude: z.number({ message: 'Довгота має бути числом' }),
+  locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }).nullable(),
+  latitude: z.number({ message: 'Широта має бути числом' }).nullable(),
+  longitude: z.number({ message: 'Довгота має бути числом' }).nullable(),
   regionId: z.number({ message: 'ID регіону має бути числом' }),
 });
 

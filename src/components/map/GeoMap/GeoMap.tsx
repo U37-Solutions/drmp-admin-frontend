@@ -16,7 +16,7 @@ const truncateCodeFromAddress = (address: string) => {
 };
 
 type GeoMapProps = {
-  addressGeometry: LocationGeometry;
+  addressGeometry?: LocationGeometry;
   regionRestriction?: Bounds;
   onAddressSelect: (address: string, geometry: LocationGeometry) => void;
 };

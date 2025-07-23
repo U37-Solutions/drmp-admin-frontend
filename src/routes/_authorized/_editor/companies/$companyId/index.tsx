@@ -34,5 +34,5 @@ function RouteComponent() {
   const { companyId } = Route.useParams();
   const { data } = useSuspenseQuery(createOfficeByCompanyIdQueryOptions(+companyId));
 
-  return <OfficesTable data={data} route="/_authorized/_editor/companies/$companyId/" isCompanyOffice />;
+  return <OfficesTable data={data} route="/_authorized/_editor/companies/$companyId/" companyId={+companyId} />;
 }

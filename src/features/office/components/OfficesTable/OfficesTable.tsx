@@ -1,8 +1,9 @@
 import { EyeOutlined } from '@ant-design/icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Button, Card, Flex, Input, Table, Tooltip, Typography } from 'antd';
 import type { SorterResult } from 'antd/es/table/interface';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { getColumns } from '@features/office/columns';
 
@@ -11,6 +12,7 @@ import mapColumnsWithSort from '@services/sort-columns.ts';
 
 import useTableState from '@shared/hooks/useTableState.ts';
 
+import CreateOfficeModal from '../CreateOfficeModal/CreateOfficeModal';
 import DeleteOfficeAction from '../DeleteOfficeAction';
 
 import styles from './OfficesTable.module.scss';
@@ -24,11 +26,16 @@ import { currentUserHasPermissions } from '@/services/has-permissions';
 type OfficesTableProps = {
   data: OfficeDTO[];
   route: FileRouteTypes['id'];
-  isCompanyOffice?: boolean;
+  companyId?: number;
 };
 
-const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, isCompanyOffice }) => {
+const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, companyId }) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+
+  const isCompanyOffice = !!companyId;
+
   const { changePage, page, pageSize, changeSearch, search, changeSorting, sortBy, sortAsc } = useTableState(route);
 
   const { pageFilteredData, total } = useMemo(
@@ -55,6 +62,10 @@ const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, isCompanyOffic
 
   const columns = useMemo(() => getColumns(renderActions), [renderActions]);
 
+  const refreshData = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['company/offices', companyId] });
+  }, [companyId, queryClient]);
+
   return (
     <Card
       title={
@@ -64,7 +75,7 @@ const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, isCompanyOffic
               Офіси
             </Typography.Title>
           )}
-          <Button>Створити офіс</Button>
+          {isCompanyOffice && <Button onClick={() => setCreateModalOpen(true)}>Створити офіс</Button>}
         </Flex>
       }
       style={{ margin: !isCompanyOffice ? 20 : 0 }}
@@ -93,6 +104,14 @@ const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, isCompanyOffic
           onChange: changePage,
         }}
       />
+      {isCompanyOffice && (
+        <CreateOfficeModal
+          companyId={companyId}
+          open={isCreateModalOpen}
+          onClose={() => setCreateModalOpen(false)}
+          onSuccess={refreshData}
+        />
+      )}
     </Card>
   );
 };

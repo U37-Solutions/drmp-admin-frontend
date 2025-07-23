@@ -8,6 +8,4 @@ export const getCompanyFeedbacks = async (companyId: number) =>
 export const deleteFeedback = async (id: number) => await apiClient.delete(`/feedbacks/${id}`).then((res) => res.data);
 
 export const assignFeedback = async (id: number, companyId: number) =>
-  await apiClient.put(`/feedbacks/${id}/assign-company`, { companyId }).then(() => ({
-    companyId,
-  }));
+  await apiClient.put(`/feedbacks/${id}/assign-company`, { companyId }).then((res) => res.data);

@@ -1,7 +1,7 @@
-import { Link } from '@tanstack/react-router';
 import type { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
+import FormatCompanyUsage from '@components/formatters/FormatCompanyUsage.tsx';
 import FormatDictionaryValue from '@components/formatters/FormatDictionaryValue';
 
 import { DICTIONARY_KEYS } from '@services/dictionary-service';
@@ -49,11 +49,7 @@ export const getColumns = (renderActions: (row: OfficeDTO) => React.ReactElement
     showSorterTooltip: {
       title: 'Сортувати за компанією',
     },
-    render: (value) => (
-      <Link to="/companies/$companyId" params={{ companyId: value }}>
-        {value}
-      </Link>
-    ),
+    render: (_value, row) => <FormatCompanyUsage {...row} />,
   },
   {
     key: 'categoryIds',

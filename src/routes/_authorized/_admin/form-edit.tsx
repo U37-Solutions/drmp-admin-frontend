@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { z } from 'zod';
 
@@ -24,9 +24,6 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/_authorized/_admin/form-edit')({
   component: RouteComponent,
   validateSearch: zodValidator(searchSchema),
-  onError: () => {
-    throw redirect({ to: '/users' });
-  },
   beforeLoad: ({ context }) => {
     return context.queryClient.ensureQueryData(customFieldsQuery);
   },

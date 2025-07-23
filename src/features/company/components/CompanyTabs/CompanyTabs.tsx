@@ -1,5 +1,5 @@
 import { ApartmentOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
-import { Outlet, useLocation, useNavigate, useParams } from '@tanstack/react-router';
+import { Outlet, useLocation, useNavigate } from '@tanstack/react-router';
 import { Tabs } from 'antd';
 import { useMemo } from 'react';
 
@@ -16,10 +16,11 @@ const tabsConfig: Record<TabKey, { label: string; icon: React.ReactElement; to: 
   [TabKey.LOGS]: { label: 'Логи', icon: <UnorderedListOutlined />, to: '/companies/$companyId/logs' },
 };
 
-const CompanyTabs: React.FC = () => {
-  const { companyId } = useParams({
-    from: '/_authorized/_editor/companies/$companyId',
-  });
+type Props = {
+  companyId: number;
+};
+
+const CompanyTabs = ({ companyId }: Props) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -33,7 +34,9 @@ const CompanyTabs: React.FC = () => {
     <>
       <Tabs
         activeKey={activeTab}
-        onChange={(key: string) => navigate({ to: tabsConfig[key as TabKey].to, replace: true, params: { companyId } })}
+        onChange={(key: string) =>
+          navigate({ to: tabsConfig[key as TabKey].to, replace: true, params: { companyId: String(companyId) } })
+        }
         items={tabs.map(([key, tab]) => ({ key, label: tab.label, icon: tab.icon }))}
       />
       <Outlet />

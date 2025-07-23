@@ -29,6 +29,9 @@ const rolePermissions: Record<Role, Permission[]> = {
     Permission.OFFICE_CREATE,
     Permission.OFFICE_UPDATE,
     Permission.OFFICE_DELETE,
+    Permission.FEEDBACKS_VIEW,
+    Permission.FEEDBACK_DELETE,
+    Permission.FEEDBACK_ASSIGN,
   ],
   [Role.EDITOR]: [
     Permission.CHAT_VIEW,
@@ -57,6 +60,8 @@ const rolePermissions: Record<Role, Permission[]> = {
     Permission.OFFICE_CREATE,
     Permission.OFFICE_UPDATE,
     Permission.OFFICE_DELETE,
+    Permission.FEEDBACKS_VIEW,
+    Permission.FEEDBACK_ASSIGN,
   ],
   [Role.COMPANY_ADMIN]: [
     Permission.COMPANY_OFFICES_VIEW,
@@ -64,8 +69,9 @@ const rolePermissions: Record<Role, Permission[]> = {
     Permission.COMPANY_OFFICE_CREATE,
     Permission.COMPANY_OFFICE_UPDATE,
     Permission.COMPANY_OFFICE_DELETE,
+    Permission.FEEDBACKS_VIEW,
   ],
-  [Role.COMPANY_USER]: [Permission.COMPANY_OFFICES_VIEW, Permission.COMPANY_OFFICE_VIEW],
+  [Role.COMPANY_USER]: [Permission.COMPANY_OFFICES_VIEW, Permission.COMPANY_OFFICE_VIEW, Permission.FEEDBACKS_VIEW],
 };
 
 export const currentUserHasPermissions = (requiredPermissions: Permission | Permission[]) => {

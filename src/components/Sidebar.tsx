@@ -1,4 +1,11 @@
-import { ApartmentOutlined, BankOutlined, FormOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  ApartmentOutlined,
+  BankOutlined,
+  FormOutlined,
+  MailOutlined,
+  MessageOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { Link, useLocation } from '@tanstack/react-router';
 import { Menu, type MenuProps } from 'antd';
 import Sider from 'antd/es/layout/Sider';
@@ -20,6 +27,11 @@ const navItems: Record<Role, MenuProps['items']> = {
       label: <Link to="/chats">Чати</Link>,
       icon: <MessageOutlined />,
     },
+    {
+      key: '/feedbacks',
+      label: <Link to="/feedbacks">Відгуки</Link>,
+      icon: <MailOutlined />,
+    },
   ],
   COMPANY_ADMIN: [
     {
@@ -31,6 +43,11 @@ const navItems: Record<Role, MenuProps['items']> = {
       key: '/company',
       label: <Link to="/company">Організація</Link>,
       icon: <BankOutlined />,
+    },
+    {
+      key: '/feedbacks',
+      label: <Link to="/feedbacks">Відгуки</Link>,
+      icon: <MailOutlined />,
     },
   ],
   ADMIN: [
@@ -54,6 +71,11 @@ const navItems: Record<Role, MenuProps['items']> = {
       label: <Link to="/offices">Офіси</Link>,
       icon: <ApartmentOutlined />,
     },
+    {
+      key: '/feedbacks',
+      label: <Link to="/feedbacks">Відгуки</Link>,
+      icon: <MailOutlined />,
+    },
   ],
   EDITOR: [
     {
@@ -70,6 +92,11 @@ const navItems: Record<Role, MenuProps['items']> = {
       key: '/offices',
       label: <Link to="/offices">Офіси</Link>,
       icon: <ApartmentOutlined />,
+    },
+    {
+      key: '/feedbacks',
+      label: <Link to="/feedbacks">Відгуки</Link>,
+      icon: <MailOutlined />,
     },
   ],
 };

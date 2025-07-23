@@ -4,6 +4,7 @@ import { Layout, Skeleton, Spin } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { Suspense, useEffect } from 'react';
 
+import { LoginPrevStateFeedback } from '@features/auth/constants.ts';
 import { getSessionInfo } from '@features/session/api.ts';
 import { useSetSessionInfo } from '@features/session/store';
 
@@ -26,6 +27,9 @@ export const Route = createFileRoute('/_authorized')({
     }
 
     return context.queryClient.ensureQueryData(sessionInfoQuery);
+  },
+  onError: () => {
+    throw redirect({ to: '/login', search: { from: LoginPrevStateFeedback.sessionExpired } });
   },
 });
 

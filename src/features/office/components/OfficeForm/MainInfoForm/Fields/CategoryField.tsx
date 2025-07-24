@@ -14,7 +14,15 @@ const CategoryField = ({
 }) => {
   const options = useDictionaryService(DICTIONARY_KEYS.categories, true);
 
-  return <Select status={error ? 'error' : ''} options={options} mode="multiple" {...field}></Select>;
+  return (
+    <Select
+      status={error ? 'error' : ''}
+      options={options}
+      placeholder="Оберіть категорію зі списку"
+      mode="multiple"
+      {...field}
+    />
+  );
 };
 
 export default CategoryField;

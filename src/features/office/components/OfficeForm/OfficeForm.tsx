@@ -1,5 +1,7 @@
 import { Button, Flex, Form, Typography } from 'antd';
 
+import CustomFieldsForm from '@features/office/components/OfficeForm/CustomFieldsForm/CustomFieldsForm.tsx';
+
 import LocationInfoForm from '../OfficeForm/LocationInfoForm/LocationInfoForm';
 import MainInfoForm from '../OfficeForm/MainInfoForm/MainInfoForm';
 
@@ -18,8 +20,8 @@ const OfficeForm = ({ form, onCancel }: OfficeFormProps) => {
     <Form layout="vertical" className={styles.form} onFinish={handleSubmit}>
       <Flex className={styles.formContent}>
         <Flex className={styles.formContent__part}>
-          <Typography.Title level={4}>Основна інформація</Typography.Title>
           <MainInfoForm form={form} />
+          <CustomFieldsForm form={form} />
         </Flex>
         <Flex className={styles.formContent__part}>
           <Typography.Title level={4}>Локація</Typography.Title>

@@ -1,5 +1,8 @@
 .wrapper {
   .tipIcon {
     color: var(--ant-color-text-secondary);
+    &:hover {
+      cursor: help;
+    }
   }
 }

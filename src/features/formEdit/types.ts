@@ -27,3 +27,8 @@ export interface CustomFieldDTO {
   required: boolean;
   options: Array<string>;
 }
+
+export interface CustomFieldValueDTO {
+  structureId: number;
+  value: string;
+}

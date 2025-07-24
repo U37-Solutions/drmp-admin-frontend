@@ -69,7 +69,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Форми власності"
+        label="Форма власності"
         extra={errors.conditionIds ? <span className={styles.error}>{errors.conditionIds.message}</span> : null}
       >
         <Controller

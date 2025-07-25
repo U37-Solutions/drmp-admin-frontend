@@ -1,9 +1,8 @@
 import { EyeOutlined } from '@ant-design/icons';
-import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { Button, Card, Flex, Input, Table, Tooltip, Typography } from 'antd';
+import { Button, Flex, Table, Tooltip } from 'antd';
 import type { SorterResult } from 'antd/es/table/interface';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { getColumns } from '@features/office/columns';
 
@@ -12,7 +11,6 @@ import mapColumnsWithSort from '@services/sort-columns.ts';
 
 import useTableState from '@shared/hooks/useTableState.ts';
 
-import CreateOfficeModal from '../CreateOfficeModal/CreateOfficeModal';
 import DeleteOfficeAction from '../DeleteOfficeAction';
 
 import styles from './OfficesTable.module.scss';
@@ -31,12 +29,10 @@ type OfficesTableProps = {
 
 const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, companyId }) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   const isCompanyOffice = !!companyId;
 
-  const { changePage, page, pageSize, changeSearch, search, changeSorting, sortBy, sortAsc } = useTableState(route);
+  const { changePage, page, pageSize, search, changeSorting, sortBy, sortAsc } = useTableState(route);
 
   const { pageFilteredData, total } = useMemo(
     () => filterTableData(data || [], page, pageSize, search, ['locationName', 'companyId']),
@@ -62,57 +58,29 @@ const OfficesTable: React.FC<OfficesTableProps> = ({ data, route, companyId }) =
 
   const columns = useMemo(() => getColumns(renderActions), [renderActions]);
 
-  const refreshData = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ['company/offices', companyId] });
-  }, [companyId, queryClient]);
-
   return (
-    <Card
-      title={
-        <Flex align="center" gap={20}>
-          {!isCompanyOffice && (
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Офіси
-            </Typography.Title>
-          )}
-          {isCompanyOffice && <Button onClick={() => setCreateModalOpen(true)}>Створити офіс</Button>}
-        </Flex>
-      }
-      style={{ margin: !isCompanyOffice ? 20 : 0 }}
-      styles={{ body: { padding: 0 } }}
-      extra={<Input.Search allowClear defaultValue={search} placeholder="Пошук" onSearch={changeSearch} />}
-    >
-      <Table
-        className="ant-responsive-table"
-        rowClassName={styles.row}
-        dataSource={pageFilteredData}
-        columns={mapColumnsWithSort<OfficeDTO>(columns, sortBy, sortAsc)}
-        onChange={(_pagination, _filters, sorter, { action }) => {
-          changeSorting(action, sorter as SorterResult<unknown>);
-        }}
-        locale={{
-          emptyText: 'Немає офісів для відображення',
-        }}
-        onRow={(record) => ({
-          onClick: () => navigate({ to: `/offices/${record.id}` }),
-        })}
-        pagination={{
-          total: total || 0,
-          showTotal: (totalCount: number) => `Всього: ${totalCount}`,
-          current: page,
-          pageSize: pageSize,
-          onChange: changePage,
-        }}
-      />
-      {isCompanyOffice && (
-        <CreateOfficeModal
-          companyId={companyId}
-          open={isCreateModalOpen}
-          onClose={() => setCreateModalOpen(false)}
-          onSuccess={refreshData}
-        />
-      )}
-    </Card>
+    <Table
+      className="ant-responsive-table"
+      rowClassName={styles.row}
+      dataSource={pageFilteredData}
+      columns={mapColumnsWithSort<OfficeDTO>(columns, sortBy, sortAsc)}
+      onChange={(_pagination, _filters, sorter, { action }) => {
+        changeSorting(action, sorter as SorterResult<unknown>);
+      }}
+      locale={{
+        emptyText: 'Немає офісів для відображення',
+      }}
+      onRow={(record) => ({
+        onClick: () => navigate({ to: `/offices/${record.id}` }),
+      })}
+      pagination={{
+        total: total || 0,
+        showTotal: (totalCount: number) => `Всього: ${totalCount}`,
+        current: page,
+        pageSize: pageSize,
+        onChange: changePage,
+      }}
+    />
   );
 };
 

@@ -32,7 +32,7 @@ const NAV_ITEMS: Array<MenuItemType & { access: Array<Role> }> = [
     key: '/offices',
     label: <Link to="/offices">Офіси</Link>,
     icon: <ApartmentOutlined />,
-    access: [Role.ADMIN, Role.EDITOR],
+    access: [Role.ADMIN, Role.EDITOR, Role.COMPANY_ADMIN, Role.COMPANY_USER],
   },
   {
     key: '/chats',

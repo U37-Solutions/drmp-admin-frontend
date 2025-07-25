@@ -9,10 +9,11 @@ export const createOfficeByIdQueryOptions = (officeId: number) => {
   });
 };
 
-export const createOfficesQueryOptions = () => {
+export const createOfficesQueryOptions = (companyId?: number | null) => {
   return queryOptions({
-    queryKey: ['offices'],
-    queryFn: () => getOffices(),
+    queryKey: ['offices', companyId],
+    // If companyId is provided (which means Offices page is accessed by CA/CU), fetch offices by company ID, otherwise fetch all offices.
+    queryFn: () => (companyId ? getOfficesByCompanyId(companyId) : getOffices()),
   });
 };
 

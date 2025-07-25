@@ -6,6 +6,8 @@ import { useMemo, useState } from 'react';
 import { useSessionInfo } from '@features/session/store';
 import type { UserDTO } from '@features/users/types.ts';
 
+import FormatUserRole from '@components/formatters/FormatUserRole.tsx';
+
 import { useConfirmNavigation } from '@shared/hooks/useConfirmNavigation';
 
 import UserProfileInfoTab from './UserProfileInfoTab';
@@ -92,6 +94,7 @@ const UserProfilePage = () => {
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Профіль
             </Typography.Title>
+            {user?.role && <FormatUserRole role={user.role} />}
           </Flex>
         }
         style={{ margin: 20 }}

@@ -12,16 +12,17 @@ import DeleteCompanyAction from '@features/company/components/DeleteCompanyActio
 import MainInfoForm from '@features/company/components/MainInfoForm/MainInfoForm.tsx';
 import type { CompanyDTO } from '@features/company/types.ts';
 import type { CompanyContactSchema, CompanyInfoSchema } from '@features/company/validation.ts';
+import { Permission } from '@features/session/types.ts';
 
 import { FormatCompanyStatus } from '@components/formatters';
 
+import { currentUserHasPermissions } from '@services/has-permissions.ts';
+
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
-import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 import styles from './CompanyPage.module.scss';
 
 const CompanyPage = ({ data }: { data: CompanyDTO }) => {
-  const roleContext = useRoleContext();
   const alertContext = useAlertContext();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -45,8 +46,9 @@ const CompanyPage = ({ data }: { data: CompanyDTO }) => {
   });
 
   const shouldShowVerification = useMemo(
-    () => data.status === 'REVIEW' && !!roleContext?.isAdmin,
-    [data.status, roleContext?.isAdmin],
+    () =>
+      (data.status === 'REVIEW' || data.status === 'REJECTED') && currentUserHasPermissions(Permission.COMPANY_VERIFY),
+    [data.status],
   );
 
   return (
@@ -67,10 +69,8 @@ const CompanyPage = ({ data }: { data: CompanyDTO }) => {
           </Flex>
 
           <Flex gap={8} align="center">
-            {(shouldShowVerification || data.status === 'REJECTED') && (
-              <CompanyVerificationActions status={data.status} id={data.id} />
-            )}
-            <DeleteCompanyAction showText company={data} />
+            {shouldShowVerification && <CompanyVerificationActions status={data.status} id={data.id} />}
+            {currentUserHasPermissions(Permission.COMPANY_DELETE) && <DeleteCompanyAction showText company={data} />}
           </Flex>
         </Flex>
       </Card>

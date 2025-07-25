@@ -7,6 +7,9 @@ import CompanyTypeField from '@features/company/components/MainInfoForm/CompanyT
 import { OWNERSHIP_TYPES } from '@features/company/constants.tsx';
 import type { CompanyDTO } from '@features/company/types.ts';
 import { type CompanyInfoSchema, companyInfoSchema } from '@features/company/validation.ts';
+import { Permission } from '@features/session/types.ts';
+
+import { currentUserHasPermissions } from '@services/has-permissions.ts';
 
 import styles from '../styles.module.scss';
 
@@ -47,7 +50,12 @@ const MainInfoForm = ({ company, onSubmit, isPending }: Props) => {
   );
 
   return (
-    <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
+    <Form
+      disabled={!currentUserHasPermissions(Permission.COMPANY_UPDATE)}
+      layout="vertical"
+      className={styles.form}
+      onFinish={handleSubmit(submitHandler)}
+    >
       <Spin spinning={isPending} fullscreen />
       <Form.Item
         label="Назва організації"

@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { Button, Card, Flex, Typography } from 'antd';
 
+import OfficeChangelogAction from '@features/office/components/OfficeChangelogAction.tsx';
+
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import DeleteOfficeAction from '../DeleteOfficeAction';
@@ -62,7 +64,10 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
               {data.locationName}
             </Typography.Title>
           </Flex>
-          <DeleteOfficeAction office={data} showText />
+          <Flex gap={8} align="center">
+            <OfficeChangelogAction officeId={data.id} />
+            <DeleteOfficeAction office={data} showText />
+          </Flex>
         </Flex>
       </Card>
       <Card className={styles.card}>

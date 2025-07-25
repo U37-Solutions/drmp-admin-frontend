@@ -70,10 +70,22 @@ const rolePermissions: Record<Role, Permission[]> = {
     Permission.COMPANY_OFFICE_CREATE,
     Permission.COMPANY_OFFICE_UPDATE,
     Permission.COMPANY_OFFICE_DELETE,
+    Permission.OFFICES_VIEW,
+    Permission.OFFICE_VIEW,
+    Permission.OFFICE_CREATE,
+    Permission.OFFICE_UPDATE,
+    Permission.OFFICE_DELETE,
     Permission.FEEDBACKS_VIEW,
     Permission.COMPANY_USERS_INVITE,
   ],
-  [Role.COMPANY_USER]: [Permission.COMPANY_OFFICES_VIEW, Permission.COMPANY_OFFICE_VIEW, Permission.FEEDBACKS_VIEW],
+  [Role.COMPANY_USER]: [
+    Permission.OFFICES_VIEW,
+    Permission.OFFICE_VIEW,
+    Permission.OFFICE_CREATE,
+    Permission.OFFICE_UPDATE,
+    Permission.OFFICE_DELETE,
+    Permission.FEEDBACKS_VIEW,
+  ],
 };
 
 export const currentUserHasPermissions = (requiredPermissions: Permission | Permission[]) => {

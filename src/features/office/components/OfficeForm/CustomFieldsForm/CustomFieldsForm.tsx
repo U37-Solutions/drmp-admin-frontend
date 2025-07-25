@@ -21,6 +21,9 @@ const CustomFieldsForm = ({ form }: Props) => {
     queryFn: async () => await getCustomFields(),
   });
 
+  console.log('CustomFieldsForm data:', data);
+  console.log('fieldArray:', fieldArray);
+
   return (
     <Flex vertical>
       {fieldArray.fields.map((field, i) => {

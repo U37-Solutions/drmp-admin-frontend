@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { Button, Form, Steps, Typography } from 'antd';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import ContactInfoFormContent from '@features/company/components/ContactInfoForm/ContactInfoFormContent';
@@ -22,6 +23,10 @@ import {
   officeFields,
   signUpCompanySchema,
 } from '../../validation';
+
+import { getCustomFields } from '@/features/formEdit/api';
+import type { CustomFieldDTO } from '@/features/formEdit/types';
+import { customFieldsFormSchema, officeSchema } from '@/features/office/validation';
 
 enum Step {
   COMPANY_INFO = 0,
@@ -50,8 +55,28 @@ const SignUpCompanyPage = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
+  const { data } = useQuery<Array<CustomFieldDTO>>({
+    queryKey: ['customFields'],
+    queryFn: async () => await getCustomFields(),
+  });
+
+  // TODO: Update type for validationSchema
+  const validationSchema = useMemo(
+    () =>
+      (data
+        ? signUpCompanySchema.extend(customFieldsFormSchema(data).shape)
+        : officeSchema) as typeof signUpCompanySchema,
+    [data],
+  );
+
+  const formatCustomFieldsInitialValues = (customFields: Array<CustomFieldDTO>) => {
+    return customFields.map((field) => ({
+      structureId: field.id,
+    }));
+  };
+
   const form = useForm<SignUpCompanySchema>({
-    resolver: zodResolver(signUpCompanySchema),
+    resolver: zodResolver(validationSchema),
   });
 
   const {
@@ -61,9 +86,17 @@ const SignUpCompanyPage = () => {
     trigger,
   } = form;
 
+  useEffect(() => {
+    if (data) {
+      form.setValue('customFields', formatCustomFieldsInitialValues(data));
+    }
+  }, [data, form]);
+
   const submitHandler = useCallback(
     async (data: SignUpCompanySchema) => {
-      await signUpCompany(data);
+      const newValues = { ...data, customFields: data.customFields?.filter((field) => !!field.value) };
+
+      await signUpCompany(newValues);
       showConfetti(10000);
 
       if (alertContext) {

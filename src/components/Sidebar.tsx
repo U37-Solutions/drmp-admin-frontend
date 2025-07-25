@@ -66,7 +66,7 @@ const Sidebar = () => {
 
   const items = useMemo(() => {
     return NAV_ITEMS.filter((item) => item.access.some((role) => roleContext?.role === role));
-  }, [roleContext]);
+  }, [roleContext?.role]);
 
   const activeKey: string = useMemo(
     () => (items.find((item) => location.pathname.includes(String(item?.key)))?.key as string) || '',

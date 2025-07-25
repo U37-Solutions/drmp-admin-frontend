@@ -1,3 +1,5 @@
+import type { OfficeSchema } from '@features/office/validation.ts';
+
 import apiClient from '@services/api-client.ts';
 
 import type { CreateOfficeDTO, OfficeDTO } from './types';
@@ -18,7 +20,7 @@ export const createOffice = async (companyId: number, newOffice: CreateOfficeDTO
   return await apiClient.post(`/offices/company/${companyId}`, newOffice).then((res) => res.data);
 };
 
-export const updateOffice = async (id: number, updatedOffice: OfficeDTO): Promise<OfficeDTO> => {
+export const updateOffice = async (id: number, updatedOffice: OfficeSchema): Promise<OfficeDTO> => {
   return await apiClient
     .put(`/offices/${id}`, {
       ...updatedOffice,

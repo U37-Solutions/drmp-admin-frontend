@@ -20,3 +20,16 @@ export interface CompanyDTO {
   ownershipType: string;
   donorSupport?: string;
 }
+
+export interface CreateCompanyDTO {
+  name: string;
+  code: string;
+  contactName: string;
+  phone: string;
+  email: string;
+  companyTypeId: number;
+  userIds?: number[];
+  socials?: Array<CompanySocial>;
+  ownershipType: string;
+  donorSupport?: string;
+}

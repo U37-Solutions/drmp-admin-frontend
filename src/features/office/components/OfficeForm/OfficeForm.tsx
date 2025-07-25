@@ -1,49 +1,77 @@
-import { Button, Flex, Form, Typography } from 'antd';
-
-import LocationInfoForm from '../OfficeForm/LocationInfoForm/LocationInfoForm';
-import MainInfoForm from '../OfficeForm/MainInfoForm/MainInfoForm';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Flex, Form } from 'antd';
+import { useCallback } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import styles from './OfficeForm.module.scss';
-import type { OfficeFormState } from './useOfficeForm';
+import OfficeFormContent from './OfficeFormContent';
+
+import type { OfficeDTO } from '../../types';
+import { type OfficeSchema, officeSchema } from '../../validation';
 
 type OfficeFormProps = {
-  form: OfficeFormState;
-  onCancel?: () => void;
+  office?: OfficeDTO;
+  onSubmit?: (data: OfficeSchema) => void;
 };
 
-const OfficeForm = ({ form, onCancel }: OfficeFormProps) => {
-  const { handleSubmit, isSubmitting, isDirty, reset } = form;
+const OfficeForm = ({ office, onSubmit }: OfficeFormProps) => {
+  const form = useForm<OfficeSchema>({
+    resolver: zodResolver(officeSchema),
+    defaultValues: office
+      ? {
+          additionalDescription: office.additionalDescription,
+          workSchedule: office.workSchedule,
+          serviceIds: office.serviceIds,
+          categoryIds: office.categoryIds,
+          conditionIds: office.conditionIds,
+          customFields: office.customFields,
+          regionId: office.regionId,
+          latitude: office.latitude,
+          longitude: office.longitude,
+          locationName: office.locationName,
+        }
+      : {},
+  });
+
+  const {
+    formState: { isSubmitting, isDirty },
+    handleSubmit,
+    reset,
+  } = form;
+
+  const submitHandler = useCallback(
+    (data: OfficeSchema) => {
+      if (onSubmit) {
+        onSubmit(data);
+      }
+
+      reset(data);
+    },
+    [onSubmit, reset],
+  );
 
   return (
-    <Form layout="vertical" className={styles.form} onFinish={handleSubmit}>
-      <Flex className={styles.formContent}>
-        <Flex className={styles.formContent__part}>
-          <Typography.Title level={4}>Основна інформація</Typography.Title>
-          <MainInfoForm form={form} />
+    <FormProvider {...form}>
+      <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
+        <OfficeFormContent />
+        <Flex className={styles.actionBtnWrapper}>
+          <Button
+            type="default"
+            variant="outlined"
+            htmlType="button"
+            onClick={() => {
+              reset();
+            }}
+            disabled={isSubmitting || !isDirty}
+          >
+            Скасувати
+          </Button>
+          <Button type="primary" htmlType="submit" disabled={isSubmitting || !isDirty}>
+            Зберегти
+          </Button>
         </Flex>
-        <Flex className={styles.formContent__part}>
-          <Typography.Title level={4}>Локація</Typography.Title>
-          <LocationInfoForm form={form} />
-        </Flex>
-      </Flex>
-      <Flex className={styles.actionBtnWrapper}>
-        <Button
-          type="default"
-          variant="outlined"
-          htmlType="button"
-          onClick={() => {
-            reset();
-            onCancel?.();
-          }}
-          disabled={isSubmitting || !isDirty}
-        >
-          Скасувати
-        </Button>
-        <Button type="primary" htmlType="submit" disabled={isSubmitting || !isDirty}>
-          Зберегти
-        </Button>
-      </Flex>
-    </Form>
+      </Form>
+    </FormProvider>
   );
 };
 

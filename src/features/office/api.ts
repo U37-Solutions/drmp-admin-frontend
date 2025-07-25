@@ -15,7 +15,7 @@ export const getOfficesByCompanyId = async (companyId: number): Promise<OfficeDT
 };
 
 export const createOffice = async (companyId: number, newOffice: CreateOfficeDTO): Promise<OfficeDTO> => {
-  return await apiClient.post(`/offices/company/${companyId}`, newOffice).then((res) => res.data);
+  return await apiClient.post<OfficeDTO>(`/offices/company/${companyId}`, newOffice).then((res) => res.data);
 };
 
 export const updateOffice = async (id: number, updatedOffice: OfficeDTO): Promise<OfficeDTO> => {

@@ -1,5 +1,5 @@
 import type { CompanyStatusFilter } from '@features/company/constants.tsx';
-import type { CompanyDTO } from '@features/company/types.ts';
+import type { CompanyDTO, CreateCompanyDTO } from '@features/company/types.ts';
 
 import apiClient from '@services/api-client.ts';
 
@@ -11,6 +11,9 @@ export const getCompanies = async (statusFilter: CompanyStatusFilter) => {
 export const getCompanyById = async (id: number) => await apiClient.get(`/companies/${id}`).then((res) => res.data);
 
 export const deleteCompany = async (id: number) => await apiClient.delete(`/companies/${id}`).then((res) => res.data);
+
+export const createCompany = async (data: CreateCompanyDTO): Promise<CompanyDTO> =>
+  await apiClient.post<CompanyDTO>('/companies', data).then((res) => res.data);
 
 export const updateCompany = async (id: number, data: CompanyDTO) =>
   await apiClient.put(`/companies/${id}`, data).then((res) => res.data);

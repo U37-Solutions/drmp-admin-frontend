@@ -59,10 +59,10 @@ export const signUpSchema = z
 
 export type TSignUpForm = z.infer<typeof signUpSchema>;
 
-export const signUpCompanySchema = z.object({
-  companyInfo: companyInfoSchema,
-  officeInfo: officeSchema,
-  userInfo: companyContactSchema,
-});
+export const signUpCompanySchema = companyInfoSchema.extend(officeSchema.shape).extend(companyContactSchema.shape);
 
 export type SignUpCompanySchema = z.infer<typeof signUpCompanySchema>;
+
+export const companyFields = Object.keys(companyInfoSchema.shape) as Array<keyof SignUpCompanySchema>;
+export const officeFields = Object.keys(officeSchema.shape) as Array<keyof SignUpCompanySchema>;
+export const contactFields = Object.keys(companyContactSchema.shape) as Array<keyof SignUpCompanySchema>;

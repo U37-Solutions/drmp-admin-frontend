@@ -33,7 +33,7 @@ export const companyContactSchema = z.object({
     .array(
       z.object({
         type: z.enum(['facebook', 'instagram', 'website'], {
-          errorMap: () => ({ message: 'Неправильний тип соціальної мережі' }),
+          message: 'Неправильний тип соціальної мережі',
         }),
         url: z.string({ message: 'Введіть URL соціальної мережі' }).url('Неправильний URL'),
       }),

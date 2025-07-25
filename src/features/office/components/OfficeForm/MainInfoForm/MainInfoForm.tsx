@@ -1,7 +1,7 @@
 import { Flex, Form, Input } from 'antd';
-import { Controller } from 'react-hook-form';
+import { Controller, type UseFormReturn } from 'react-hook-form';
 
-import type { OfficeFormState } from '../useOfficeForm';
+import type { OfficeSchema } from '@features/office/validation';
 
 import CategoryField from './Fields/CategoryField';
 import ConditionField from './Fields/ConditionField';
@@ -9,11 +9,14 @@ import ServiceField from './Fields/ServiceField';
 import styles from './MainInfoForm.module.scss';
 
 type MainInfoFormProps = {
-  form: OfficeFormState;
+  form: UseFormReturn<OfficeSchema>;
 };
 
 const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
-  const { control, errors } = form;
+  const {
+    control,
+    formState: { errors },
+  } = form;
 
   return (
     <Flex style={{ flexDirection: 'column' }}>
@@ -64,7 +67,11 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           name="categoryIds"
           control={control}
           render={({ field }) => (
-            <CategoryField error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined} field={field} />
+            <CategoryField
+              placeholder="Виберіть категорії"
+              error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined}
+              field={field}
+            />
           )}
         />
       </Form.Item>
@@ -77,6 +84,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           control={control}
           render={({ field }) => (
             <ConditionField
+              placeholder="Виберіть форми власності"
               error={Array.isArray(errors.conditionIds) ? errors.conditionIds : undefined}
               field={field}
             />
@@ -91,7 +99,11 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           name="serviceIds"
           control={control}
           render={({ field }) => (
-            <ServiceField error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined} field={field} />
+            <ServiceField
+              placeholder="Виберіть типи організації"
+              error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined}
+              field={field}
+            />
           )}
         />
       </Form.Item>

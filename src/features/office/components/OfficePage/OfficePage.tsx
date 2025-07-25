@@ -7,7 +7,6 @@ import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import DeleteOfficeAction from '../DeleteOfficeAction';
 import OfficeForm from '../OfficeForm/OfficeForm';
-import { useOfficeForm } from '../OfficeForm/useOfficeForm';
 
 import styles from './OfficePage.module.scss';
 
@@ -42,11 +41,6 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
     },
   });
 
-  const form = useOfficeForm({
-    office: data,
-    onSubmit: mutate,
-  });
-
   return (
     <div className={styles.wrapper}>
       <Card className={styles.card}>
@@ -66,7 +60,7 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
         </Flex>
       </Card>
       <Card className={styles.card}>
-        <OfficeForm form={form} />
+        <OfficeForm office={data} onSubmit={(data) => mutate(data)} />
       </Card>
     </div>
   );

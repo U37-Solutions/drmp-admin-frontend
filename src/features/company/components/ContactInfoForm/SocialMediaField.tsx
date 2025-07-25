@@ -2,18 +2,11 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, Select, Tooltip } from 'antd';
 import { type Control, Controller, type FieldErrors, useFieldArray } from 'react-hook-form';
 
-import { SOC_MEDIA_ICON_MAP } from '@features/company/constants.tsx';
-import type { CompanySocial } from '@features/company/types.ts';
 import type { CompanyContactSchema } from '@features/company/validation.ts';
 
 import styles from '../styles.module.scss';
 
-const formatSocMediaLabel = (type: CompanySocial['type']) => (
-  <Flex gap={4} align="center">
-    {SOC_MEDIA_ICON_MAP[type]}
-    <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
-  </Flex>
-);
+import { formatSocMediaLabel } from '../../utils';
 
 const SOC_MEDIA_TYPES = [
   {

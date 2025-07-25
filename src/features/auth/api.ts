@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 
-import type { TSignUpForm } from '@features/auth/validation.ts';
+import type { SignUpCompanySchema, TSignUpForm } from '@features/auth/validation.ts';
 
 import apiClient from '@services/api-client.ts';
 
@@ -57,3 +57,37 @@ export const getUserByTempTokenOptions = (token: string) => ({
   queryKey: ['user-temporary', token],
   queryFn: async () => await getUserByTempToken(token),
 });
+
+export const signUpCompany = async (data: SignUpCompanySchema): Promise<void> => {
+  try {
+    await apiClient.post('/company-register', {
+      name: data.name,
+      code: data.code,
+      contactName: data.contactName,
+      phone: data.phone,
+      email: data.email,
+      companyTypeId: data.companyTypeId,
+      socials: data.socials,
+      ownershipType: data.ownershipType,
+      donorSupport: data.donorSupport,
+      offices: [
+        {
+          workSchedule: data.workSchedule,
+          additionalDescription: data.additionalDescription,
+          locationName: data.locationName,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          regionId: data.regionId,
+          serviceIds: data.serviceIds,
+          categoryIds: data.categoryIds,
+          conditionIds: data.conditionIds,
+          customFields: data.customFields,
+        },
+      ],
+    });
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data?.message || 'Сталася помилка при створенні компанії. Спробуйте ще раз');
+    }
+  }
+};

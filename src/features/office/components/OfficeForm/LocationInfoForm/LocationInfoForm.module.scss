@@ -87,3 +87,7 @@
     }
   }
 }
+
+.error {
+  @include input-error-message
+}

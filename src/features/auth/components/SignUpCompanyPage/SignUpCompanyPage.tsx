@@ -1,50 +1,46 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Steps, Typography } from 'antd';
+import { useNavigate } from '@tanstack/react-router';
+import { Button, Form, Steps, Typography } from 'antd';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+
+import ContactInfoFormContent from '@features/company/components/ContactInfoForm/ContactInfoFormContent';
+import MainInfoFormContent from '@features/company/components/MainInfoForm/MainInfoFormContent';
+import OfficeFormContent from '@features/office/components/OfficeForm/OfficeFormContent';
+
+import { useAlertContext } from '@shared/providers/AlertProvider';
+import { useShowConfetti } from '@shared/ui/utils/confetti';
 
 import styles from './SignUpCompanyPage.module.scss';
-import SignUpCompanyStep from './steps/SignUpCompanyStep/SignUpCompanyStep';
-import SignUpOfficeStep from './steps/SignUpOfficeStep/SignUpOfficeStep';
-import SignUpUserStep from './steps/SignUpUserStep/SignUpUserStep';
-import SignUpVerificationStep from './steps/SignUpVerificationStep/SignUpVerificationStep';
+import SignUpVerificationStep from './SignUpVerificationStep/SignUpVerificationStep';
 
-import { type SignUpCompanySchema, signUpCompanySchema } from '../../validation';
+import { signUpCompany } from '../../api';
+import {
+  type SignUpCompanySchema,
+  companyFields,
+  contactFields,
+  officeFields,
+  signUpCompanySchema,
+} from '../../validation';
 
 enum Step {
   COMPANY_INFO = 0,
   OFFICE_INFO = 1,
-  USER_INFO = 2,
+  CONTACT_INFO = 2,
   VERIFICATION = 3,
 }
 
-const stepsInfo: Record<Step, { title: string; subtitle: string; content: React.ReactElement }> = {
-  [Step.COMPANY_INFO]: {
-    title: 'Інформація про організацію',
-    subtitle: 'Заповніть дані про організацію.',
-    content: <SignUpCompanyStep />,
-  },
-  [Step.OFFICE_INFO]: {
-    title: 'Інформація про офіс',
-    subtitle: 'Створіть перший офіс організації.',
-    content: <SignUpOfficeStep />,
-  },
-  [Step.USER_INFO]: {
-    title: 'Інформація про контактну особу',
-    subtitle: 'Заповніть дані про контактну особу.',
-    content: <SignUpUserStep />,
-  },
-  [Step.VERIFICATION]: {
-    title: 'Перевірка',
-    subtitle: 'Перевірте введені дані.',
-    content: <SignUpVerificationStep />,
-  },
+type StepContent = {
+  title: string;
+  content: React.ReactElement;
+  trigger?: () => Promise<boolean>;
 };
 
 const SignUpCompanyPage = () => {
+  const alertContext = useAlertContext();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(Step.COMPANY_INFO);
-
-  const steps = useMemo(() => Object.values(stepsInfo), []);
+  const showConfetti = useShowConfetti();
 
   const nextStep = () => {
     setCurrentStep((prev) => prev + 1);
@@ -54,47 +50,111 @@ const SignUpCompanyPage = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
-  // const {
-  //   control,
-  //   handleSubmit,
-  //   reset,
-  //   formState: { errors, isSubmitting, isDirty },
-  // } = useForm<SignUpCompanySchema>({
-  //   resolver: zodResolver(signUpCompanySchema),
-  // });
+  const form = useForm<SignUpCompanySchema>({
+    resolver: zodResolver(signUpCompanySchema),
+  });
 
-  // const submitHandler = useCallback(
-  //   (data: SignUpCompanySchema) => {
-  //     reset(data);
-  //   },
-  //   [onSubmit, reset],
-  // );
+  const {
+    formState: { isSubmitting, isDirty, isValid },
+    handleSubmit,
+    getValues,
+    trigger,
+  } = form;
+
+  const submitHandler = useCallback(
+    async (data: SignUpCompanySchema) => {
+      await signUpCompany(data);
+      showConfetti(10000);
+
+      if (alertContext) {
+        alertContext.openNotification('Запит на створення організації успішно надіслано', 'success');
+      }
+
+      setTimeout(() => {
+        navigate({ to: '/login' });
+      }, 5000);
+    },
+    [alertContext, navigate, showConfetti],
+  );
+
+  const values = getValues();
+
+  const stepsInfo: Record<Step, StepContent> = useMemo(
+    () => ({
+      [Step.COMPANY_INFO]: {
+        title: 'Інформація про організацію',
+        content: <MainInfoFormContent />,
+        trigger: async () => await trigger(companyFields),
+      },
+      [Step.OFFICE_INFO]: {
+        title: 'Інформація про офіс',
+        content: <OfficeFormContent />,
+        trigger: async () => await trigger(officeFields),
+      },
+      [Step.CONTACT_INFO]: {
+        title: 'Інформація про контактну особу',
+        content: <ContactInfoFormContent />,
+        trigger: async () => await trigger(contactFields),
+      },
+      [Step.VERIFICATION]: {
+        title: 'Перевірка',
+        content: <SignUpVerificationStep data={values} />,
+      },
+    }),
+    [trigger, values],
+  );
+
+  const steps = useMemo(() => Object.values(stepsInfo), [stepsInfo]);
+
+  const currentStepInfo = stepsInfo[currentStep];
 
   return (
-    <div className={styles.signUpCompanyPage}>
-      <div className={styles.signUpCompanyPage__header}>
-        <Typography.Title level={1}>Реєстрація організації</Typography.Title>
-        <Steps current={currentStep} items={steps} />
-      </div>
-      <div className={styles.signUpCompanyPage__content}>{stepsInfo[currentStep].content}</div>
-      <div className={styles.signUpCompanyPage__footer}>
-        {currentStep > 0 && (
-          <Button className={styles.signUpCompanyPage__footerPrev} onClick={() => prevStep()}>
-            Назад
-          </Button>
-        )}
-        {currentStep < steps.length - 1 && (
-          <Button className={styles.signUpCompanyPage__footerNext} type="primary" onClick={() => nextStep()}>
-            Далі
-          </Button>
-        )}
-        {currentStep === steps.length - 1 && (
-          <Button className={styles.signUpCompanyPage__footerSubmit} type="primary" onClick={() => ({})}>
-            Зареєструватися
-          </Button>
-        )}
-      </div>
-    </div>
+    <FormProvider {...form}>
+      <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
+        <div className={styles.signUpCompanyPage}>
+          <div className={styles.signUpCompanyPage__header}>
+            <Typography.Title level={1}>Реєстрація організації</Typography.Title>
+            <Steps current={currentStep} items={steps} />
+          </div>
+
+          <div className={styles.signUpCompanyPage__content}>{currentStepInfo.content}</div>
+
+          <div className={styles.signUpCompanyPage__footer}>
+            {currentStep > 0 && (
+              <Button className={styles.signUpCompanyPage__footerPrev} onClick={() => prevStep()}>
+                Назад
+              </Button>
+            )}
+            {currentStep < steps.length - 1 && (
+              <Button
+                className={styles.signUpCompanyPage__footerNext}
+                type="primary"
+                disabled={!isDirty}
+                onClick={async () => {
+                  const isStepValid = await currentStepInfo.trigger?.();
+
+                  if (isStepValid) {
+                    nextStep();
+                  }
+                }}
+              >
+                Далі
+              </Button>
+            )}
+            {currentStep === steps.length - 1 && (
+              <Button
+                className={styles.signUpCompanyPage__footerSubmit}
+                type="primary"
+                htmlType="submit"
+                disabled={!isDirty || !isValid || isSubmitting}
+              >
+                Зареєструватися
+              </Button>
+            )}
+          </div>
+        </div>
+      </Form>
+    </FormProvider>
   );
 };
 

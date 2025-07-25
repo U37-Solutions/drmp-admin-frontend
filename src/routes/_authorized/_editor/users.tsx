@@ -29,7 +29,7 @@ export const Route = createFileRoute('/_authorized/_editor/users')({
 
 function UsersPage() {
   const alertContext = useAlertContext();
-  const { search, changeSearch } = useTableState(Route.id);
+  const { search, changeSearch } = useTableState('/_authorized/_editor/users');
   const {
     data: users,
     isPending,
@@ -59,7 +59,7 @@ function UsersPage() {
       styles={{ body: { padding: 0 } }}
       extra={<Input.Search defaultValue={search} placeholder="Пошук" onSearch={changeSearch} />}
     >
-      <UsersTable data={users!} isLoading={isPending} refetchData={refetch} routeId={Route.id} />
+      <UsersTable data={users!} isLoading={isPending} refetchData={refetch} routeId="/_authorized/_editor/users" />
       <InviteEditorModal open={showInviteModal} handleClose={handleInviteModalClose} />
     </Card>
   );

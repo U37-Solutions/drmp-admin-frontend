@@ -1,32 +1,31 @@
-import { Card, Input, Table, message } from 'antd';
+import { Table } from 'antd';
 import type { SorterResult } from 'antd/es/table/interface';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { getColumns } from '@features/users/columns.tsx';
-import InviteUserModal from '@features/users/components/InviteUserModal/InviteUserModal.tsx';
-import UserHeader from '@features/users/components/UserHeader.tsx';
 import type { UserDTO } from '@features/users/types.ts';
 
 import filterTableData from '@services/filter-table-data';
 import mapColumnsWithSort from '@services/sort-columns';
 
 import useTableState from '@shared/hooks/useTableState';
+import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import DeleteUserAction from './DeleteUser/DeleteUserAction';
 import ViewUserAction from './ViewUser/ViewUserAction';
+
+import type { FileRouteTypes } from '@/routeTree.gen.ts';
 
 type IProps = {
   data: Array<UserDTO>;
   isLoading: boolean;
   refetchData: () => void;
+  routeId: FileRouteTypes['id'];
 };
 
-const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const { changePage, page, pageSize, changeSearch, search, changeSorting, sortBy, sortAsc } =
-    useTableState('/_authorized/_editor/users');
-
-  const [showInviteModal, setShowInviteModal] = useState(false);
+const UsersTable = ({ data, isLoading, refetchData, routeId }: IProps) => {
+  const alertContext = useAlertContext();
+  const { changePage, page, pageSize, search, changeSorting, sortBy, sortAsc } = useTableState(routeId);
 
   const columns = useMemo(
     () =>
@@ -37,64 +36,39 @@ const UsersTable = ({ data, isLoading, refetchData }: IProps) => {
             key="delete-user"
             user={record}
             onSuccess={() => {
-              messageApi.open({
-                type: 'success',
-                content: 'Користувача успішно видалено',
-              });
+              if (alertContext) {
+                alertContext.openNotification('Користувача успішно видалено', 'success');
+              }
               refetchData();
             }}
           />,
         ],
       }),
-    [messageApi, refetchData],
+    [refetchData, alertContext],
   );
   const { pageFilteredData, total } = useMemo(
     () => filterTableData(data, page, pageSize, search, ['firstName', 'lastName', 'email']),
     [data, page, pageSize, search],
   );
 
-  const handleInviteModalClose = useCallback(
-    (success: boolean) => {
-      if (success) {
-        messageApi.open({
-          type: 'success',
-          content: 'Запрошення успішно надіслано',
-        });
-      }
-
-      setShowInviteModal(false);
-    },
-    [messageApi],
-  );
-
   return (
-    <>
-      {contextHolder}
-      <Card
-        title={<UserHeader handleInviteClick={() => setShowInviteModal(true)} />}
-        style={{ margin: 20 }}
-        styles={{ body: { padding: 0 } }}
-        extra={<Input.Search defaultValue={search} placeholder="Пошук" onSearch={changeSearch} />}
-      >
-        <Table
-          className="ant-responsive-table"
-          loading={{ spinning: isLoading }}
-          dataSource={pageFilteredData}
-          columns={mapColumnsWithSort<UserDTO>(columns, sortBy, sortAsc)}
-          onChange={(_pagination, _filters, sorter, { action }) => {
-            changeSorting(action, sorter as SorterResult<unknown>);
-          }}
-          pagination={{
-            total: total || 0,
-            showTotal: (totalCount: number) => `Всього: ${totalCount}`,
-            current: page,
-            pageSize: pageSize,
-            onChange: changePage,
-          }}
-        />
-      </Card>
-      <InviteUserModal open={showInviteModal} handleClose={handleInviteModalClose} />
-    </>
+    <Table
+      className="ant-responsive-table"
+      loading={{ spinning: isLoading }}
+      dataSource={pageFilteredData}
+      locale={{ emptyText: 'Немає користувачів' }}
+      columns={mapColumnsWithSort<UserDTO>(columns, sortBy, sortAsc)}
+      onChange={(_pagination, _filters, sorter, { action }) => {
+        changeSorting(action, sorter as SorterResult<unknown>);
+      }}
+      pagination={{
+        total: total || 0,
+        showTotal: (totalCount: number) => `Всього: ${totalCount}`,
+        current: page,
+        pageSize: pageSize,
+        onChange: changePage,
+      }}
+    />
   );
 };
 

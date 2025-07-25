@@ -1,3 +1,5 @@
+import type { CustomFieldValueDTO } from '@features/formEdit/types.ts';
+
 import type { Region } from '@components/map/types';
 
 export type OfficeDTO = {
@@ -13,7 +15,7 @@ export type OfficeDTO = {
   serviceIds: number[];
   categoryIds: number[];
   conditionIds: number[];
-  customFields: unknown[];
+  customFields: Array<CustomFieldValueDTO>;
 };
 
 export type CreateOfficeDTO = {

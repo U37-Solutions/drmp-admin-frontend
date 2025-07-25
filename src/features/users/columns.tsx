@@ -1,6 +1,10 @@
 import type { ColumnsType } from 'antd/es/table';
 import type React from 'react';
 
+import type { Role } from '@features/session/types.ts';
+
+import FormatUserRole from '@components/formatters/FormatUserRole.tsx';
+
 import UsersTableActions from './components/UsersTableActions';
 import type { UserDTO } from './types';
 
@@ -40,6 +44,15 @@ export const getColumns = ({
     showSorterTooltip: {
       title: 'Сортувати за email',
     },
+  },
+  {
+    title: 'Роль',
+    dataIndex: 'role',
+    sorter: (a, b) => a.role?.localeCompare(b.role),
+    showSorterTooltip: {
+      title: 'Сортувати за роллю',
+    },
+    render: (role: Role) => <FormatUserRole role={role} />,
   },
   {
     title: 'Дії',

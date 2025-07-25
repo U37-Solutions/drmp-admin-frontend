@@ -12,6 +12,9 @@ export const getUser = async (id: number) => await apiClient.get(`/users/${id}`)
 export const getUsers = async (role?: Role) =>
   await apiClient.get('/users', { params: { role } }).then((res) => res.data);
 
+export const getUsersByCompany = async (companyId: number) =>
+  await apiClient.get(`/users/company/${companyId}`).then((res) => res.data);
+
 export const updateUser = async (id: number, updatedUser: Partial<Omit<UserDTO, 'id'>>) =>
   await apiClient.put(`/users/${id}`, updatedUser).then((res) => res.data);
 
@@ -34,3 +37,15 @@ export const inviteUser = async (data: TInviteUserForm) =>
       throw new Error(err);
     })
     .then((res) => res.data);
+
+export const inviteCompanyUser = async (data: TInviteUserForm) =>
+  await apiClient
+    .post(`/invite-company-user`, data)
+    .then((res) => res.data)
+    .catch((err) => {
+      if (err instanceof AxiosError && err.response?.status === 400) {
+        throw new Error('Користувач із такою електронною поштою вже існує');
+      }
+
+      throw new Error(err);
+    });

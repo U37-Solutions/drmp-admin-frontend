@@ -13,9 +13,11 @@ const LabelWithHelpTip = ({ label, tip }: Props) => {
   return (
     <Flex gap={4} className={styles.wrapper}>
       <span>{label}</span>
-      <Tooltip title={tip}>
-        <QuestionCircleFilled className={styles.tipIcon} />
-      </Tooltip>
+      {!!tip && (
+        <Tooltip title={tip}>
+          <QuestionCircleFilled className={styles.tipIcon} />
+        </Tooltip>
+      )}
     </Flex>
   );
 };

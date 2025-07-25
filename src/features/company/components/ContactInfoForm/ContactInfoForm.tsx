@@ -5,6 +5,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import type { CompanyDTO } from '@features/company/types.ts';
 import { type CompanyContactSchema, companyContactSchema } from '@features/company/validation.ts';
+import { Permission } from '@features/session/types.ts';
+
+import { currentUserHasPermissions } from '@services/has-permissions.ts';
 
 import ContactInfoFormContent from './ContactInfoFormContent';
 
@@ -45,7 +48,11 @@ const ContactInfoForm = ({ company, onSubmit, isPending }: Props) => {
 
   return (
     <FormProvider {...form}>
-      <Form layout="vertical" onFinish={handleSubmit(submitHandler)}>
+      <Form
+        disabled={!currentUserHasPermissions(Permission.COMPANY_UPDATE)}
+        layout="vertical"
+        onFinish={handleSubmit(submitHandler)}
+      >
         <Spin spinning={isPending} fullscreen />
 
         <ContactInfoFormContent />

@@ -4,7 +4,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import OfficePage from '@/features/office/components/OfficePage/OfficePage';
 import { createOfficeByIdQueryOptions } from '@/features/office/queries';
 
-export const Route = createFileRoute('/_authorized/_editor/offices/$officeId')({
+export const Route = createFileRoute('/_authorized/offices/$officeId')({
   component: RouteComponent,
   beforeLoad: async ({ params, context }) => {
     const { officeId } = params;

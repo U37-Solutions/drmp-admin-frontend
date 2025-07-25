@@ -16,27 +16,26 @@ import { Route as AuthorizedFeedbacksRouteImport } from './routes/_authorized/fe
 import { Route as AuthorizedChatsRouteImport } from './routes/_authorized/chats'
 import { Route as UnauthorizedUserRouteRouteImport } from './routes/_unauthorized/_user/route'
 import { Route as UnauthorizedCompanyRouteRouteImport } from './routes/_unauthorized/_company/route'
+import { Route as AuthorizedOfficesRouteRouteImport } from './routes/_authorized/offices/route'
 import { Route as AuthorizedEditorRouteRouteImport } from './routes/_authorized/_editor/route'
 import { Route as AuthorizedCompanyAdminRouteRouteImport } from './routes/_authorized/_companyAdmin/route'
 import { Route as AuthorizedAdminRouteRouteImport } from './routes/_authorized/_admin/route'
+import { Route as AuthorizedOfficesIndexRouteImport } from './routes/_authorized/offices/index'
 import { Route as UnauthorizedUserLoginRouteImport } from './routes/_unauthorized/_user/login'
 import { Route as UnauthorizedUserForgotPasswordRouteImport } from './routes/_unauthorized/_user/forgot-password'
 import { Route as UnauthorizedUserCheckEmailRouteImport } from './routes/_unauthorized/_user/check-email'
 import { Route as AuthorizedEditorUsersRouteImport } from './routes/_authorized/_editor/users'
-import { Route as AuthorizedCompanyAdminCompanyRouteImport } from './routes/_authorized/_companyAdmin/company'
 import { Route as AuthorizedAdminFormEditRouteImport } from './routes/_authorized/_admin/form-edit'
-import { Route as AuthorizedEditorOfficesRouteRouteImport } from './routes/_authorized/_editor/offices/route'
+import { Route as AuthorizedOfficesOfficeIdRouteRouteImport } from './routes/_authorized/offices/$officeId/route'
 import { Route as AuthorizedEditorCompaniesRouteRouteImport } from './routes/_authorized/_editor/companies/route'
-import { Route as AuthorizedEditorOfficesIndexRouteImport } from './routes/_authorized/_editor/offices/index'
 import { Route as AuthorizedEditorCompaniesIndexRouteImport } from './routes/_authorized/_editor/companies/index'
 import { Route as UnauthorizedUserSignUpTokenRouteImport } from './routes/_unauthorized/_user/sign-up.$token'
 import { Route as UnauthorizedUserResetPasswordTokenRouteImport } from './routes/_unauthorized/_user/reset-password.$token'
 import { Route as UnauthorizedCompanySignUpCompanyRouteImport } from './routes/_unauthorized/_company/sign-up.company'
-import { Route as AuthorizedEditorOfficesOfficeIdRouteRouteImport } from './routes/_authorized/_editor/offices/$officeId/route'
-import { Route as AuthorizedEditorCompaniesCompanyIdRouteRouteImport } from './routes/_authorized/_editor/companies/$companyId/route'
-import { Route as AuthorizedEditorCompaniesCompanyIdIndexRouteImport } from './routes/_authorized/_editor/companies/$companyId/index'
-import { Route as AuthorizedEditorCompaniesCompanyIdUsersRouteImport } from './routes/_authorized/_editor/companies/$companyId/users'
-import { Route as AuthorizedEditorCompaniesCompanyIdLogsRouteImport } from './routes/_authorized/_editor/companies/$companyId/logs'
+import { Route as AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteImport } from './routes/_authorized/_companyAdmin/companies/$companyId/route'
+import { Route as AuthorizedCompanyAdminCompaniesCompanyIdIndexRouteImport } from './routes/_authorized/_companyAdmin/companies/$companyId/index'
+import { Route as AuthorizedCompanyAdminCompaniesCompanyIdUsersRouteImport } from './routes/_authorized/_companyAdmin/companies/$companyId/users'
+import { Route as AuthorizedCompanyAdminCompaniesCompanyIdLogsRouteImport } from './routes/_authorized/_companyAdmin/companies/$companyId/logs'
 
 const AuthorizedRouteRoute = AuthorizedRouteRouteImport.update({
   id: '/_authorized',
@@ -71,6 +70,11 @@ const UnauthorizedCompanyRouteRoute =
     id: '/_unauthorized/_company',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthorizedOfficesRouteRoute = AuthorizedOfficesRouteRouteImport.update({
+  id: '/offices',
+  path: '/offices',
+  getParentRoute: () => AuthorizedRouteRoute,
+} as any)
 const AuthorizedEditorRouteRoute = AuthorizedEditorRouteRouteImport.update({
   id: '/_editor',
   getParentRoute: () => AuthorizedRouteRoute,
@@ -83,6 +87,11 @@ const AuthorizedCompanyAdminRouteRoute =
 const AuthorizedAdminRouteRoute = AuthorizedAdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => AuthorizedRouteRoute,
+} as any)
+const AuthorizedOfficesIndexRoute = AuthorizedOfficesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthorizedOfficesRouteRoute,
 } as any)
 const UnauthorizedUserLoginRoute = UnauthorizedUserLoginRouteImport.update({
   id: '/login',
@@ -106,34 +115,22 @@ const AuthorizedEditorUsersRoute = AuthorizedEditorUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AuthorizedEditorRouteRoute,
 } as any)
-const AuthorizedCompanyAdminCompanyRoute =
-  AuthorizedCompanyAdminCompanyRouteImport.update({
-    id: '/company',
-    path: '/company',
-    getParentRoute: () => AuthorizedCompanyAdminRouteRoute,
-  } as any)
 const AuthorizedAdminFormEditRoute = AuthorizedAdminFormEditRouteImport.update({
   id: '/form-edit',
   path: '/form-edit',
   getParentRoute: () => AuthorizedAdminRouteRoute,
 } as any)
-const AuthorizedEditorOfficesRouteRoute =
-  AuthorizedEditorOfficesRouteRouteImport.update({
-    id: '/offices',
-    path: '/offices',
-    getParentRoute: () => AuthorizedEditorRouteRoute,
+const AuthorizedOfficesOfficeIdRouteRoute =
+  AuthorizedOfficesOfficeIdRouteRouteImport.update({
+    id: '/$officeId',
+    path: '/$officeId',
+    getParentRoute: () => AuthorizedOfficesRouteRoute,
   } as any)
 const AuthorizedEditorCompaniesRouteRoute =
   AuthorizedEditorCompaniesRouteRouteImport.update({
     id: '/companies',
     path: '/companies',
     getParentRoute: () => AuthorizedEditorRouteRoute,
-  } as any)
-const AuthorizedEditorOfficesIndexRoute =
-  AuthorizedEditorOfficesIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthorizedEditorOfficesRouteRoute,
   } as any)
 const AuthorizedEditorCompaniesIndexRoute =
   AuthorizedEditorCompaniesIndexRouteImport.update({
@@ -159,81 +156,73 @@ const UnauthorizedCompanySignUpCompanyRoute =
     path: '/sign-up/company',
     getParentRoute: () => UnauthorizedCompanyRouteRoute,
   } as any)
-const AuthorizedEditorOfficesOfficeIdRouteRoute =
-  AuthorizedEditorOfficesOfficeIdRouteRouteImport.update({
-    id: '/$officeId',
-    path: '/$officeId',
-    getParentRoute: () => AuthorizedEditorOfficesRouteRoute,
+const AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute =
+  AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteImport.update({
+    id: '/companies/$companyId',
+    path: '/companies/$companyId',
+    getParentRoute: () => AuthorizedCompanyAdminRouteRoute,
   } as any)
-const AuthorizedEditorCompaniesCompanyIdRouteRoute =
-  AuthorizedEditorCompaniesCompanyIdRouteRouteImport.update({
-    id: '/$companyId',
-    path: '/$companyId',
-    getParentRoute: () => AuthorizedEditorCompaniesRouteRoute,
-  } as any)
-const AuthorizedEditorCompaniesCompanyIdIndexRoute =
-  AuthorizedEditorCompaniesCompanyIdIndexRouteImport.update({
+const AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute =
+  AuthorizedCompanyAdminCompaniesCompanyIdIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AuthorizedEditorCompaniesCompanyIdRouteRoute,
+    getParentRoute: () => AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute,
   } as any)
-const AuthorizedEditorCompaniesCompanyIdUsersRoute =
-  AuthorizedEditorCompaniesCompanyIdUsersRouteImport.update({
+const AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute =
+  AuthorizedCompanyAdminCompaniesCompanyIdUsersRouteImport.update({
     id: '/users',
     path: '/users',
-    getParentRoute: () => AuthorizedEditorCompaniesCompanyIdRouteRoute,
+    getParentRoute: () => AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute,
   } as any)
-const AuthorizedEditorCompaniesCompanyIdLogsRoute =
-  AuthorizedEditorCompaniesCompanyIdLogsRouteImport.update({
+const AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute =
+  AuthorizedCompanyAdminCompaniesCompanyIdLogsRouteImport.update({
     id: '/logs',
     path: '/logs',
-    getParentRoute: () => AuthorizedEditorCompaniesCompanyIdRouteRoute,
+    getParentRoute: () => AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/offices': typeof AuthorizedOfficesRouteRouteWithChildren
   '/chats': typeof AuthorizedChatsRoute
   '/feedbacks': typeof AuthorizedFeedbacksRoute
   '/profile': typeof AuthorizedProfileRoute
   '/companies': typeof AuthorizedEditorCompaniesRouteRouteWithChildren
-  '/offices': typeof AuthorizedEditorOfficesRouteRouteWithChildren
+  '/offices/$officeId': typeof AuthorizedOfficesOfficeIdRouteRoute
   '/form-edit': typeof AuthorizedAdminFormEditRoute
-  '/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/users': typeof AuthorizedEditorUsersRoute
   '/check-email': typeof UnauthorizedUserCheckEmailRoute
   '/forgot-password': typeof UnauthorizedUserForgotPasswordRoute
   '/login': typeof UnauthorizedUserLoginRoute
-  '/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
-  '/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
+  '/offices/': typeof AuthorizedOfficesIndexRoute
+  '/companies/$companyId': typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteWithChildren
   '/sign-up/company': typeof UnauthorizedCompanySignUpCompanyRoute
   '/reset-password/$token': typeof UnauthorizedUserResetPasswordTokenRoute
   '/sign-up/$token': typeof UnauthorizedUserSignUpTokenRoute
   '/companies/': typeof AuthorizedEditorCompaniesIndexRoute
-  '/offices/': typeof AuthorizedEditorOfficesIndexRoute
-  '/companies/$companyId/logs': typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
-  '/companies/$companyId/users': typeof AuthorizedEditorCompaniesCompanyIdUsersRoute
-  '/companies/$companyId/': typeof AuthorizedEditorCompaniesCompanyIdIndexRoute
+  '/companies/$companyId/logs': typeof AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute
+  '/companies/$companyId/users': typeof AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute
+  '/companies/$companyId/': typeof AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chats': typeof AuthorizedChatsRoute
   '/feedbacks': typeof AuthorizedFeedbacksRoute
   '/profile': typeof AuthorizedProfileRoute
+  '/offices/$officeId': typeof AuthorizedOfficesOfficeIdRouteRoute
   '/form-edit': typeof AuthorizedAdminFormEditRoute
-  '/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/users': typeof AuthorizedEditorUsersRoute
   '/check-email': typeof UnauthorizedUserCheckEmailRoute
   '/forgot-password': typeof UnauthorizedUserForgotPasswordRoute
   '/login': typeof UnauthorizedUserLoginRoute
-  '/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
+  '/offices': typeof AuthorizedOfficesIndexRoute
   '/sign-up/company': typeof UnauthorizedCompanySignUpCompanyRoute
   '/reset-password/$token': typeof UnauthorizedUserResetPasswordTokenRoute
   '/sign-up/$token': typeof UnauthorizedUserSignUpTokenRoute
   '/companies': typeof AuthorizedEditorCompaniesIndexRoute
-  '/offices': typeof AuthorizedEditorOfficesIndexRoute
-  '/companies/$companyId/logs': typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
-  '/companies/$companyId/users': typeof AuthorizedEditorCompaniesCompanyIdUsersRoute
-  '/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdIndexRoute
+  '/companies/$companyId/logs': typeof AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute
+  '/companies/$companyId/users': typeof AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute
+  '/companies/$companyId': typeof AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -242,52 +231,50 @@ export interface FileRoutesById {
   '/_authorized/_admin': typeof AuthorizedAdminRouteRouteWithChildren
   '/_authorized/_companyAdmin': typeof AuthorizedCompanyAdminRouteRouteWithChildren
   '/_authorized/_editor': typeof AuthorizedEditorRouteRouteWithChildren
+  '/_authorized/offices': typeof AuthorizedOfficesRouteRouteWithChildren
   '/_unauthorized/_company': typeof UnauthorizedCompanyRouteRouteWithChildren
   '/_unauthorized/_user': typeof UnauthorizedUserRouteRouteWithChildren
   '/_authorized/chats': typeof AuthorizedChatsRoute
   '/_authorized/feedbacks': typeof AuthorizedFeedbacksRoute
   '/_authorized/profile': typeof AuthorizedProfileRoute
   '/_authorized/_editor/companies': typeof AuthorizedEditorCompaniesRouteRouteWithChildren
-  '/_authorized/_editor/offices': typeof AuthorizedEditorOfficesRouteRouteWithChildren
+  '/_authorized/offices/$officeId': typeof AuthorizedOfficesOfficeIdRouteRoute
   '/_authorized/_admin/form-edit': typeof AuthorizedAdminFormEditRoute
-  '/_authorized/_companyAdmin/company': typeof AuthorizedCompanyAdminCompanyRoute
   '/_authorized/_editor/users': typeof AuthorizedEditorUsersRoute
   '/_unauthorized/_user/check-email': typeof UnauthorizedUserCheckEmailRoute
   '/_unauthorized/_user/forgot-password': typeof UnauthorizedUserForgotPasswordRoute
   '/_unauthorized/_user/login': typeof UnauthorizedUserLoginRoute
-  '/_authorized/_editor/companies/$companyId': typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
-  '/_authorized/_editor/offices/$officeId': typeof AuthorizedEditorOfficesOfficeIdRouteRoute
+  '/_authorized/offices/': typeof AuthorizedOfficesIndexRoute
+  '/_authorized/_companyAdmin/companies/$companyId': typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteWithChildren
   '/_unauthorized/_company/sign-up/company': typeof UnauthorizedCompanySignUpCompanyRoute
   '/_unauthorized/_user/reset-password/$token': typeof UnauthorizedUserResetPasswordTokenRoute
   '/_unauthorized/_user/sign-up/$token': typeof UnauthorizedUserSignUpTokenRoute
   '/_authorized/_editor/companies/': typeof AuthorizedEditorCompaniesIndexRoute
-  '/_authorized/_editor/offices/': typeof AuthorizedEditorOfficesIndexRoute
-  '/_authorized/_editor/companies/$companyId/logs': typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
-  '/_authorized/_editor/companies/$companyId/users': typeof AuthorizedEditorCompaniesCompanyIdUsersRoute
-  '/_authorized/_editor/companies/$companyId/': typeof AuthorizedEditorCompaniesCompanyIdIndexRoute
+  '/_authorized/_companyAdmin/companies/$companyId/logs': typeof AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute
+  '/_authorized/_companyAdmin/companies/$companyId/users': typeof AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute
+  '/_authorized/_companyAdmin/companies/$companyId/': typeof AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/offices'
     | '/chats'
     | '/feedbacks'
     | '/profile'
     | '/companies'
-    | '/offices'
+    | '/offices/$officeId'
     | '/form-edit'
-    | '/company'
     | '/users'
     | '/check-email'
     | '/forgot-password'
     | '/login'
+    | '/offices/'
     | '/companies/$companyId'
-    | '/offices/$officeId'
     | '/sign-up/company'
     | '/reset-password/$token'
     | '/sign-up/$token'
     | '/companies/'
-    | '/offices/'
     | '/companies/$companyId/logs'
     | '/companies/$companyId/users'
     | '/companies/$companyId/'
@@ -297,18 +284,17 @@ export interface FileRouteTypes {
     | '/chats'
     | '/feedbacks'
     | '/profile'
+    | '/offices/$officeId'
     | '/form-edit'
-    | '/company'
     | '/users'
     | '/check-email'
     | '/forgot-password'
     | '/login'
-    | '/offices/$officeId'
+    | '/offices'
     | '/sign-up/company'
     | '/reset-password/$token'
     | '/sign-up/$token'
     | '/companies'
-    | '/offices'
     | '/companies/$companyId/logs'
     | '/companies/$companyId/users'
     | '/companies/$companyId'
@@ -319,29 +305,28 @@ export interface FileRouteTypes {
     | '/_authorized/_admin'
     | '/_authorized/_companyAdmin'
     | '/_authorized/_editor'
+    | '/_authorized/offices'
     | '/_unauthorized/_company'
     | '/_unauthorized/_user'
     | '/_authorized/chats'
     | '/_authorized/feedbacks'
     | '/_authorized/profile'
     | '/_authorized/_editor/companies'
-    | '/_authorized/_editor/offices'
+    | '/_authorized/offices/$officeId'
     | '/_authorized/_admin/form-edit'
-    | '/_authorized/_companyAdmin/company'
     | '/_authorized/_editor/users'
     | '/_unauthorized/_user/check-email'
     | '/_unauthorized/_user/forgot-password'
     | '/_unauthorized/_user/login'
-    | '/_authorized/_editor/companies/$companyId'
-    | '/_authorized/_editor/offices/$officeId'
+    | '/_authorized/offices/'
+    | '/_authorized/_companyAdmin/companies/$companyId'
     | '/_unauthorized/_company/sign-up/company'
     | '/_unauthorized/_user/reset-password/$token'
     | '/_unauthorized/_user/sign-up/$token'
     | '/_authorized/_editor/companies/'
-    | '/_authorized/_editor/offices/'
-    | '/_authorized/_editor/companies/$companyId/logs'
-    | '/_authorized/_editor/companies/$companyId/users'
-    | '/_authorized/_editor/companies/$companyId/'
+    | '/_authorized/_companyAdmin/companies/$companyId/logs'
+    | '/_authorized/_companyAdmin/companies/$companyId/users'
+    | '/_authorized/_companyAdmin/companies/$companyId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -402,6 +387,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthorizedCompanyRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authorized/offices': {
+      id: '/_authorized/offices'
+      path: '/offices'
+      fullPath: '/offices'
+      preLoaderRoute: typeof AuthorizedOfficesRouteRouteImport
+      parentRoute: typeof AuthorizedRouteRoute
+    }
     '/_authorized/_editor': {
       id: '/_authorized/_editor'
       path: ''
@@ -422,6 +414,13 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthorizedAdminRouteRouteImport
       parentRoute: typeof AuthorizedRouteRoute
+    }
+    '/_authorized/offices/': {
+      id: '/_authorized/offices/'
+      path: '/'
+      fullPath: '/offices/'
+      preLoaderRoute: typeof AuthorizedOfficesIndexRouteImport
+      parentRoute: typeof AuthorizedOfficesRouteRoute
     }
     '/_unauthorized/_user/login': {
       id: '/_unauthorized/_user/login'
@@ -451,13 +450,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedEditorUsersRouteImport
       parentRoute: typeof AuthorizedEditorRouteRoute
     }
-    '/_authorized/_companyAdmin/company': {
-      id: '/_authorized/_companyAdmin/company'
-      path: '/company'
-      fullPath: '/company'
-      preLoaderRoute: typeof AuthorizedCompanyAdminCompanyRouteImport
-      parentRoute: typeof AuthorizedCompanyAdminRouteRoute
-    }
     '/_authorized/_admin/form-edit': {
       id: '/_authorized/_admin/form-edit'
       path: '/form-edit'
@@ -465,12 +457,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedAdminFormEditRouteImport
       parentRoute: typeof AuthorizedAdminRouteRoute
     }
-    '/_authorized/_editor/offices': {
-      id: '/_authorized/_editor/offices'
-      path: '/offices'
-      fullPath: '/offices'
-      preLoaderRoute: typeof AuthorizedEditorOfficesRouteRouteImport
-      parentRoute: typeof AuthorizedEditorRouteRoute
+    '/_authorized/offices/$officeId': {
+      id: '/_authorized/offices/$officeId'
+      path: '/$officeId'
+      fullPath: '/offices/$officeId'
+      preLoaderRoute: typeof AuthorizedOfficesOfficeIdRouteRouteImport
+      parentRoute: typeof AuthorizedOfficesRouteRoute
     }
     '/_authorized/_editor/companies': {
       id: '/_authorized/_editor/companies'
@@ -478,13 +470,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/companies'
       preLoaderRoute: typeof AuthorizedEditorCompaniesRouteRouteImport
       parentRoute: typeof AuthorizedEditorRouteRoute
-    }
-    '/_authorized/_editor/offices/': {
-      id: '/_authorized/_editor/offices/'
-      path: '/'
-      fullPath: '/offices/'
-      preLoaderRoute: typeof AuthorizedEditorOfficesIndexRouteImport
-      parentRoute: typeof AuthorizedEditorOfficesRouteRoute
     }
     '/_authorized/_editor/companies/': {
       id: '/_authorized/_editor/companies/'
@@ -514,40 +499,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthorizedCompanySignUpCompanyRouteImport
       parentRoute: typeof UnauthorizedCompanyRouteRoute
     }
-    '/_authorized/_editor/offices/$officeId': {
-      id: '/_authorized/_editor/offices/$officeId'
-      path: '/$officeId'
-      fullPath: '/offices/$officeId'
-      preLoaderRoute: typeof AuthorizedEditorOfficesOfficeIdRouteRouteImport
-      parentRoute: typeof AuthorizedEditorOfficesRouteRoute
-    }
-    '/_authorized/_editor/companies/$companyId': {
-      id: '/_authorized/_editor/companies/$companyId'
-      path: '/$companyId'
+    '/_authorized/_companyAdmin/companies/$companyId': {
+      id: '/_authorized/_companyAdmin/companies/$companyId'
+      path: '/companies/$companyId'
       fullPath: '/companies/$companyId'
-      preLoaderRoute: typeof AuthorizedEditorCompaniesCompanyIdRouteRouteImport
-      parentRoute: typeof AuthorizedEditorCompaniesRouteRoute
+      preLoaderRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteImport
+      parentRoute: typeof AuthorizedCompanyAdminRouteRoute
     }
-    '/_authorized/_editor/companies/$companyId/': {
-      id: '/_authorized/_editor/companies/$companyId/'
+    '/_authorized/_companyAdmin/companies/$companyId/': {
+      id: '/_authorized/_companyAdmin/companies/$companyId/'
       path: '/'
       fullPath: '/companies/$companyId/'
-      preLoaderRoute: typeof AuthorizedEditorCompaniesCompanyIdIndexRouteImport
-      parentRoute: typeof AuthorizedEditorCompaniesCompanyIdRouteRoute
+      preLoaderRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdIndexRouteImport
+      parentRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute
     }
-    '/_authorized/_editor/companies/$companyId/users': {
-      id: '/_authorized/_editor/companies/$companyId/users'
+    '/_authorized/_companyAdmin/companies/$companyId/users': {
+      id: '/_authorized/_companyAdmin/companies/$companyId/users'
       path: '/users'
       fullPath: '/companies/$companyId/users'
-      preLoaderRoute: typeof AuthorizedEditorCompaniesCompanyIdUsersRouteImport
-      parentRoute: typeof AuthorizedEditorCompaniesCompanyIdRouteRoute
+      preLoaderRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdUsersRouteImport
+      parentRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute
     }
-    '/_authorized/_editor/companies/$companyId/logs': {
-      id: '/_authorized/_editor/companies/$companyId/logs'
+    '/_authorized/_companyAdmin/companies/$companyId/logs': {
+      id: '/_authorized/_companyAdmin/companies/$companyId/logs'
       path: '/logs'
       fullPath: '/companies/$companyId/logs'
-      preLoaderRoute: typeof AuthorizedEditorCompaniesCompanyIdLogsRouteImport
-      parentRoute: typeof AuthorizedEditorCompaniesCompanyIdRouteRoute
+      preLoaderRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdLogsRouteImport
+      parentRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute
     }
   }
 }
@@ -563,13 +541,35 @@ const AuthorizedAdminRouteRouteChildren: AuthorizedAdminRouteRouteChildren = {
 const AuthorizedAdminRouteRouteWithChildren =
   AuthorizedAdminRouteRoute._addFileChildren(AuthorizedAdminRouteRouteChildren)
 
+interface AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteChildren {
+  AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute
+  AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute
+  AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute
+}
+
+const AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteChildren: AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteChildren =
+  {
+    AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute:
+      AuthorizedCompanyAdminCompaniesCompanyIdLogsRoute,
+    AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute:
+      AuthorizedCompanyAdminCompaniesCompanyIdUsersRoute,
+    AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute:
+      AuthorizedCompanyAdminCompaniesCompanyIdIndexRoute,
+  }
+
+const AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteWithChildren =
+  AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute._addFileChildren(
+    AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteChildren,
+  )
+
 interface AuthorizedCompanyAdminRouteRouteChildren {
-  AuthorizedCompanyAdminCompanyRoute: typeof AuthorizedCompanyAdminCompanyRoute
+  AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute: typeof AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteWithChildren
 }
 
 const AuthorizedCompanyAdminRouteRouteChildren: AuthorizedCompanyAdminRouteRouteChildren =
   {
-    AuthorizedCompanyAdminCompanyRoute: AuthorizedCompanyAdminCompanyRoute,
+    AuthorizedCompanyAdminCompaniesCompanyIdRouteRoute:
+      AuthorizedCompanyAdminCompaniesCompanyIdRouteRouteWithChildren,
   }
 
 const AuthorizedCompanyAdminRouteRouteWithChildren =
@@ -577,36 +577,12 @@ const AuthorizedCompanyAdminRouteRouteWithChildren =
     AuthorizedCompanyAdminRouteRouteChildren,
   )
 
-interface AuthorizedEditorCompaniesCompanyIdRouteRouteChildren {
-  AuthorizedEditorCompaniesCompanyIdLogsRoute: typeof AuthorizedEditorCompaniesCompanyIdLogsRoute
-  AuthorizedEditorCompaniesCompanyIdUsersRoute: typeof AuthorizedEditorCompaniesCompanyIdUsersRoute
-  AuthorizedEditorCompaniesCompanyIdIndexRoute: typeof AuthorizedEditorCompaniesCompanyIdIndexRoute
-}
-
-const AuthorizedEditorCompaniesCompanyIdRouteRouteChildren: AuthorizedEditorCompaniesCompanyIdRouteRouteChildren =
-  {
-    AuthorizedEditorCompaniesCompanyIdLogsRoute:
-      AuthorizedEditorCompaniesCompanyIdLogsRoute,
-    AuthorizedEditorCompaniesCompanyIdUsersRoute:
-      AuthorizedEditorCompaniesCompanyIdUsersRoute,
-    AuthorizedEditorCompaniesCompanyIdIndexRoute:
-      AuthorizedEditorCompaniesCompanyIdIndexRoute,
-  }
-
-const AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren =
-  AuthorizedEditorCompaniesCompanyIdRouteRoute._addFileChildren(
-    AuthorizedEditorCompaniesCompanyIdRouteRouteChildren,
-  )
-
 interface AuthorizedEditorCompaniesRouteRouteChildren {
-  AuthorizedEditorCompaniesCompanyIdRouteRoute: typeof AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren
   AuthorizedEditorCompaniesIndexRoute: typeof AuthorizedEditorCompaniesIndexRoute
 }
 
 const AuthorizedEditorCompaniesRouteRouteChildren: AuthorizedEditorCompaniesRouteRouteChildren =
   {
-    AuthorizedEditorCompaniesCompanyIdRouteRoute:
-      AuthorizedEditorCompaniesCompanyIdRouteRouteWithChildren,
     AuthorizedEditorCompaniesIndexRoute: AuthorizedEditorCompaniesIndexRoute,
   }
 
@@ -615,34 +591,14 @@ const AuthorizedEditorCompaniesRouteRouteWithChildren =
     AuthorizedEditorCompaniesRouteRouteChildren,
   )
 
-interface AuthorizedEditorOfficesRouteRouteChildren {
-  AuthorizedEditorOfficesOfficeIdRouteRoute: typeof AuthorizedEditorOfficesOfficeIdRouteRoute
-  AuthorizedEditorOfficesIndexRoute: typeof AuthorizedEditorOfficesIndexRoute
-}
-
-const AuthorizedEditorOfficesRouteRouteChildren: AuthorizedEditorOfficesRouteRouteChildren =
-  {
-    AuthorizedEditorOfficesOfficeIdRouteRoute:
-      AuthorizedEditorOfficesOfficeIdRouteRoute,
-    AuthorizedEditorOfficesIndexRoute: AuthorizedEditorOfficesIndexRoute,
-  }
-
-const AuthorizedEditorOfficesRouteRouteWithChildren =
-  AuthorizedEditorOfficesRouteRoute._addFileChildren(
-    AuthorizedEditorOfficesRouteRouteChildren,
-  )
-
 interface AuthorizedEditorRouteRouteChildren {
   AuthorizedEditorCompaniesRouteRoute: typeof AuthorizedEditorCompaniesRouteRouteWithChildren
-  AuthorizedEditorOfficesRouteRoute: typeof AuthorizedEditorOfficesRouteRouteWithChildren
   AuthorizedEditorUsersRoute: typeof AuthorizedEditorUsersRoute
 }
 
 const AuthorizedEditorRouteRouteChildren: AuthorizedEditorRouteRouteChildren = {
   AuthorizedEditorCompaniesRouteRoute:
     AuthorizedEditorCompaniesRouteRouteWithChildren,
-  AuthorizedEditorOfficesRouteRoute:
-    AuthorizedEditorOfficesRouteRouteWithChildren,
   AuthorizedEditorUsersRoute: AuthorizedEditorUsersRoute,
 }
 
@@ -651,10 +607,27 @@ const AuthorizedEditorRouteRouteWithChildren =
     AuthorizedEditorRouteRouteChildren,
   )
 
+interface AuthorizedOfficesRouteRouteChildren {
+  AuthorizedOfficesOfficeIdRouteRoute: typeof AuthorizedOfficesOfficeIdRouteRoute
+  AuthorizedOfficesIndexRoute: typeof AuthorizedOfficesIndexRoute
+}
+
+const AuthorizedOfficesRouteRouteChildren: AuthorizedOfficesRouteRouteChildren =
+  {
+    AuthorizedOfficesOfficeIdRouteRoute: AuthorizedOfficesOfficeIdRouteRoute,
+    AuthorizedOfficesIndexRoute: AuthorizedOfficesIndexRoute,
+  }
+
+const AuthorizedOfficesRouteRouteWithChildren =
+  AuthorizedOfficesRouteRoute._addFileChildren(
+    AuthorizedOfficesRouteRouteChildren,
+  )
+
 interface AuthorizedRouteRouteChildren {
   AuthorizedAdminRouteRoute: typeof AuthorizedAdminRouteRouteWithChildren
   AuthorizedCompanyAdminRouteRoute: typeof AuthorizedCompanyAdminRouteRouteWithChildren
   AuthorizedEditorRouteRoute: typeof AuthorizedEditorRouteRouteWithChildren
+  AuthorizedOfficesRouteRoute: typeof AuthorizedOfficesRouteRouteWithChildren
   AuthorizedChatsRoute: typeof AuthorizedChatsRoute
   AuthorizedFeedbacksRoute: typeof AuthorizedFeedbacksRoute
   AuthorizedProfileRoute: typeof AuthorizedProfileRoute
@@ -665,6 +638,7 @@ const AuthorizedRouteRouteChildren: AuthorizedRouteRouteChildren = {
   AuthorizedCompanyAdminRouteRoute:
     AuthorizedCompanyAdminRouteRouteWithChildren,
   AuthorizedEditorRouteRoute: AuthorizedEditorRouteRouteWithChildren,
+  AuthorizedOfficesRouteRoute: AuthorizedOfficesRouteRouteWithChildren,
   AuthorizedChatsRoute: AuthorizedChatsRoute,
   AuthorizedFeedbacksRoute: AuthorizedFeedbacksRoute,
   AuthorizedProfileRoute: AuthorizedProfileRoute,

@@ -4,14 +4,15 @@ import {
   FormOutlined,
   MailOutlined,
   MessageOutlined,
-  UserOutlined,
+  TeamOutlined,
 } from '@ant-design/icons';
 import { Link, useLocation } from '@tanstack/react-router';
-import { Menu, type MenuProps } from 'antd';
+import { Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
+import type { MenuItemType } from 'antd/es/menu/interface';
 import { useMemo } from 'react';
 
-import type { Role } from '@features/session/types.ts';
+import { Role } from '@features/session/types.ts';
 
 import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
@@ -20,98 +21,52 @@ const siderStyle: React.CSSProperties = {
   scrollbarGutter: 'stable',
 };
 
-const navItems: Record<Role, MenuProps['items']> = {
-  COMPANY_USER: [
-    {
-      key: '/chats',
-      label: <Link to="/chats">Чати</Link>,
-      icon: <MessageOutlined />,
-    },
-    {
-      key: '/feedbacks',
-      label: <Link to="/feedbacks">Відгуки</Link>,
-      icon: <MailOutlined />,
-    },
-  ],
-  COMPANY_ADMIN: [
-    {
-      key: '/chats',
-      label: <Link to="/chats">Чати</Link>,
-      icon: <MessageOutlined />,
-    },
-    {
-      key: '/company',
-      label: <Link to="/company">Організація</Link>,
-      icon: <BankOutlined />,
-    },
-    {
-      key: '/feedbacks',
-      label: <Link to="/feedbacks">Відгуки</Link>,
-      icon: <MailOutlined />,
-    },
-  ],
-  ADMIN: [
-    {
-      key: '/users',
-      label: <Link to="/users">Користувачі</Link>,
-      icon: <UserOutlined />,
-    },
-    {
-      key: '/companies',
-      label: <Link to="/companies">Організації</Link>,
-      icon: <BankOutlined />,
-    },
-    {
-      key: '/form-edit',
-      label: <Link to="/form-edit">Анкета реєстрації</Link>,
-      icon: <FormOutlined />,
-    },
-    {
-      key: '/offices',
-      label: <Link to="/offices">Офіси</Link>,
-      icon: <ApartmentOutlined />,
-    },
-    {
-      key: '/feedbacks',
-      label: <Link to="/feedbacks">Відгуки</Link>,
-      icon: <MailOutlined />,
-    },
-  ],
-  EDITOR: [
-    {
-      key: '/users',
-      label: <Link to="/users">Користувачі</Link>,
-      icon: <UserOutlined />,
-    },
-    {
-      key: '/companies',
-      label: <Link to="/companies">Організації</Link>,
-      icon: <BankOutlined />,
-    },
-    {
-      key: '/offices',
-      label: <Link to="/offices">Офіси</Link>,
-      icon: <ApartmentOutlined />,
-    },
-    {
-      key: '/feedbacks',
-      label: <Link to="/feedbacks">Відгуки</Link>,
-      icon: <MailOutlined />,
-    },
-  ],
-};
+const NAV_ITEMS: Array<MenuItemType & { access: Array<Role> }> = [
+  {
+    key: '/companies',
+    label: <Link to="/companies">Організації</Link>,
+    icon: <BankOutlined />,
+    access: [Role.EDITOR, Role.ADMIN, Role.COMPANY_ADMIN],
+  },
+  {
+    key: '/offices',
+    label: <Link to="/offices">Офіси</Link>,
+    icon: <ApartmentOutlined />,
+    access: [Role.ADMIN, Role.EDITOR, Role.COMPANY_ADMIN, Role.COMPANY_USER],
+  },
+  {
+    key: '/chats',
+    label: <Link to="/chats">Чати</Link>,
+    icon: <MessageOutlined />,
+    access: [Role.COMPANY_ADMIN, Role.COMPANY_USER],
+  },
+  {
+    key: '/feedbacks',
+    label: <Link to="/feedbacks">Відгуки</Link>,
+    icon: <MailOutlined />,
+    access: [Role.COMPANY_ADMIN, Role.COMPANY_USER, Role.ADMIN, Role.EDITOR],
+  },
+  {
+    key: '/users',
+    label: <Link to="/users">Користувачі</Link>,
+    icon: <TeamOutlined />,
+    access: [Role.ADMIN, Role.EDITOR],
+  },
+  {
+    key: '/form-edit',
+    label: <Link to="/form-edit">Анкета реєстрації</Link>,
+    icon: <FormOutlined />,
+    access: [Role.ADMIN],
+  },
+];
 
 const Sidebar = () => {
   const location = useLocation();
   const roleContext = useRoleContext();
 
   const items = useMemo(() => {
-    if (!roleContext) {
-      return [];
-    }
-
-    return navItems[roleContext.role] || [];
-  }, [roleContext]);
+    return NAV_ITEMS.filter((item) => item.access.some((role) => roleContext?.role === role));
+  }, [roleContext?.role]);
 
   const activeKey: string = useMemo(
     () => (items.find((item) => location.pathname.includes(String(item?.key)))?.key as string) || '',
@@ -126,9 +81,9 @@ const Sidebar = () => {
     <Sider breakpoint="md" collapsedWidth={0} style={siderStyle}>
       <Menu
         style={{ height: '100%' }}
-        items={navItems[roleContext.role]}
+        items={items}
         mode="inline"
-        activeKey={activeKey}
+        selectedKeys={[activeKey]}
         defaultSelectedKeys={[activeKey]}
       />
     </Sider>

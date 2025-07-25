@@ -1,13 +1,12 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Flex, Form } from 'antd';
-import { useCallback } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 
 import styles from './OfficeForm.module.scss';
 import OfficeFormContent from './OfficeFormContent';
+import { useOfficeForm } from './useOfficeForm';
 
 import type { OfficeDTO } from '../../types';
-import { type OfficeSchema, officeSchema } from '../../validation';
+import { type OfficeSchema } from '../../validation';
 
 type OfficeFormProps = {
   office?: OfficeDTO;
@@ -15,40 +14,14 @@ type OfficeFormProps = {
 };
 
 const OfficeForm = ({ office, onSubmit }: OfficeFormProps) => {
-  const form = useForm<OfficeSchema>({
-    resolver: zodResolver(officeSchema),
-    defaultValues: office
-      ? {
-          additionalDescription: office.additionalDescription,
-          workSchedule: office.workSchedule,
-          serviceIds: office.serviceIds,
-          categoryIds: office.categoryIds,
-          conditionIds: office.conditionIds,
-          customFields: office.customFields,
-          regionId: office.regionId,
-          latitude: office.latitude,
-          longitude: office.longitude,
-          locationName: office.locationName,
-        }
-      : {},
-  });
+  const form = useOfficeForm({ office, onSubmit });
 
   const {
     formState: { isSubmitting, isDirty },
     handleSubmit,
     reset,
+    submitHandler,
   } = form;
-
-  const submitHandler = useCallback(
-    (data: OfficeSchema) => {
-      if (onSubmit) {
-        onSubmit(data);
-      }
-
-      reset(data);
-    },
-    [onSubmit, reset],
-  );
 
   return (
     <FormProvider {...form}>

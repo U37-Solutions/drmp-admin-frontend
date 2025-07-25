@@ -12,11 +12,12 @@ import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import styles from './ChatContent.module.scss';
 
-const ChatContent = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void }) => {
+const ChatContent = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): Promise<void> }) => {
   const alertContext = useAlertContext();
   const queryClient = useQueryClient();
 
   const socketRef = useRef<WebSocket | null>(null);
+  const isUnmounting = useRef(false);
   const messageListRef = useRef<HTMLDivElement | null>(null);
 
   const [curMsg, setCurMsg] = useState<string>('');
@@ -45,6 +46,11 @@ const ChatContent = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void
     [chat.id, chat.accessToken],
   );
 
+  const onChatClose = useCallback(async () => {
+    await handleClose();
+    socketRef.current = null;
+  }, [handleClose]);
+
   useEffect(() => {
     if (!chat.accessToken || chat.archived) return;
 
@@ -52,6 +58,7 @@ const ChatContent = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void
     socketRef.current = socket;
 
     socket.onerror = (error) => {
+      if (isUnmounting.current) return;
       if (alertContext && error) {
         alertContext.openNotification('Виникла помилка. Спробуйте ще раз або зверніться до адміністратора', 'error');
       }
@@ -67,6 +74,8 @@ const ChatContent = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void
     };
 
     return () => {
+      isUnmounting.current = true;
+      socket.onerror = null;
       socket.close();
     };
   }, [alertContext, chat.accessToken, chat.archived, queryClient]);
@@ -79,7 +88,7 @@ const ChatContent = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void
 
   return (
     <Flex vertical gap={16} className={styles.wrapper}>
-      <ChatHeader chat={chat} handleClose={handleClose} />
+      <ChatHeader chat={chat} handleClose={onChatClose} />
       <div className={styles.messageList} ref={messageListRef}>
         <Skeleton loading={isPending}>
           {(data || []).map((message) => (

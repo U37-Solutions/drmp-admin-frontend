@@ -9,7 +9,7 @@ import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 import styles from './ChatContent.module.scss';
 
-const ChatHeader = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void }) => {
+const ChatHeader = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): Promise<void> }) => {
   const queryClient = useQueryClient();
   const alertContext = useAlertContext();
   const chatMode = chat.archived ? 'archived' : 'active';
@@ -32,8 +32,8 @@ const ChatHeader = ({ chat, handleClose }: { chat: ChatDTO; handleClose(): void 
       if (alertContext) {
         alertContext.openNotification('Чат успішно видалено', 'success');
       }
+      await handleClose();
       await queryClient.refetchQueries({ queryKey: ['chat', chatMode], type: 'all' });
-      handleClose();
     },
   });
 

@@ -28,12 +28,15 @@ export enum Permission {
   USER_UPDATE = 'user:update',
   USER_DELETE = 'user:delete',
   USER_RESET_PASSWORD = 'user:reset_password',
+  //Company User
+  COMPANY_USERS_INVITE = 'company-users:invite',
   // Company
   COMPANIES_VIEW = 'companies:view',
   COMPANY_VIEW = 'company:view',
   COMPANY_CREATE = 'company:create',
   COMPANY_UPDATE = 'company:update',
   COMPANY_DELETE = 'company:delete',
+  COMPANY_VERIFY = 'company:verify',
   // Company Office
   COMPANY_OFFICES_VIEW = 'company-offices:view',
   COMPANY_OFFICE_VIEW = 'company-office:view',

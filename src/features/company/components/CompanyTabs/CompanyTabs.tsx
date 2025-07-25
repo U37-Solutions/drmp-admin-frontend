@@ -1,4 +1,4 @@
-import { ApartmentOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
+import { ApartmentOutlined, HistoryOutlined, TeamOutlined } from '@ant-design/icons';
 import { Outlet, useLocation, useNavigate } from '@tanstack/react-router';
 import { Tabs } from 'antd';
 import { useMemo } from 'react';
@@ -11,9 +11,8 @@ enum TabKey {
 
 const tabsConfig: Record<TabKey, { label: string; icon: React.ReactElement; to: string }> = {
   [TabKey.OFFICES]: { label: 'Офіси', icon: <ApartmentOutlined />, to: '/companies/$companyId' },
-  // TODO: Implement users and logs tabs
-  [TabKey.USERS]: { label: 'Користувачі', icon: <UserOutlined />, to: '/companies/$companyId/users' },
-  [TabKey.LOGS]: { label: 'Логи', icon: <UnorderedListOutlined />, to: '/companies/$companyId/logs' },
+  [TabKey.USERS]: { label: 'Користувачі', icon: <TeamOutlined />, to: '/companies/$companyId/users' },
+  [TabKey.LOGS]: { label: 'Журнал змін', icon: <HistoryOutlined />, to: '/companies/$companyId/logs' },
 };
 
 type Props = {

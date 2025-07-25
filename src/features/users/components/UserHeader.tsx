@@ -1,6 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Flex, Tooltip, Typography } from 'antd';
 
+import UsersChangelogAction from '@features/users/components/UsersChangelogAction.tsx';
+
 type IProps = {
   handleInviteClick: () => void;
 };
@@ -14,6 +16,7 @@ const UserHeader = ({ handleInviteClick }: IProps) => {
       <Tooltip placement="bottom" title="Запросити нового користувача">
         <Button onClick={handleInviteClick} icon={<PlusOutlined />} />
       </Tooltip>
+      <UsersChangelogAction />
     </Flex>
   );
 };

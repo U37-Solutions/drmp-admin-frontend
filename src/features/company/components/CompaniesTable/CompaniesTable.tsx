@@ -10,18 +10,18 @@ import { getColumns } from '@features/company/columns.tsx';
 import DeleteCompanyAction from '@features/company/components/DeleteCompanyAction.tsx';
 import { COMPANY_STATUS_FILTER_OPTIONS, type CompanyStatusFilter } from '@features/company/constants.tsx';
 import type { CompanyDTO } from '@features/company/types.ts';
+import { Permission } from '@features/session/types.ts';
 
 import filterTableData from '@services/filter-table-data.ts';
+import { currentUserHasPermissions } from '@services/has-permissions.ts';
 import mapColumnsWithSort from '@services/sort-columns.ts';
 
 import useTableState from '@shared/hooks/useTableState.ts';
-import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 import styles from './CompaniesTable.module.scss';
 
 const CompaniesTable = () => {
   const navigate = useNavigate();
-  const roleContext = useRoleContext();
   const [companyStatusFilter, setCompanyStatusFilter] = useState<CompanyStatusFilter>('ALL');
   const { changePage, page, pageSize, changeSearch, search, changeSorting, sortBy, sortAsc } = useTableState(
     '/_authorized/_editor/companies',
@@ -49,11 +49,11 @@ const CompaniesTable = () => {
             />
           </Tooltip>
 
-          {!!roleContext?.isAdmin && <DeleteCompanyAction company={row} />}
+          {currentUserHasPermissions(Permission.COMPANY_DELETE) && <DeleteCompanyAction company={row} />}
         </Flex>
       );
     },
-    [navigate, roleContext?.isAdmin],
+    [navigate],
   );
 
   const columns = useMemo(() => getColumns(renderActions), [renderActions]);

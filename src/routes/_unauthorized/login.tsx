@@ -23,6 +23,7 @@ export const Route = createFileRoute('/_unauthorized/login')({
   beforeLoad: ({ context }) => {
     if (context.auth?.isAuthenticated) {
       context.auth.logout();
+      context.queryClient.invalidateQueries();
     }
   },
 });

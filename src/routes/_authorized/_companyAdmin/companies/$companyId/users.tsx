@@ -19,7 +19,7 @@ const searchSchema = z.object({
   page: fallback(z.number(), 1).default(1),
   pageSize: fallback(z.number(), 10).default(10),
   search: fallback(z.string(), '').default(''),
-  sortBy: fallback(z.enum(['id', 'firstName', 'lastName', 'email']), 'id').default('id'),
+  sortBy: fallback(z.enum(['id', 'firstName', 'lastName', 'email', 'role']), 'id').default('id'),
   sortAsc: fallback(z.boolean(), true).default(true),
 });
 
@@ -44,7 +44,7 @@ function RouteComponent() {
     getUsersByCompanyQueryOptions(Number(companyId)),
   );
 
-  const { search, changeSearch } = useTableState(Route.id);
+  const { search, changeSearch } = useTableState('/_authorized/_companyAdmin/companies/$companyId/users');
 
   const canInviteUsers = useMemo(() => currentUserHasPermissions(Permission.COMPANY_USERS_INVITE), []);
 

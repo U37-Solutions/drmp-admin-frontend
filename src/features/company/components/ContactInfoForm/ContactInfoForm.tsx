@@ -7,6 +7,9 @@ import styles from '@features/auth/components/LoginForm/LoginForm.module.scss';
 import SocialMediaField from '@features/company/components/ContactInfoForm/SocialMediaField.tsx';
 import type { CompanyDTO } from '@features/company/types.ts';
 import { type CompanyContactSchema, companyContactSchema } from '@features/company/validation.ts';
+import { Permission } from '@features/session/types.ts';
+
+import { currentUserHasPermissions } from '@services/has-permissions.ts';
 
 interface Props {
   company?: CompanyDTO;
@@ -43,7 +46,11 @@ const ContactInfoForm = ({ company, onSubmit, isPending }: Props) => {
   );
 
   return (
-    <Form layout="vertical" onFinish={handleSubmit(submitHandler)}>
+    <Form
+      disabled={!currentUserHasPermissions(Permission.COMPANY_UPDATE)}
+      layout="vertical"
+      onFinish={handleSubmit(submitHandler)}
+    >
       <Spin spinning={isPending} fullscreen />
       <Form.Item
         label="Електронна адреса"

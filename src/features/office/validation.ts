@@ -9,24 +9,24 @@ export const officeSchema = z.object({
     .min(1, { message: 'Графік роботи не може бути порожнім' }),
   serviceIds: z
     .array(z.number(), {
-      invalid_type_error: 'Виберіть хоча б одну послугу',
-      required_error: 'Виберіть хоча б одну послугу',
+      invalid_type_error: 'Виберіть хоча б один вид послуг',
+      required_error: 'Виберіть хоча б один вид послуг',
     })
-    .min(1, { message: 'Виберіть хоча б одну послугу' }),
+    .min(1, { message: 'Виберіть хоча б один вид послуг' }),
 
   categoryIds: z
     .array(z.number(), {
-      invalid_type_error: 'Виберіть хоча б одну категорію',
-      required_error: 'Виберіть хоча б одну категорію',
+      invalid_type_error: 'Виберіть хоча б одну категорію бенефіціарів',
+      required_error: 'Виберіть хоча б одну категорію бенефіціарів',
     })
-    .min(1, { message: 'Виберіть хоча б одну категорію' }),
+    .min(1, { message: 'Виберіть хоча б одну категорію бенефіціарів' }),
 
   conditionIds: z
     .array(z.number(), {
-      invalid_type_error: 'Виберіть хоча б одну форму власності',
-      required_error: 'Виберіть хоча б одну форму власності',
+      invalid_type_error: 'Виберіть хоча б одну умову надання допомоги',
+      required_error: 'Виберіть хоча б одну умову надання допомоги',
     })
-    .min(1, { message: 'Виберіть хоча б одну форму власності' }),
+    .min(1, { message: 'Виберіть хоча б одну умову надання допомоги' }),
   locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }),
   latitude: z.number({ message: 'Широта має бути числом' }).min(1, { message: 'Широта має бути більше 0' }),
   longitude: z.number({ message: 'Довгота має бути числом' }).min(1, { message: 'Довгота має бути більше 0' }),

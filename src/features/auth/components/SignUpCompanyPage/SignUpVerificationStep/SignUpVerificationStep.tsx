@@ -7,7 +7,7 @@ import { formatSocMediaLabel } from '@features/company/utils';
 
 import StaticMap from '@components/map/StaticMap/StaticMap';
 
-import { DICTIONARY_KEYS, type DictionaryDTO, useDictionaryService } from '@services/dictionary-service';
+import { DICTIONARY_KEYS, useDictionaryService } from '@services/dictionary-service';
 
 import styles from './SignUpVerificationStep.module.scss';
 
@@ -16,10 +16,10 @@ type Props = {
 };
 
 const SignUpUserStep = ({ data }: Props) => {
-  const companyTypes = useDictionaryService(DICTIONARY_KEYS.companyTypes) as DictionaryDTO[];
-  const categories = useDictionaryService(DICTIONARY_KEYS.categories) as DictionaryDTO[];
-  const conditions = useDictionaryService(DICTIONARY_KEYS.conditions) as DictionaryDTO[];
-  const services = useDictionaryService(DICTIONARY_KEYS.services) as DictionaryDTO[];
+  const companyTypes = useDictionaryService(DICTIONARY_KEYS.companyTypes, false);
+  const categories = useDictionaryService(DICTIONARY_KEYS.categories, false);
+  const conditions = useDictionaryService(DICTIONARY_KEYS.conditions, false);
+  const services = useDictionaryService(DICTIONARY_KEYS.services, false);
 
   return (
     <div className={styles.signUpVerificationStep}>

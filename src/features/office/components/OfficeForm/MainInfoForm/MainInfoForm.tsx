@@ -60,7 +60,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Категорії"
+        label="Категорії бенефіціарів"
         extra={errors.categoryIds ? <span className={styles.error}>{errors.categoryIds.message}</span> : null}
       >
         <Controller
@@ -68,7 +68,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           control={control}
           render={({ field }) => (
             <CategoryField
-              placeholder="Виберіть категорії"
+              placeholder="Виберіть категорії бенефіціарів"
               error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined}
               field={field}
             />
@@ -76,7 +76,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Форма власності"
+        label="Умови надання допомоги"
         extra={errors.conditionIds ? <span className={styles.error}>{errors.conditionIds.message}</span> : null}
       >
         <Controller
@@ -84,7 +84,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           control={control}
           render={({ field }) => (
             <ConditionField
-              placeholder="Виберіть форми власності"
+              placeholder="Виберіть умови надання допомоги"
               error={Array.isArray(errors.conditionIds) ? errors.conditionIds : undefined}
               field={field}
             />
@@ -92,7 +92,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Типи організації"
+        label="Види послуг"
         extra={errors.serviceIds ? <span className={styles.error}>{errors.serviceIds.message}</span> : null}
       >
         <Controller
@@ -100,7 +100,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           control={control}
           render={({ field }) => (
             <ServiceField
-              placeholder="Виберіть типи організації"
+              placeholder="Виберіть види послуг"
               error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined}
               field={field}
             />

@@ -1,7 +1,7 @@
 import { EyeOutlined } from '@ant-design/icons';
 import { Flex, Form, Typography } from 'antd';
 import { useState } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, type UseFormReturn } from 'react-hook-form';
 
 import { type OfficeSchema } from '@features/office/validation';
 
@@ -12,13 +12,11 @@ import type { Bounds, LocationGeometry, Region } from '@components/map/types';
 
 import MapApiProvider from '@shared/providers/MapApiProvider';
 
-import type { OfficeFormState } from '../useOfficeForm';
-
 import RegionField from './Fields/RegionField';
 import styles from './LocationInfoForm.module.scss';
 
 type LocationInfoFormProps = {
-  form: OfficeFormState;
+  form: UseFormReturn<OfficeSchema>;
 };
 
 const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
@@ -26,7 +24,12 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
   // TODO: Implement region restriction logic if needed
   const [, setRegionRestriction] = useState<Bounds>();
 
-  const { control, errors, setValue, getValues } = form;
+  const {
+    control,
+    formState: { errors },
+    setValue,
+    getValues,
+  } = form;
 
   const handleUpdateField = (field: keyof OfficeSchema, value: string | number) => {
     setValue(field, value, {
@@ -64,7 +67,7 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
                     handleUpdateLocation({ locationName: address, latitude: geometry.lat, longitude: geometry.lng })
                   }
                   onSearchLocation={(text) => handleUpdateField('locationName', text)}
-                  status={errors.locationName ? 'error' : ''}
+                  error={!!errors.locationName}
                   onBlur={field.onBlur}
                   name={field.name}
                 />
@@ -85,7 +88,9 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
                   setRegionRestriction(REGION_INFO[value as Region]?.bounds);
                 };
 
-                return <RegionField error={errors.regionId} field={{ ...field, onChange }} />;
+                return (
+                  <RegionField placeholder="Виберіть регіон" error={errors.regionId} field={{ ...field, onChange }} />
+                );
               }}
             />
           </Form.Item>

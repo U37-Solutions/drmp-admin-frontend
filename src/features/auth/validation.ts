@@ -2,6 +2,9 @@ import { z } from 'zod';
 
 import { FIRST_NAME_REGEX } from '@features/users/validation.ts';
 
+import { companyContactSchema, companyInfoSchema } from '../company/validation';
+import { officeSchema } from '../office/validation';
+
 export const loginSchema = z.object({
   email: z.string({ message: 'Введіть електронну адресу' }).email('Неправильна електронна адреса'),
   password: z.string({ message: 'Введіть пароль' }).min(1, 'Введіть пароль'),
@@ -55,3 +58,11 @@ export const signUpSchema = z
   });
 
 export type TSignUpForm = z.infer<typeof signUpSchema>;
+
+export const signUpCompanySchema = companyInfoSchema.extend(officeSchema.shape).extend(companyContactSchema.shape);
+
+export type SignUpCompanySchema = z.infer<typeof signUpCompanySchema>;
+
+export const companyFields = Object.keys(companyInfoSchema.shape) as Array<keyof SignUpCompanySchema>;
+export const officeFields = Object.keys(officeSchema.shape) as Array<keyof SignUpCompanySchema>;
+export const contactFields = Object.keys(companyContactSchema.shape) as Array<keyof SignUpCompanySchema>;

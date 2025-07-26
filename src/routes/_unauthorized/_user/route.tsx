@@ -6,7 +6,7 @@ import { clearCookies } from '@services/cookie-client.ts';
 
 import styles from './index.module.scss';
 
-export const Route = createFileRoute('/_unauthorized')({
+export const Route = createFileRoute('/_unauthorized/_user')({
   component: RouteComponent,
   loader: () => {
     clearCookies();

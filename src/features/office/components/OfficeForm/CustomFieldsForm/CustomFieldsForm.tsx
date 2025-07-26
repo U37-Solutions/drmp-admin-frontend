@@ -1,16 +1,17 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Flex, Form } from 'antd';
-import { Controller, useFieldArray } from 'react-hook-form';
+import { Controller, type UseFormReturn, useFieldArray } from 'react-hook-form';
 
 import { getCustomFields } from '@features/formEdit/api.ts';
 import CustomFieldBuilder from '@features/formEdit/components/CustomFieldBuilder/CustomFieldBuilder.tsx';
 import type { CustomFieldDTO } from '@features/formEdit/types.ts';
-import type { OfficeFormState } from '@features/office/components/OfficeForm/useOfficeForm.ts';
 
 import LabelWithHelpTip from '@components/LabelWithHelpTip/LabelWithHelpTip.tsx';
 
+import type { OfficeSchema } from '@/features/office/validation';
+
 type Props = {
-  form: OfficeFormState;
+  form: UseFormReturn<OfficeSchema>;
 };
 
 const CustomFieldsForm = ({ form }: Props) => {
@@ -24,7 +25,7 @@ const CustomFieldsForm = ({ form }: Props) => {
     <Flex vertical>
       {fieldArray.fields.map((field, i) => {
         const fieldConfig = data.find((f) => f.id === field.structureId);
-        const fieldError = form.errors.customFields?.[i]?.value?.message;
+        const fieldError = form.formState.errors.customFields?.[i]?.value?.message;
 
         if (!fieldConfig) return null;
 

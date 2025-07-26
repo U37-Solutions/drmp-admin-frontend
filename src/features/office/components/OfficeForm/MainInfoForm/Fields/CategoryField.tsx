@@ -6,9 +6,11 @@ import { DICTIONARY_KEYS, useDictionaryService } from '@services/dictionary-serv
 import type { OfficeSchema } from '@/features/office/validation';
 
 const CategoryField = ({
+  placeholder,
   error,
   field,
 }: {
+  placeholder?: string;
   error?: FieldError[];
   field: ControllerRenderProps<OfficeSchema, 'categoryIds'>;
 }) => {
@@ -16,12 +18,12 @@ const CategoryField = ({
 
   return (
     <Select
+      placeholder={placeholder}
       status={error ? 'error' : ''}
       options={options}
-      placeholder="Оберіть категорію зі списку"
       mode="multiple"
       {...field}
-    />
+    ></Select>
   );
 };
 

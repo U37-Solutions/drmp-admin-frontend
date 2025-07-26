@@ -3,20 +3,34 @@ import { z } from 'zod';
 import type { CustomFieldDTO } from '@features/formEdit/types.ts';
 
 export const officeSchema = z.object({
-  additionalDescription: z
-    .string({ message: 'Введіть опис' })
-    .min(1, { message: 'Опис не може бути порожнім' })
-    .nullable(),
+  additionalDescription: z.string({ message: 'Введіть опис' }).min(1, { message: 'Опис не може бути порожнім' }),
+  workSchedule: z
+    .string({ message: 'Введіть графік роботи' })
+    .min(1, { message: 'Графік роботи не може бути порожнім' }),
   serviceIds: z
-    .array(z.number({ message: 'ID типу організації має бути числом' }))
-    .min(1, { message: 'Виберіть хоча б один тип організації' }),
+    .array(z.number(), {
+      invalid_type_error: 'Виберіть хоча б один вид послуг',
+      required_error: 'Виберіть хоча б один вид послуг',
+    })
+    .min(1, { message: 'Виберіть хоча б один вид послуг' }),
+
   categoryIds: z
-    .array(z.number({ message: 'ID категорії має бути числом' }))
-    .min(1, { message: 'Виберіть хоча б одну категорію' }),
+    .array(z.number(), {
+      invalid_type_error: 'Виберіть хоча б одну категорію бенефіціарів',
+      required_error: 'Виберіть хоча б одну категорію бенефіціарів',
+    })
+    .min(1, { message: 'Виберіть хоча б одну категорію бенефіціарів' }),
+
   conditionIds: z
-    .array(z.number({ message: 'ID форми власності має бути числом' }))
-    .min(1, { message: 'Виберіть хоча б одну форму власності' }),
-  workSchedule: z.string(),
+    .array(z.number(), {
+      invalid_type_error: 'Виберіть хоча б одну умову надання допомоги',
+      required_error: 'Виберіть хоча б одну умову надання допомоги',
+    })
+    .min(1, { message: 'Виберіть хоча б одну умову надання допомоги' }),
+  locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }),
+  latitude: z.number({ message: 'Широта має бути числом' }).min(1, { message: 'Широта має бути більше 0' }),
+  longitude: z.number({ message: 'Довгота має бути числом' }).min(1, { message: 'Довгота має бути більше 0' }),
+  regionId: z.number({ message: 'Виберіть регіон' }),
   customFields: z
     .array(
       z.object({
@@ -25,10 +39,6 @@ export const officeSchema = z.object({
       }),
     )
     .optional(),
-  locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }).nullable(),
-  latitude: z.number({ message: 'Широта має бути числом' }).nullable(),
-  longitude: z.number({ message: 'Довгота має бути числом' }).nullable(),
-  regionId: z.number({ message: 'ID регіону має бути числом' }),
 });
 
 export type OfficeSchema = z.infer<typeof officeSchema>;

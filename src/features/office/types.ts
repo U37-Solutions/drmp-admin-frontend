@@ -5,10 +5,10 @@ import type { Region } from '@components/map/types';
 export type OfficeDTO = {
   id: number;
   workSchedule: string;
-  additionalDescription: string | null;
-  locationName: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  additionalDescription: string;
+  locationName: string;
+  latitude: number;
+  longitude: number;
   regionId: Region;
   companyId: number;
   companyName: string;
@@ -20,10 +20,10 @@ export type OfficeDTO = {
 
 export type CreateOfficeDTO = {
   workSchedule: string;
-  additionalDescription: string | null;
-  locationName: string | null;
-  latitude: number | null;
-  longitude: number | null;
+  additionalDescription: string;
+  locationName: string;
+  latitude: number;
+  longitude: number;
   regionId: Region;
   serviceIds: number[];
   categoryIds: number[];

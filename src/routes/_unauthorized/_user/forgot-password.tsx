@@ -3,7 +3,7 @@ import { Flex, Typography } from 'antd';
 
 import ForgotPasswordForm from '@features/auth/components/ForgotPasswordForm/ForgotPasswordForm.tsx';
 
-export const Route = createFileRoute('/_unauthorized/forgot-password')({
+export const Route = createFileRoute('/_unauthorized/_user/forgot-password')({
   component: RouteComponent,
 });
 

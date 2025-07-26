@@ -7,9 +7,11 @@ import type { OfficeSchema } from '@features/office/validation';
 import { REGION_TITLE } from '@components/map/constants';
 
 const RegionField = ({
+  placeholder,
   error,
   field,
 }: {
+  placeholder?: string;
   error?: FieldError;
   field: ControllerRenderProps<OfficeSchema, 'regionId'>;
 }) => {
@@ -22,7 +24,7 @@ const RegionField = ({
     [],
   );
 
-  return <Select status={error ? 'error' : ''} options={options} {...field}></Select>;
+  return <Select placeholder={placeholder} status={error ? 'error' : ''} options={options} {...field}></Select>;
 };
 
 export default RegionField;

@@ -6,15 +6,25 @@ import { DICTIONARY_KEYS, useDictionaryService } from '@services/dictionary-serv
 import type { OfficeSchema } from '@/features/office/validation';
 
 const ConditionField = ({
+  placeholder,
   error,
   field,
 }: {
+  placeholder?: string;
   error?: FieldError[];
   field: ControllerRenderProps<OfficeSchema, 'conditionIds'>;
 }) => {
   const options = useDictionaryService(DICTIONARY_KEYS.conditions, true);
 
-  return <Select status={error ? 'error' : ''} options={options} mode="multiple" {...field}></Select>;
+  return (
+    <Select
+      placeholder={placeholder}
+      status={error ? 'error' : ''}
+      options={options}
+      mode="multiple"
+      {...field}
+    ></Select>
+  );
 };
 
 export default ConditionField;

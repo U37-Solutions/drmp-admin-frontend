@@ -38,14 +38,7 @@ export const useOfficeForm = ({ office, onSubmit }: UseOfficeFormProps) => {
     }));
   };
 
-  const {
-    control,
-    formState: { errors, isSubmitting, isDirty },
-    handleSubmit,
-    setValue,
-    getValues,
-    reset,
-  } = useForm<OfficeSchema>({
+  const form = useForm<OfficeSchema>({
     resolver: zodResolver(validationSchema),
     defaultValues: office
       ? {
@@ -62,6 +55,8 @@ export const useOfficeForm = ({ office, onSubmit }: UseOfficeFormProps) => {
         }
       : {},
   });
+
+  const { setValue, reset } = form;
 
   useEffect(() => {
     if (data) {
@@ -83,14 +78,8 @@ export const useOfficeForm = ({ office, onSubmit }: UseOfficeFormProps) => {
   );
 
   return {
-    control,
-    errors,
-    isSubmitting,
-    isDirty,
-    getValues,
-    setValue,
-    reset,
-    handleSubmit: handleSubmit(submitHandler),
+    ...form,
+    submitHandler,
   };
 };
 

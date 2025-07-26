@@ -1,7 +1,7 @@
 import { Flex, Form, Input } from 'antd';
-import { Controller } from 'react-hook-form';
+import { Controller, type UseFormReturn } from 'react-hook-form';
 
-import type { OfficeFormState } from '../useOfficeForm';
+import type { OfficeSchema } from '@features/office/validation';
 
 import CategoryField from './Fields/CategoryField';
 import ConditionField from './Fields/ConditionField';
@@ -9,11 +9,14 @@ import ServiceField from './Fields/ServiceField';
 import styles from './MainInfoForm.module.scss';
 
 type MainInfoFormProps = {
-  form: OfficeFormState;
+  form: UseFormReturn<OfficeSchema>;
 };
 
 const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
-  const { control, errors } = form;
+  const {
+    control,
+    formState: { errors },
+  } = form;
 
   return (
     <Flex style={{ flexDirection: 'column' }}>
@@ -57,19 +60,23 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Категорії"
+        label="Категорії бенефіціарів"
         extra={errors.categoryIds ? <span className={styles.error}>{errors.categoryIds.message}</span> : null}
       >
         <Controller
           name="categoryIds"
           control={control}
           render={({ field }) => (
-            <CategoryField error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined} field={field} />
+            <CategoryField
+              placeholder="Виберіть категорії бенефіціарів"
+              error={Array.isArray(errors.categoryIds) ? errors.categoryIds : undefined}
+              field={field}
+            />
           )}
         />
       </Form.Item>
       <Form.Item
-        label="Форма власності"
+        label="Умови надання допомоги"
         extra={errors.conditionIds ? <span className={styles.error}>{errors.conditionIds.message}</span> : null}
       >
         <Controller
@@ -77,6 +84,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
           control={control}
           render={({ field }) => (
             <ConditionField
+              placeholder="Виберіть умови надання допомоги"
               error={Array.isArray(errors.conditionIds) ? errors.conditionIds : undefined}
               field={field}
             />
@@ -84,14 +92,18 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Типи організації"
+        label="Види послуг"
         extra={errors.serviceIds ? <span className={styles.error}>{errors.serviceIds.message}</span> : null}
       >
         <Controller
           name="serviceIds"
           control={control}
           render={({ field }) => (
-            <ServiceField error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined} field={field} />
+            <ServiceField
+              placeholder="Виберіть види послуг"
+              error={Array.isArray(errors.serviceIds) ? errors.serviceIds : undefined}
+              field={field}
+            />
           )}
         />
       </Form.Item>

@@ -1,6 +1,5 @@
 import { useMapsLibrary } from '@vis.gl/react-google-maps';
 import { AutoComplete, Input } from 'antd';
-import type { InputStatus } from 'antd/es/_util/statusUtils';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@shared/hooks/useDebounce';
@@ -14,7 +13,7 @@ type LocationAutocompleteProps = {
   onSelectLocation: (address: string, geometry: LocationGeometry) => void;
   onSearchLocation: (text: string) => void;
   onBlur?: () => void;
-  status?: InputStatus;
+  error?: boolean;
 };
 
 const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
@@ -24,7 +23,7 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   onSelectLocation,
   onSearchLocation,
   onBlur,
-  status,
+  error,
 }) => {
   const places = useMapsLibrary('places');
   const [service, setService] = useState<google.maps.places.AutocompleteService | null>(null);
@@ -89,9 +88,8 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
       value={value}
       onChange={setValue}
       onBlur={onBlur}
-      status={status}
     >
-      <Input.Search name={name} placeholder={placeholder || 'Введіть адресу'} />
+      <Input.Search name={name} placeholder={placeholder || 'Введіть адресу'} status={error ? 'error' : ''} />
     </AutoComplete>
   );
 };

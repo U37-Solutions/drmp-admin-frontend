@@ -1,3 +1,7 @@
 .form {
   gap: 20px;
 }
+
+.error {
+  @include input-error-message
+}

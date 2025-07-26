@@ -1,51 +1,50 @@
-import { Button, Flex, Form, Typography } from 'antd';
-
-import CustomFieldsForm from '@features/office/components/OfficeForm/CustomFieldsForm/CustomFieldsForm.tsx';
-
-import LocationInfoForm from '../OfficeForm/LocationInfoForm/LocationInfoForm';
-import MainInfoForm from '../OfficeForm/MainInfoForm/MainInfoForm';
+import { Button, Flex, Form } from 'antd';
+import { FormProvider } from 'react-hook-form';
 
 import styles from './OfficeForm.module.scss';
-import type { OfficeFormState } from './useOfficeForm';
+import OfficeFormContent from './OfficeFormContent';
+import { useOfficeForm } from './useOfficeForm';
+
+import type { OfficeDTO } from '../../types';
+import { type OfficeSchema } from '../../validation';
 
 type OfficeFormProps = {
-  form: OfficeFormState;
-  onCancel?: () => void;
+  office?: OfficeDTO;
+  onSubmit?: (data: OfficeSchema) => void;
 };
 
-const OfficeForm = ({ form, onCancel }: OfficeFormProps) => {
-  const { handleSubmit, isSubmitting, isDirty, reset } = form;
+const OfficeForm = ({ office, onSubmit }: OfficeFormProps) => {
+  const form = useOfficeForm({ office, onSubmit });
+
+  const {
+    formState: { isSubmitting, isDirty },
+    handleSubmit,
+    reset,
+    submitHandler,
+  } = form;
 
   return (
-    <Form layout="vertical" className={styles.form} onFinish={handleSubmit}>
-      <Flex className={styles.formContent}>
-        <Flex className={styles.formContent__part}>
-          <MainInfoForm form={form} />
-          <CustomFieldsForm form={form} />
+    <FormProvider {...form}>
+      <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
+        <OfficeFormContent />
+        <Flex className={styles.actionBtnWrapper}>
+          <Button
+            type="default"
+            variant="outlined"
+            htmlType="button"
+            onClick={() => {
+              reset();
+            }}
+            disabled={isSubmitting || !isDirty}
+          >
+            Скасувати
+          </Button>
+          <Button type="primary" htmlType="submit" disabled={isSubmitting || !isDirty}>
+            Зберегти
+          </Button>
         </Flex>
-        <Flex className={styles.formContent__part}>
-          <Typography.Title level={4}>Локація</Typography.Title>
-          <LocationInfoForm form={form} />
-        </Flex>
-      </Flex>
-      <Flex className={styles.actionBtnWrapper}>
-        <Button
-          type="default"
-          variant="outlined"
-          htmlType="button"
-          onClick={() => {
-            reset();
-            onCancel?.();
-          }}
-          disabled={isSubmitting || !isDirty}
-        >
-          Скасувати
-        </Button>
-        <Button type="primary" htmlType="submit" disabled={isSubmitting || !isDirty}>
-          Зберегти
-        </Button>
-      </Flex>
-    </Form>
+      </Form>
+    </FormProvider>
   );
 };
 

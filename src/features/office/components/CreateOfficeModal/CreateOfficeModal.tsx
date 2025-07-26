@@ -4,7 +4,6 @@ import { Modal, Typography } from 'antd';
 import { useAlertContext } from '@shared/providers/AlertProvider';
 
 import OfficeForm from '../OfficeForm/OfficeForm';
-import { useOfficeForm } from '../OfficeForm/useOfficeForm';
 
 import { createOffice } from '../../api';
 import type { OfficeSchema } from '../../validation';
@@ -30,15 +29,13 @@ const CreateOfficeModal = ({ companyId, open, onClose, onSuccess }: CreateOffice
     },
   });
 
-  const form = useOfficeForm({
-    onSubmit: (data) => {
-      mutate(data);
-    },
-  });
-
   const handleClose = () => {
-    form.reset();
     onClose();
+  };
+
+  const handleSubmit = (data: OfficeSchema) => {
+    mutate(data);
+    handleClose();
   };
 
   return (
@@ -56,7 +53,7 @@ const CreateOfficeModal = ({ companyId, open, onClose, onSuccess }: CreateOffice
       }}
       footer={null}
     >
-      <OfficeForm form={form} onCancel={handleClose} />
+      <OfficeForm onSubmit={handleSubmit} />
     </Modal>
   );
 };

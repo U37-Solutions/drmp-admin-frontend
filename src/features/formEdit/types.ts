@@ -1,3 +1,5 @@
+import { DICTIONARY_KEYS, type DictionaryDTO } from '@services/dictionary-service.tsx';
+
 export enum CustomFieldType {
   TEXT = 'TEXT',
   NUMBER = 'NUMBER',
@@ -27,6 +29,14 @@ export interface CustomFieldDTO {
   required: boolean;
   options: Array<string>;
 }
+
+export interface StaticFieldDTO extends Omit<CustomFieldDTO, 'options'> {
+  options: Array<DictionaryDTO>;
+  dictionaryKey: DICTIONARY_KEYS;
+}
+
+export const getIsFieldStatic = (field: CustomFieldDTO | StaticFieldDTO): field is StaticFieldDTO =>
+  'dictionaryKey' in field;
 
 export interface CustomFieldValueDTO {
   structureId: number;

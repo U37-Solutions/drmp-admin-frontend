@@ -1,12 +1,14 @@
-import { Flex, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import React from 'react';
 
-import { type CustomFieldDTO, type CustomFieldType } from '@features/formEdit/types.ts';
+import { type CustomFieldDTO, type CustomFieldType, type StaticFieldDTO } from '@features/formEdit/types.ts';
 
 import FormatCustomFieldType from '@components/formatters/FormatCustomFieldType.tsx';
+import FormatFieldOptions from '@components/formatters/FormatFieldOptions.tsx';
 
-export const getColumns = (renderActions: (row: CustomFieldDTO) => React.ReactElement): ColumnsType<CustomFieldDTO> => [
+export const getColumns = (
+  renderActions: (row: CustomFieldDTO | StaticFieldDTO) => React.ReactElement,
+): ColumnsType<CustomFieldDTO | StaticFieldDTO> => [
   {
     key: 'title',
     title: 'Назва',
@@ -49,18 +51,7 @@ export const getColumns = (renderActions: (row: CustomFieldDTO) => React.ReactEl
     key: 'options',
     title: 'Варіанти відповіді',
     dataIndex: 'options',
-    render: (options: Array<string>) =>
-      options?.length ? (
-        <Flex wrap="wrap">
-          {options.map((option, index) => (
-            <Tag key={index} style={{ margin: '2px' }}>
-              {option}
-            </Tag>
-          ))}
-        </Flex>
-      ) : (
-        '-'
-      ),
+    render: (_options, row) => <FormatFieldOptions row={row} />,
   },
   {
     key: 'actions',

@@ -6,15 +6,20 @@ import { useMemo, useState } from 'react';
 import { getColumns } from '@features/formEdit/columns.tsx';
 import CustomFieldEditDialog from '@features/formEdit/components/CustomFieldEditDialog/CustomFieldEditDialog.tsx';
 import DeleteCustomFieldAction from '@features/formEdit/components/CustomFieldsTable/DeleteCustomFieldAction.tsx';
-import { type CustomFieldDTO, CustomFieldEditDialogMode } from '@features/formEdit/types.ts';
+import {
+  type CustomFieldDTO,
+  CustomFieldEditDialogMode,
+  type StaticFieldDTO,
+  getIsFieldStatic,
+} from '@features/formEdit/types.ts';
 
 import filterTableData from '@services/filter-table-data.ts';
 import mapColumnsWithSort from '@services/sort-columns.ts';
 
 import useTableState from '@shared/hooks/useTableState.ts';
 
-const CustomFieldsTable = ({ data, loading }: { data: Array<CustomFieldDTO>; loading: boolean }) => {
-  const [editingRow, setEditingRow] = useState<CustomFieldDTO | null>(null);
+const CustomFieldsTable = ({ data, loading }: { data: Array<CustomFieldDTO | StaticFieldDTO>; loading: boolean }) => {
+  const [editingRow, setEditingRow] = useState<CustomFieldDTO | StaticFieldDTO | null>(null);
   const [dialogMode, setDialogMode] = useState<CustomFieldEditDialogMode | undefined>();
   const isDialogOpen = (dialogMode === 'create' && !editingRow) || !!editingRow;
 
@@ -27,8 +32,8 @@ const CustomFieldsTable = ({ data, loading }: { data: Array<CustomFieldDTO>; loa
     [data, page, pageSize, search],
   );
 
-  const handleFieldEdit = (field: CustomFieldDTO) => {
-    setDialogMode(field.id === -1 ? CustomFieldEditDialogMode.editStatic : CustomFieldEditDialogMode.edit);
+  const handleFieldEdit = (field: CustomFieldDTO | StaticFieldDTO) => {
+    setDialogMode(getIsFieldStatic(field) ? CustomFieldEditDialogMode.editStatic : CustomFieldEditDialogMode.edit);
     setEditingRow(field);
   };
 
@@ -37,7 +42,7 @@ const CustomFieldsTable = ({ data, loading }: { data: Array<CustomFieldDTO>; loa
     setEditingRow(null);
   };
 
-  const renderActions = (row: CustomFieldDTO) => (
+  const renderActions = (row: CustomFieldDTO | StaticFieldDTO) => (
     <Flex gap={4}>
       <Tooltip title="Редагувати поле">
         <Button variant="outlined" icon={<EditOutlined />} onClick={() => handleFieldEdit(row)} />
@@ -77,7 +82,7 @@ const CustomFieldsTable = ({ data, loading }: { data: Array<CustomFieldDTO>; loa
       <Table
         loading={{ spinning: loading }}
         locale={{ emptyText: 'На даний момент немає полів для відображення' }}
-        columns={mapColumnsWithSort<CustomFieldDTO>(getColumns(renderActions), sortBy, sortAsc)}
+        columns={mapColumnsWithSort<CustomFieldDTO | StaticFieldDTO>(getColumns(renderActions), sortBy, sortAsc)}
         onChange={(_pagination, _filters, sorter, { action }) => {
           changeSorting(action, sorter as SorterResult<unknown>);
         }}

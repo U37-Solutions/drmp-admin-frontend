@@ -2,6 +2,24 @@ import { z } from 'zod';
 
 import { CustomFieldType } from '@features/formEdit/types.ts';
 
+export const staticFieldSchema = z
+  .object({
+    options: z
+      .array(
+        z.object({
+          id: z.number().optional(),
+          name: z.string().min(1, { message: 'Варіант відповіді не може бути пустим' }),
+        }),
+      )
+      .min(2, { message: 'Вкажіть хоча б два варіанти відповіді' }),
+  })
+  .refine((data) => new Set(data.options).size === data.options?.length, {
+    message: 'Варіанти відповіді повинні бути унікальними',
+    path: ['options'],
+  });
+
+export type StaticFieldSchema = z.infer<typeof staticFieldSchema>;
+
 export const customFieldSchema = z
   .object({
     type: z.enum([CustomFieldType.SELECT, CustomFieldType.TEXT, CustomFieldType.NUMBER, CustomFieldType.TEXTAREA], {

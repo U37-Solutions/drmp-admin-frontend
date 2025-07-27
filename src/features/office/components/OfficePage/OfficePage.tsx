@@ -60,7 +60,7 @@ const OfficePage: React.FC<OfficePageProps> = ({ data }) => {
           </Flex>
           <Flex gap={8} align="center">
             <OfficeChangelogAction officeId={data.id} />
-            <DeleteOfficeAction office={data} showText />
+            <DeleteOfficeAction office={data} showText isOfficePage />
           </Flex>
         </Flex>
       </Card>

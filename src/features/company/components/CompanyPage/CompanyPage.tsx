@@ -70,7 +70,9 @@ const CompanyPage = ({ data }: { data: CompanyDTO }) => {
 
           <Flex gap={8} align="center">
             {shouldShowVerification && <CompanyVerificationActions status={data.status} id={data.id} />}
-            {currentUserHasPermissions(Permission.COMPANY_DELETE) && <DeleteCompanyAction showText company={data} />}
+            {currentUserHasPermissions(Permission.COMPANY_DELETE) && (
+              <DeleteCompanyAction showText company={data} isCompanyPage />
+            )}
           </Flex>
         </Flex>
       </Card>

@@ -1,5 +1,6 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCanGoBack, useNavigate, useRouter } from '@tanstack/react-router';
 import { Button, Tooltip } from 'antd';
 import { useCallback } from 'react';
 
@@ -13,9 +14,13 @@ type DeleteOfficeActionProps = {
   showText?: boolean;
   office: OfficeDTO;
   isCompanyOffice?: boolean;
+  isOfficePage?: boolean;
 };
 
-const DeleteOfficeAction: React.FC<DeleteOfficeActionProps> = ({ showText, office, isCompanyOffice }) => {
+const DeleteOfficeAction: React.FC<DeleteOfficeActionProps> = ({ showText, office, isCompanyOffice, isOfficePage }) => {
+  const navigate = useNavigate();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
   const alertContext = useAlertContext();
   const queryClient = useQueryClient();
 
@@ -34,6 +39,14 @@ const DeleteOfficeAction: React.FC<DeleteOfficeActionProps> = ({ showText, offic
         await queryClient.refetchQueries({ queryKey: ['offices', office.companyId], type: 'all' });
       } else {
         await queryClient.refetchQueries({ queryKey: ['offices'], type: 'all' });
+      }
+
+      if (!isOfficePage) return;
+
+      if (canGoBack) {
+        router.history.back();
+      } else {
+        navigate({ to: '/offices' });
       }
     },
     onError: () => {

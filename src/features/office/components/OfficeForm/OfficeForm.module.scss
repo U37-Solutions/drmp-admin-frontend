@@ -2,9 +2,14 @@
   gap: 20px;
 }
 
+.formWrapper {
+  &_scroll {
+    max-height: calc(100vh - 316px);
+    overflow-y: auto;
+  }
+}
+
 .formContent {
-  max-height: calc(100vh - 316px);
-  overflow-y: auto;
   flex-wrap: wrap;
   gap: 20px;
 

@@ -6,7 +6,7 @@ import { type CompanyInfoSchema } from '@features/company/validation.ts';
 
 import CompanyTypeField from './CompanyTypeField';
 
-import { OWNERSHIP_TYPES } from '../../constants';
+import { FIELDS_LENGTH, OWNERSHIP_TYPES } from '../../constants';
 
 const MainInfoFormContent = () => {
   const {
@@ -24,7 +24,12 @@ const MainInfoFormContent = () => {
           name="name"
           control={control}
           render={({ field }) => (
-            <Input placeholder="Назва організації" status={errors.name ? 'error' : ''} {...field} />
+            <Input
+              placeholder="Назва організації"
+              status={errors.name ? 'error' : ''}
+              maxLength={FIELDS_LENGTH.name}
+              {...field}
+            />
           )}
         />
       </Form.Item>
@@ -77,6 +82,7 @@ const MainInfoFormContent = () => {
             <Input.TextArea
               rows={4}
               placeholder="Приклад: Організація отримує державне фінансування та підтримку від міжнародних донорів"
+              maxLength={FIELDS_LENGTH.donorSupport}
               {...field}
             />
           )}

@@ -53,7 +53,7 @@ const CreateOfficeModal = ({ companyId, open, onClose, onSuccess }: CreateOffice
       }}
       footer={null}
     >
-      <OfficeForm onSubmit={handleSubmit} />
+      <OfficeForm onSubmit={handleSubmit} scroll />
     </Modal>
   );
 };

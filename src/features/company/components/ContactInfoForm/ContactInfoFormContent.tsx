@@ -5,6 +5,8 @@ import styles from '@features/auth/components/LoginForm/LoginForm.module.scss';
 import SocialMediaField from '@features/company/components/ContactInfoForm/SocialMediaField.tsx';
 import { type CompanyContactSchema } from '@features/company/validation.ts';
 
+import { FIELDS_LENGTH } from '../../constants';
+
 const ContactInfoFormContent = () => {
   const {
     control,
@@ -33,7 +35,12 @@ const ContactInfoFormContent = () => {
           name="contactName"
           control={control}
           render={({ field }) => (
-            <Input placeholder="Імʼя Прізвище" status={errors.contactName ? 'error' : ''} {...field} />
+            <Input
+              placeholder="Імʼя Прізвище"
+              status={errors.contactName ? 'error' : ''}
+              maxLength={FIELDS_LENGTH.contactName}
+              {...field}
+            />
           )}
         />
       </Form.Item>

@@ -3,6 +3,7 @@ import { Flex, Form, Typography } from 'antd';
 import { useState } from 'react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
+import { FIELDS_LENGTH } from '@features/office/constants';
 import { type OfficeSchema } from '@features/office/validation';
 
 import { REGION_INFO } from '@components/map/constants';
@@ -50,7 +51,7 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
   return (
     <MapApiProvider>
       <Flex style={{ flexDirection: 'column' }} justify="space-between" gap={20}>
-        <Flex justify="space-between" gap={20}>
+        <Flex className={styles.fieldsWrapper} justify="space-between">
           <Form.Item
             label="Адреса"
             extra={errors.locationName ? <span className={styles.error}>{errors.locationName.message}</span> : null}
@@ -70,6 +71,7 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
                   error={!!errors.locationName}
                   onBlur={field.onBlur}
                   name={field.name}
+                  maxLength={FIELDS_LENGTH.locationName}
                 />
               )}
             />

@@ -29,3 +29,5 @@ export const FIELDS_LENGTH = {
   donorSupport: 255,
   contactName: 100,
 };
+
+export const UKRAINIAN_PHONE_REGEX = /^\+380[3-9][0-9]{8}$/;

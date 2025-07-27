@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { FIELDS_LENGTH } from './constants';
+import { FIELDS_LENGTH, UKRAINIAN_PHONE_REGEX } from './constants';
 
 export const companyInfoSchema = z.object({
   name: z
@@ -30,6 +30,9 @@ export const companyContactSchema = z.object({
   contactName: z
     .string({ message: 'Введіть контактну особу' })
     .min(1, { message: 'Контактна особа не може бути порожньою' })
+    .max(FIELDS_LENGTH.contactName, {
+      message: `Кількість символів не може перевищувати ${FIELDS_LENGTH.contactName}`,
+    })
     .regex(/^[a-zA-Zа-яА-ЯёЁіІїЇґҐєЄ\s]+$/, {
       message: 'Контактна особа повинна містити лише літери та пробіли',
     })
@@ -40,7 +43,7 @@ export const companyContactSchema = z.object({
   phone: z
     .string({ message: 'Введіть номер телефону' })
     .min(1, { message: 'Номер телефону не може бути порожнім' })
-    .regex(/^\+380[3-9][0-9]{8}$/, {
+    .regex(UKRAINIAN_PHONE_REGEX, {
       message: 'Мобільний номер має бути у форматі +380XXXXXXXXX (без пробілів чи роздільників)',
     }),
   email: z.string({ message: 'Введіть електронну адресу' }).email('Неправильна електронна адреса'),

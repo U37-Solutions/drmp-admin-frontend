@@ -71,7 +71,10 @@ const SignUpCompanyPage = () => {
     [officeValidationSchema],
   );
 
-  const currentStepSchema = stepSchema[currentStep] as typeof signUpCompanySchema;
+  const currentStepSchema = useMemo(
+    () => stepSchema[currentStep] as typeof signUpCompanySchema,
+    [currentStep, stepSchema],
+  );
 
   const formatCustomFieldsInitialValues = (customFields: Array<CustomFieldDTO>) => {
     return customFields.map((field) => ({
@@ -84,7 +87,7 @@ const SignUpCompanyPage = () => {
   });
 
   const {
-    formState: { isSubmitting, isDirty, isValid },
+    formState: { isSubmitting, isDirty, isValid, isSubmitted },
     handleSubmit,
     getValues,
     trigger,
@@ -201,7 +204,7 @@ const SignUpCompanyPage = () => {
                 className={styles.signUpCompanyPage__footerSubmit}
                 type="primary"
                 htmlType="submit"
-                disabled={!isDirty || !isValid || isSubmitting}
+                disabled={!isDirty || !isValid || isSubmitting || isSubmitted}
               >
                 Зареєструватися
               </Button>

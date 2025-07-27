@@ -2,11 +2,21 @@ import { z } from 'zod';
 
 import type { CustomFieldDTO } from '@features/formEdit/types.ts';
 
+import { FIELDS_LENGTH } from './constants';
+
 export const officeSchema = z.object({
-  additionalDescription: z.string({ message: 'Введіть опис' }).min(1, { message: 'Опис не може бути порожнім' }),
+  additionalDescription: z
+    .string({ message: 'Введіть опис' })
+    .min(1, { message: 'Опис не може бути порожнім' })
+    .max(FIELDS_LENGTH.additionalDescription, {
+      message: `Кількість символів не може перевищувати ${FIELDS_LENGTH.additionalDescription}`,
+    }),
   workSchedule: z
     .string({ message: 'Введіть графік роботи' })
-    .min(1, { message: 'Графік роботи не може бути порожнім' }),
+    .min(1, { message: 'Графік роботи не може бути порожнім' })
+    .max(FIELDS_LENGTH.workSchedule, {
+      message: `Кількість символів не може перевищувати ${FIELDS_LENGTH.workSchedule}`,
+    }),
   serviceIds: z
     .array(z.number(), {
       invalid_type_error: 'Виберіть хоча б один вид послуг',
@@ -27,7 +37,12 @@ export const officeSchema = z.object({
       required_error: 'Виберіть хоча б одну умову надання допомоги',
     })
     .min(1, { message: 'Виберіть хоча б одну умову надання допомоги' }),
-  locationName: z.string({ message: 'Введіть адресу' }).min(1, { message: 'Адреса не може бути порожньою' }),
+  locationName: z
+    .string({ message: 'Введіть адресу' })
+    .min(1, { message: 'Адреса не може бути порожньою' })
+    .max(FIELDS_LENGTH.locationName, {
+      message: `Кількість символів не може перевищувати ${FIELDS_LENGTH.locationName}`,
+    }),
   latitude: z.number({ message: 'Широта має бути числом' }).min(1, { message: 'Широта має бути більше 0' }),
   longitude: z.number({ message: 'Довгота має бути числом' }).min(1, { message: 'Довгота має бути більше 0' }),
   regionId: z.number({ message: 'Виберіть регіон' }),

@@ -23,3 +23,11 @@ export const COMPANY_STATUS_FILTER_OPTIONS: Array<{ label: string; value: Compan
   { label: 'Активні', value: 'ACTIVE' },
   { label: 'Відхилені', value: 'REJECTED' },
 ];
+
+export const FIELDS_LENGTH = {
+  name: 100,
+  donorSupport: 255,
+  contactName: 100,
+};
+
+export const UKRAINIAN_PHONE_REGEX = /^\+380[3-9][0-9]{8}$/;

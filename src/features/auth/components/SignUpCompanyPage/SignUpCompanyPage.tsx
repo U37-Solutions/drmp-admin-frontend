@@ -1,3 +1,4 @@
+import { ApartmentOutlined, BankOutlined, ContactsOutlined, SolutionOutlined } from '@ant-design/icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -16,14 +17,9 @@ import styles from './SignUpCompanyPage.module.scss';
 import SignUpVerificationStep from './SignUpVerificationStep/SignUpVerificationStep';
 
 import { signUpCompany } from '../../api';
-import {
-  type SignUpCompanySchema,
-  companyFields,
-  contactFields,
-  officeFields,
-  signUpCompanySchema,
-} from '../../validation';
+import { type SignUpCompanySchema, signUpCompanySchema } from '../../validation';
 
+import { companyContactSchema, companyInfoSchema } from '@/features/company/validation';
 import { getCustomFields } from '@/features/formEdit/api';
 import type { CustomFieldDTO } from '@/features/formEdit/types';
 import { customFieldsFormSchema, officeSchema } from '@/features/office/validation';
@@ -38,14 +34,14 @@ enum Step {
 type StepContent = {
   title: string;
   content: React.ReactElement;
-  trigger?: () => Promise<boolean>;
 };
 
 const SignUpCompanyPage = () => {
   const alertContext = useAlertContext();
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(Step.COMPANY_INFO);
   const showConfetti = useShowConfetti();
+  const [currentStep, setCurrentStep] = useState(Step.COMPANY_INFO);
+  const [isStepValid, setIsStepValid] = useState(true);
 
   const nextStep = () => {
     setCurrentStep((prev) => prev + 1);
@@ -60,13 +56,24 @@ const SignUpCompanyPage = () => {
     queryFn: async () => await getCustomFields(),
   });
 
-  // TODO: Update type for validationSchema
-  const validationSchema = useMemo(
-    () =>
-      (data
-        ? signUpCompanySchema.extend(customFieldsFormSchema(data).shape)
-        : officeSchema) as typeof signUpCompanySchema,
+  const officeValidationSchema = useMemo(
+    () => (data ? officeSchema.extend(customFieldsFormSchema(data).shape) : officeSchema),
     [data],
+  );
+
+  const stepSchema = useMemo(
+    () => ({
+      [Step.COMPANY_INFO]: companyInfoSchema,
+      [Step.OFFICE_INFO]: officeValidationSchema,
+      [Step.CONTACT_INFO]: companyContactSchema,
+      [Step.VERIFICATION]: signUpCompanySchema,
+    }),
+    [officeValidationSchema],
+  );
+
+  const currentStepSchema = useMemo(
+    () => stepSchema[currentStep] as typeof signUpCompanySchema,
+    [currentStep, stepSchema],
   );
 
   const formatCustomFieldsInitialValues = (customFields: Array<CustomFieldDTO>) => {
@@ -76,14 +83,15 @@ const SignUpCompanyPage = () => {
   };
 
   const form = useForm<SignUpCompanySchema>({
-    resolver: zodResolver(validationSchema),
+    resolver: zodResolver(currentStepSchema),
   });
 
   const {
-    formState: { isSubmitting, isDirty, isValid },
+    formState: { isSubmitting, isDirty, isValid, isSubmitted },
     handleSubmit,
     getValues,
     trigger,
+    clearErrors,
   } = form;
 
   useEffect(() => {
@@ -96,16 +104,21 @@ const SignUpCompanyPage = () => {
     async (data: SignUpCompanySchema) => {
       const newValues = { ...data, customFields: data.customFields?.filter((field) => !!field.value) };
 
-      await signUpCompany(newValues);
-      showConfetti(10000);
+      try {
+        await signUpCompany(newValues);
 
-      if (alertContext) {
-        alertContext.openNotification('Запит на створення організації успішно надіслано', 'success');
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
+        showConfetti(10000);
+
+        alertContext?.openNotification('Запит на створення організації успішно надіслано', 'success');
+
+        setTimeout(() => {
+          navigate({ to: '/login' });
+        }, 5000);
+      } catch (error) {
+        alertContext?.openNotification(`${error}`, 'error');
       }
-
-      setTimeout(() => {
-        navigate({ to: '/login' });
-      }, 5000);
     },
     [alertContext, navigate, showConfetti],
   );
@@ -115,26 +128,27 @@ const SignUpCompanyPage = () => {
   const stepsInfo: Record<Step, StepContent> = useMemo(
     () => ({
       [Step.COMPANY_INFO]: {
-        title: 'Інформація про організацію',
+        title: 'Основна інформація',
         content: <MainInfoFormContent />,
-        trigger: async () => await trigger(companyFields),
+        icon: <BankOutlined />,
       },
       [Step.OFFICE_INFO]: {
-        title: 'Інформація про офіс',
+        title: 'Офіс',
         content: <OfficeFormContent />,
-        trigger: async () => await trigger(officeFields),
+        icon: <ApartmentOutlined />,
       },
       [Step.CONTACT_INFO]: {
-        title: 'Інформація про контактну особу',
+        title: 'Контактна інформація',
         content: <ContactInfoFormContent />,
-        trigger: async () => await trigger(contactFields),
+        icon: <ContactsOutlined />,
       },
       [Step.VERIFICATION]: {
         title: 'Перевірка',
         content: <SignUpVerificationStep data={values} />,
+        icon: <SolutionOutlined />,
       },
     }),
-    [trigger, values],
+    [values],
   );
 
   const steps = useMemo(() => Object.values(stepsInfo), [stepsInfo]);
@@ -146,15 +160,23 @@ const SignUpCompanyPage = () => {
       <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
         <div className={styles.signUpCompanyPage}>
           <div className={styles.signUpCompanyPage__header}>
-            <Typography.Title level={1}>Реєстрація організації</Typography.Title>
-            <Steps current={currentStep} items={steps} />
+            <Typography.Title level={1} style={{ textAlign: 'center' }}>
+              Реєстрація організації
+            </Typography.Title>
+            <Steps current={currentStep} items={steps} status={!isStepValid ? 'error' : undefined} />
           </div>
 
           <div className={styles.signUpCompanyPage__content}>{currentStepInfo.content}</div>
 
           <div className={styles.signUpCompanyPage__footer}>
             {currentStep > 0 && (
-              <Button className={styles.signUpCompanyPage__footerPrev} onClick={() => prevStep()}>
+              <Button
+                className={styles.signUpCompanyPage__footerPrev}
+                onClick={() => {
+                  prevStep();
+                  clearErrors();
+                }}
+              >
                 Назад
               </Button>
             )}
@@ -162,12 +184,15 @@ const SignUpCompanyPage = () => {
               <Button
                 className={styles.signUpCompanyPage__footerNext}
                 type="primary"
-                disabled={!isDirty}
+                disabled={!isDirty && !isValid}
                 onClick={async () => {
-                  const isStepValid = await currentStepInfo.trigger?.();
+                  const isStepValid = await trigger();
+
+                  setIsStepValid(isStepValid);
 
                   if (isStepValid) {
                     nextStep();
+                    clearErrors();
                   }
                 }}
               >
@@ -179,7 +204,7 @@ const SignUpCompanyPage = () => {
                 className={styles.signUpCompanyPage__footerSubmit}
                 type="primary"
                 htmlType="submit"
-                disabled={!isDirty || !isValid || isSubmitting}
+                disabled={!isDirty || !isValid || isSubmitting || isSubmitted}
               >
                 Зареєструватися
               </Button>

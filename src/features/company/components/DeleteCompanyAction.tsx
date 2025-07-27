@@ -1,5 +1,6 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCanGoBack, useNavigate, useRouter } from '@tanstack/react-router';
 import { Button, Tooltip } from 'antd';
 import { useCallback } from 'react';
 
@@ -8,7 +9,18 @@ import type { CompanyDTO } from '@features/company/types.ts';
 
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
-const DeleteCompanyAction = ({ showText, company }: { showText?: boolean; company: CompanyDTO }) => {
+const DeleteCompanyAction = ({
+  showText,
+  company,
+  isCompanyPage,
+}: {
+  showText?: boolean;
+  company: CompanyDTO;
+  isCompanyPage?: boolean;
+}) => {
+  const navigate = useNavigate();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
   const alertContext = useAlertContext();
   const queryClient = useQueryClient();
 
@@ -22,6 +34,14 @@ const DeleteCompanyAction = ({ showText, company }: { showText?: boolean; compan
       if (alertContext) {
         alertContext.openNotification('Організацію успішно видалено', 'success');
         await queryClient.refetchQueries({ queryKey: ['companies'], type: 'all' });
+      }
+
+      if (!isCompanyPage) return;
+
+      if (canGoBack) {
+        router.history.back();
+      } else {
+        navigate({ to: '/companies' });
       }
     },
     onError: () => {

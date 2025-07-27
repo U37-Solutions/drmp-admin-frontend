@@ -19,7 +19,7 @@
     width: 100%;
 
     @include respond-to('xl') {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 50% 50%;
     }
 
     .card {
@@ -41,7 +41,11 @@
         &Field {
           display: flex;
           align-items: center;
-          gap: 10px;
+          flex-wrap: wrap;
+
+          &Title {
+            margin-right: 10px;
+          }
 
           &Value {
             &_text {
@@ -59,7 +63,6 @@
               display: flex;
               flex-wrap: wrap;
               gap: 10px;
-              max-width: 100%;
             }
 
             &_map {
@@ -67,6 +70,14 @@
                 width: 100%;
                 border-radius: 8px;
                 object-fit: cover;
+              }
+            }
+
+            &__tag {
+              max-width: 200px;
+
+              @include respond-to('xl') {
+                max-width: 400px;
               }
             }
           }

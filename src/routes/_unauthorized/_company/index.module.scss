@@ -2,8 +2,13 @@
   height: 100%;
 
   .wrapperCard {
-    width: 95%;
+    width: 100%;
     max-width: 1700px;
+    height: 100%;
+
+    @include respond-to('desktop') {
+      height: unset;
+    }
 
     :global(.ant-card-body) {
       margin: auto;
@@ -11,6 +16,7 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
+      height: 100%;
 
       @include respond-to('desktop') {
         max-width: 70%;

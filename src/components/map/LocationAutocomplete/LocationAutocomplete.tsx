@@ -14,6 +14,7 @@ type LocationAutocompleteProps = {
   onSearchLocation: (text: string) => void;
   onBlur?: () => void;
   error?: boolean;
+  maxLength?: number;
 };
 
 const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
@@ -24,6 +25,7 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   onSearchLocation,
   onBlur,
   error,
+  maxLength,
 }) => {
   const places = useMapsLibrary('places');
   const [service, setService] = useState<google.maps.places.AutocompleteService | null>(null);
@@ -89,7 +91,12 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
       onChange={setValue}
       onBlur={onBlur}
     >
-      <Input.Search name={name} placeholder={placeholder || 'Введіть адресу'} status={error ? 'error' : ''} />
+      <Input.Search
+        name={name}
+        placeholder={placeholder || 'Введіть адресу'}
+        status={error ? 'error' : ''}
+        maxLength={maxLength}
+      />
     </AutoComplete>
   );
 };

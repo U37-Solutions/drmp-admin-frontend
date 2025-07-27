@@ -1,6 +1,7 @@
 import { Flex, Form, Input } from 'antd';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
+import { FIELDS_LENGTH } from '@features/office/constants';
 import type { OfficeSchema } from '@features/office/validation';
 
 import CategoryField from './Fields/CategoryField';
@@ -36,6 +37,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
               autoSize={{ minRows: 2, maxRows: 12 }}
               placeholder="Приклад: Офіс розташований у центрі міста, має сучасний дизайн та обладнання"
               status={errors.additionalDescription ? 'error' : ''}
+              maxLength={FIELDS_LENGTH.additionalDescription}
               {...field}
               value={field.value ?? ''}
             />
@@ -54,6 +56,7 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
               autoSize={{ minRows: 2, maxRows: 7 }}
               placeholder="Приклад: Пн-Пт 9:00-18:00, Сб 10:00-16:00"
               status={errors.workSchedule ? 'error' : ''}
+              maxLength={FIELDS_LENGTH.workSchedule}
               {...field}
             />
           )}

@@ -1,4 +1,5 @@
 import { Button, Flex, Form } from 'antd';
+import clsx from 'clsx';
 import { FormProvider } from 'react-hook-form';
 
 import styles from './OfficeForm.module.scss';
@@ -11,9 +12,10 @@ import { type OfficeSchema } from '../../validation';
 type OfficeFormProps = {
   office?: OfficeDTO;
   onSubmit?: (data: OfficeSchema) => void;
+  scroll?: boolean;
 };
 
-const OfficeForm = ({ office, onSubmit }: OfficeFormProps) => {
+const OfficeForm = ({ office, onSubmit, scroll }: OfficeFormProps) => {
   const form = useOfficeForm({ office, onSubmit });
 
   const {
@@ -26,7 +28,13 @@ const OfficeForm = ({ office, onSubmit }: OfficeFormProps) => {
   return (
     <FormProvider {...form}>
       <Form layout="vertical" className={styles.form} onFinish={handleSubmit(submitHandler)}>
-        <OfficeFormContent />
+        <div
+          className={clsx(styles.formWrapper, {
+            [styles.formWrapper_scroll]: scroll,
+          })}
+        >
+          <OfficeFormContent />
+        </div>
         <Flex className={styles.actionBtnWrapper}>
           <Button
             type="default"

@@ -87,7 +87,7 @@ export const signUpCompany = async (data: SignUpCompanySchema): Promise<void> =>
     });
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data?.message || 'Сталася помилка при створенні компанії. Спробуйте ще раз');
+      throw new Error(error.response?.data?.message || 'Сталася помилка при створенні організації. Спробуйте ще раз');
     }
   }
 };

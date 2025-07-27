@@ -3,11 +3,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from 'antd';
 
 import { deleteCustomField } from '@features/formEdit/api.ts';
-import type { CustomFieldDTO } from '@features/formEdit/types.ts';
+import { type CustomFieldDTO, type StaticFieldDTO, getIsFieldStatic } from '@features/formEdit/types.ts';
 
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
-const DeleteCustomFieldAction = ({ field }: { field: CustomFieldDTO }) => {
+const DeleteCustomFieldAction = ({ field }: { field: CustomFieldDTO | StaticFieldDTO }) => {
   const alertContext = useAlertContext();
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -44,7 +44,7 @@ const DeleteCustomFieldAction = ({ field }: { field: CustomFieldDTO }) => {
       color="danger"
       icon={<DeleteOutlined />}
       onClick={handleDelete}
-      disabled={field.id === -1}
+      disabled={getIsFieldStatic(field)}
     />
   );
 };

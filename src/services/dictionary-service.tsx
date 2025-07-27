@@ -28,7 +28,7 @@ type ReturnType<T extends boolean> = T extends true ? Array<DictionarySelectOpti
 
 export const useDictionaryService = <T extends boolean>(
   key: DICTIONARY_KEYS,
-  formatSelectOptions?: T,
+  formatSelectOptions: T = false as T,
 ): ReturnType<T> => {
   const { data } = useQuery<Array<DictionaryDTO>>(getDictionaryQueryOptions(key));
 

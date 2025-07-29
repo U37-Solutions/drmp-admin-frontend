@@ -16,6 +16,8 @@ export type OfficeDTO = {
   categoryIds: number[];
   conditionIds: number[];
   customFields: Array<CustomFieldValueDTO>;
+  city?: string;
+  isFree: boolean;
 };
 
 export type CreateOfficeDTO = {

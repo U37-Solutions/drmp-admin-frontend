@@ -52,8 +52,12 @@ export const useOfficeForm = ({ office, onSubmit }: UseOfficeFormProps) => {
           latitude: office.latitude,
           longitude: office.longitude,
           locationName: office.locationName,
+          city: office.city,
+          isFree: office.isFree,
         }
-      : {},
+      : {
+          isFree: true,
+        },
   });
 
   const { setValue, reset } = form;

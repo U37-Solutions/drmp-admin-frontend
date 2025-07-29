@@ -23,6 +23,7 @@ export const officeSchema = z.object({
       required_error: 'Виберіть хоча б один вид послуг',
     })
     .min(1, { message: 'Виберіть хоча б один вид послуг' }),
+  isFree: z.boolean(),
 
   categoryIds: z
     .array(z.number(), {
@@ -54,6 +55,7 @@ export const officeSchema = z.object({
       }),
     )
     .optional(),
+  city: z.string().optional().nullable(),
 });
 
 export type OfficeSchema = z.infer<typeof officeSchema>;

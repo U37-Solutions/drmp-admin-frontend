@@ -1,5 +1,5 @@
 import { UserAddOutlined } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Flex, Modal, Typography } from 'antd';
 import React from 'react';
 
@@ -11,6 +11,7 @@ import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
 
 const InviteCompanyUserAction = () => {
   const alertContext = useAlertContext();
+  const queryClient = useQueryClient();
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -22,11 +23,12 @@ const InviteCompanyUserAction = () => {
         alertContext.openNotification(error.message, 'error');
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       setIsModalOpen(false);
       if (alertContext) {
         alertContext.openNotification('Запрошення надіслано', 'success');
       }
+      await queryClient.refetchQueries({ queryKey: ['users'], type: 'all' });
     },
   });
 

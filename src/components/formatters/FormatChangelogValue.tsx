@@ -7,7 +7,17 @@ import { getDeepObjectDiff } from '@features/changelog/util.ts';
 const FormatChangelogValue = ({ row }: { row: FormattedChangelogEntry<ChangelogValueUnion> }) => {
   const difference = getDeepObjectDiff(row.prevValue || {}, row.newValue || {});
 
-  const formattedDifference = Object.keys(difference).map((updatedKey) => {
+  const getDifference = () => {
+    if (row.action === ChangelogAction.CREATE) {
+      return row.newValue || {};
+    }
+    if (row.action === ChangelogAction.DELETE) {
+      return row.prevValue || {};
+    }
+    return difference;
+  };
+
+  const formattedDifference = Object.keys(getDifference()).map((updatedKey) => {
     const prevValue = row.prevValue?.[updatedKey as keyof ChangelogValueUnion];
     const newValue = row.newValue?.[updatedKey as keyof ChangelogValueUnion];
 
@@ -36,7 +46,7 @@ const FormatChangelogValue = ({ row }: { row: FormattedChangelogEntry<ChangelogV
     };
   });
 
-  if (!Object.keys(difference).length) return <span>Змін не було, або дані зміни неможливо відстежити</span>;
+  if (!formattedDifference.length) return <span>Змін не було, або дані зміни неможливо відстежити</span>;
 
   return (
     <List

@@ -22,6 +22,10 @@ export const getColumns = <K extends ChangelogValueUnion>(): ColumnsType<Formatt
     title: 'Тип',
     dataIndex: 'action',
     key: 'action',
+    sorter: (a, b) => a.action.localeCompare(b.action),
+    showSorterTooltip: {
+      title: 'Сортувати за типом зміни',
+    },
     render: (value: ChangelogAction) => <FormatChangeType type={value} />,
   },
   {

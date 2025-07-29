@@ -62,9 +62,12 @@ const ViewUserModal = ({ userId, open, handleClose }: IProps) => {
           isEmpty: !data,
         },
         content: {
-          // TODO: Remove this if it's not needed
           [ContentState.LOADING]: <Typography.Text>Завантаження...</Typography.Text>,
-          [ContentState.EMPTY]: <Typography.Text type="secondary">Користувач не знайдений</Typography.Text>,
+          [ContentState.EMPTY]: (
+            <Typography.Text type="secondary">
+              Користувач не знайдений. Можливо, він ще не прийняв запрошення
+            </Typography.Text>
+          ),
           [ContentState.SUCCESS]: (
             <Flex key="user-info" vertical gap={12}>
               <Flex gap={8}>

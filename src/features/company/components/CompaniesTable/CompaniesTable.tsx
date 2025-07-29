@@ -32,7 +32,7 @@ const CompaniesTable = () => {
     queryFn: async () => await getCompanies(companyStatusFilter),
   });
 
-  const { pageFilteredData, total } = useMemo(
+  const { data: dataBySearch, total } = useMemo(
     () => filterTableData(data || [], page, pageSize, search, ['name', 'email', 'code']),
     [data, page, pageSize, search],
   );
@@ -82,7 +82,7 @@ const CompaniesTable = () => {
         className="ant-responsive-table"
         rowClassName={styles.row}
         loading={{ spinning: isPending }}
-        dataSource={pageFilteredData}
+        dataSource={dataBySearch}
         columns={mapColumnsWithSort<CompanyDTO>(columns, sortBy, sortAsc)}
         onChange={(_pagination, _filters, sorter, { action }) => {
           changeSorting(action, sorter as SorterResult<unknown>);

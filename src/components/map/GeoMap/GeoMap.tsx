@@ -18,7 +18,7 @@ const truncateCodeFromAddress = (address: string) => {
 type GeoMapProps = {
   addressGeometry?: LocationGeometry;
   regionRestriction?: Bounds;
-  onAddressSelect: (address: string, geometry: LocationGeometry) => void;
+  onAddressSelect: (address: string, geometry: LocationGeometry, city: string) => void;
 };
 
 const GeoMap: React.FC<GeoMapProps> = ({ addressGeometry, regionRestriction, onAddressSelect }) => {
@@ -50,10 +50,13 @@ const GeoMap: React.FC<GeoMapProps> = ({ addressGeometry, regionRestriction, onA
       })
       .then((res) => {
         const result = res.results[0];
+
         if (result) {
           const address = truncateCodeFromAddress(result.formatted_address);
+          const city =
+            result.address_components.find((component) => component.types.includes('locality'))?.long_name || '';
 
-          onAddressSelect(address, geometry);
+          onAddressSelect(address, geometry, city);
         }
       });
   };

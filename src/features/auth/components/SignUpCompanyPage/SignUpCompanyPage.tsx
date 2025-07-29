@@ -84,6 +84,9 @@ const SignUpCompanyPage = () => {
 
   const form = useForm<SignUpCompanySchema>({
     resolver: zodResolver(currentStepSchema),
+    defaultValues: {
+      isFree: true,
+    },
   });
 
   const {

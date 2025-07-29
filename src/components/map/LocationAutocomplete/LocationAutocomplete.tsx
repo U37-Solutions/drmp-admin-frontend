@@ -10,7 +10,7 @@ type LocationAutocompleteProps = {
   name?: string;
   placeholder?: string;
   location: string;
-  onSelectLocation: (address: string, geometry: LocationGeometry) => void;
+  onSelectLocation: (address: string, geometry: LocationGeometry, city: string) => void;
   onSearchLocation: (text: string) => void;
   onBlur?: () => void;
   error?: boolean;
@@ -69,14 +69,16 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
     detailsService.getDetails(
       {
         placeId: prediction.place_id,
-        fields: ['name', 'geometry', 'formatted_address'],
+        fields: ['name', 'geometry', 'formatted_address', 'address_components'],
       },
       (place) => {
         if (place?.geometry?.location && place?.formatted_address) {
           const lat = place.geometry.location.lat();
           const lng = place.geometry.location.lng();
+          const city =
+            place.address_components?.find((component) => component.types.includes('locality'))?.long_name || '';
 
-          onSelectLocation(place.formatted_address, { lat, lng });
+          onSelectLocation(place.formatted_address, { lat, lng }, city);
         }
       },
     );

@@ -9,7 +9,7 @@ import { type OfficeSchema } from '@features/office/validation';
 import { REGION_INFO } from '@components/map/constants';
 import GeoMap from '@components/map/GeoMap/GeoMap';
 import LocationAutocomplete from '@components/map/LocationAutocomplete/LocationAutocomplete';
-import type { Bounds, LocationGeometry, Region } from '@components/map/types';
+import type { Bounds, Region } from '@components/map/types';
 
 import MapApiProvider from '@shared/providers/MapApiProvider';
 
@@ -40,10 +40,11 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
     });
   };
 
-  const handleUpdateLocation = (value: { locationName: string; latitude: number; longitude: number }) => {
+  const handleUpdateLocation = (value: { locationName: string; latitude: number; longitude: number; city: string }) => {
     handleUpdateField('locationName', value.locationName);
     handleUpdateField('latitude', value.latitude);
     handleUpdateField('longitude', value.longitude);
+    handleUpdateField('city', value.city);
   };
 
   const values = getValues();
@@ -64,8 +65,13 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
                 <LocationAutocomplete
                   placeholder="Введіть адресу або оберіть на карті"
                   location={field.value ?? ''}
-                  onSelectLocation={(address, geometry) =>
-                    handleUpdateLocation({ locationName: address, latitude: geometry.lat, longitude: geometry.lng })
+                  onSelectLocation={(address, geometry, city) =>
+                    handleUpdateLocation({
+                      locationName: address,
+                      latitude: geometry.lat,
+                      longitude: geometry.lng,
+                      city,
+                    })
                   }
                   onSearchLocation={(text) => handleUpdateField('locationName', text)}
                   error={!!errors.locationName}
@@ -117,8 +123,8 @@ const LocationInfoForm = ({ form }: LocationInfoFormProps) => {
               addressGeometry={
                 values.latitude && values.longitude ? { lat: values.latitude, lng: values.longitude } : undefined
               }
-              onAddressSelect={(address: string, geometry: LocationGeometry) =>
-                handleUpdateLocation({ locationName: address, latitude: geometry.lat, longitude: geometry.lng })
+              onAddressSelect={(address, geometry, city) =>
+                handleUpdateLocation({ locationName: address, latitude: geometry.lat, longitude: geometry.lng, city })
               }
             />
           )}

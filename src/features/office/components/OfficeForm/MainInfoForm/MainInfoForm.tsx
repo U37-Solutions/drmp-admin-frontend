@@ -1,6 +1,7 @@
 import { Flex, Form, Input } from 'antd';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 
+import IsFreeRadioField from '@features/office/components/OfficeForm/MainInfoForm/Fields/IsFreeRadioField.tsx';
 import { FIELDS_LENGTH } from '@features/office/constants';
 import type { OfficeSchema } from '@features/office/validation';
 
@@ -18,6 +19,8 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
     control,
     formState: { errors },
   } = form;
+
+  console.log('MainInfoForm errors:', errors);
 
   return (
     <Flex style={{ flexDirection: 'column' }}>
@@ -109,6 +112,12 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
             />
           )}
         />
+      </Form.Item>
+      <Form.Item
+        label="Вартість послуг"
+        extra={errors.isFree?.message ? <span className="field-error">{errors.isFree.message}</span> : null}
+      >
+        <Controller name="isFree" control={control} render={({ field }) => <IsFreeRadioField field={field} />} />
       </Form.Item>
     </Flex>
   );

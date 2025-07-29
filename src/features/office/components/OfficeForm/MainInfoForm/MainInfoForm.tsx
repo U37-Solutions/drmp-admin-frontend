@@ -20,8 +20,6 @@ const MainInfoForm: React.FC<MainInfoFormProps> = ({ form }) => {
     formState: { errors },
   } = form;
 
-  console.log('MainInfoForm errors:', errors);
-
   return (
     <Flex style={{ flexDirection: 'column' }}>
       <Form.Item

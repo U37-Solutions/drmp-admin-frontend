@@ -39,6 +39,8 @@ const OFFICE_CHANGELOG_VALUE_TITLE_MAP: Record<keyof OfficeDTO, string> = {
   categoryIds: 'Категорії',
   conditionIds: 'Умови',
   customFields: 'Користувацькі поля',
+  city: 'Місто',
+  isFree: 'Вартість',
 };
 
 export const CHANGELOG_VALUES_TITLE_MAP = {

@@ -1,6 +1,7 @@
 name: 🆕🔀 Pull Request [develop]
  
 on:
+  workflow_dispatch:
   pull_request:
     branches: ["develop"]
 

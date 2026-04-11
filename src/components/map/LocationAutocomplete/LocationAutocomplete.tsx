@@ -1,10 +1,23 @@
-import { useMapsLibrary } from '@vis.gl/react-google-maps';
 import { AutoComplete, Input } from 'antd';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from '@shared/hooks/useDebounce';
 
 import type { LocationGeometry, LocationOption } from '../types';
+
+type NominatimResult = {
+  place_id: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
+  };
+};
+
+const NOMINATIM_URL = (import.meta.env.VITE_NOMINATIM_URL ?? '').replace(/\/$/, '');
 
 type LocationAutocompleteProps = {
   name?: string;
@@ -27,33 +40,39 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
   error,
   maxLength,
 }) => {
-  const places = useMapsLibrary('places');
-  const [service, setService] = useState<google.maps.places.AutocompleteService | null>(null);
-  const [suggestions, setSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+  const [suggestions, setSuggestions] = useState<NominatimResult[]>([]);
   const [value, setValue] = useState(location || '');
 
   useEffect(() => {
     setValue(location);
   }, [location]);
 
-  useEffect(() => {
-    if (places && !service) {
-      setService(new places.AutocompleteService());
+  const fetchSuggestions = async (text: string) => {
+    if (!NOMINATIM_URL || !text.trim()) {
+      setSuggestions([]);
+      return;
     }
-  }, [places, service]);
-
-  const fetchPredictions = (text: string) => {
-    if (service && text) {
-      service.getPlacePredictions(
-        { input: text, componentRestrictions: { country: 'ua' }, language: 'uk', types: ['geocode'] },
-        (predictions) => setSuggestions(predictions || []),
-      );
-    } else {
+    try {
+      const params = new URLSearchParams({
+        q: text,
+        format: 'json',
+        countrycodes: 'ua',
+        'accept-language': 'uk',
+        limit: '5',
+        addressdetails: '1',
+      });
+      const res = await fetch(`${NOMINATIM_URL}/search?${params.toString()}`, {
+        headers: { 'User-Agent': 'DRMP Admin/1.0' },
+      });
+      if (!res.ok) return;
+      const data: unknown = await res.json();
+      setSuggestions(Array.isArray(data) ? (data as NominatimResult[]) : []);
+    } catch {
       setSuggestions([]);
     }
   };
 
-  const debouncedFetch = useDebounce(fetchPredictions, 1000);
+  const debouncedFetch = useDebounce(fetchSuggestions, 1000);
 
   const onSearch = (text: string) => {
     setValue(text);
@@ -61,33 +80,20 @@ const LocationAutocomplete: React.FC<LocationAutocompleteProps> = ({
     debouncedFetch(text);
   };
 
-  const onSelect = (option: LocationOption) => {
-    const prediction = suggestions.find((suggestion) => suggestion.place_id === option.key);
-    if (!prediction || !places) return;
+  const onSelect = (_: string, option: LocationOption) => {
+    const result = suggestions.find((s) => s.place_id === option.key);
+    if (!result) return;
 
-    const detailsService = new google.maps.places.PlacesService(document.createElement('div'));
-    detailsService.getDetails(
-      {
-        placeId: prediction.place_id,
-        fields: ['name', 'geometry', 'formatted_address', 'address_components'],
-      },
-      (place) => {
-        if (place?.geometry?.location && place?.formatted_address) {
-          const lat = place.geometry.location.lat();
-          const lng = place.geometry.location.lng();
-          const city =
-            place.address_components?.find((component) => component.types.includes('locality'))?.long_name || '';
-
-          onSelectLocation(place.formatted_address, { lat, lng }, city);
-        }
-      },
-    );
+    const geometry: LocationGeometry = { lat: parseFloat(result.lat), lng: parseFloat(result.lon) };
+    const addr = result.address ?? {};
+    const city = addr.city ?? addr.town ?? addr.village ?? '';
+    onSelectLocation(result.display_name, geometry, city);
   };
 
   return (
     <AutoComplete
-      options={suggestions.map((s) => ({ value: s.description, key: s.place_id }))}
-      onSelect={(_, option) => onSelect(option)}
+      options={suggestions.map((s) => ({ value: s.display_name, key: s.place_id }))}
+      onSelect={onSelect}
       onSearch={onSearch}
       value={value}
       onChange={setValue}

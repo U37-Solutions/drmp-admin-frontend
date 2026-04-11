@@ -9,14 +9,14 @@ COPY . .
 
 ARG VITE_API_URL
 ARG VITE_SOCKET_URL
+ARG VITE_TILES_URL
+ARG VITE_NOMINATIM_URL
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_SOCKET_URL=$VITE_SOCKET_URL
+ENV VITE_TILES_URL=$VITE_TILES_URL
+ENV VITE_NOMINATIM_URL=$VITE_NOMINATIM_URL
 
-RUN --mount=type=secret,id=VITE_MAP_API_KEY \
-    --mount=type=secret,id=VITE_MAP_ID \
-    export VITE_MAP_API_KEY=$(cat /run/secrets/VITE_MAP_API_KEY) && \
-    export VITE_MAP_ID=$(cat /run/secrets/VITE_MAP_ID) && \
-    npm run build
+RUN npm run build
 
 FROM node:18-alpine
 

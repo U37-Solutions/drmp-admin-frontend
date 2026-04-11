@@ -35,8 +35,8 @@ jobs:
           VITE_SOCKET_URL: ${{ vars.VITE_SOCKET_URL }}
           NAMESPACE: ${{ env.NAMESPACE }}
           PROJECT_NAME: ${{ env.PROJECT_NAME }}
-          VITE_MAP_API_KEY: ${{ secrets.VITE_MAP_API_KEY }}
-          VITE_MAP_ID: ${{ secrets.VITE_MAP_ID }}
+          VITE_TILES_URL: ${{ vars.VITE_TILES_URL }}
+          VITE_NOMINATIM_URL: ${{ vars.VITE_NOMINATIM_URL }}
 
   deploy:
     needs: build-and-push

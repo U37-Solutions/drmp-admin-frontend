@@ -16,10 +16,10 @@ inputs:
   VITE_SOCKET_URL:
     type: string
     required: true
-  VITE_MAP_API_KEY:
+  VITE_TILES_URL:
     type: string
     required: true
-  VITE_MAP_ID:
+  VITE_NOMINATIM_URL:
     type: string
     required: true
 
@@ -35,9 +35,8 @@ runs:
         tags: |
           ${{ inputs.DOCKER_REGISTRY_NAME }}/${{ inputs.NAMESPACE }}/${{ inputs.PROJECT_NAME }}:latest
         platforms: linux/amd64
-        secrets: |
-          VITE_MAP_API_KEY=${{ inputs.VITE_MAP_API_KEY }}
-          VITE_MAP_ID=${{ inputs.VITE_MAP_ID }}
         build-args: |
           VITE_API_URL=${{ inputs.VITE_API_URL }}
           VITE_SOCKET_URL=${{ inputs.VITE_SOCKET_URL }}
+          VITE_TILES_URL=${{ inputs.VITE_TILES_URL }}
+          VITE_NOMINATIM_URL=${{ inputs.VITE_NOMINATIM_URL }}

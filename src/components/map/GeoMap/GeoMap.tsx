@@ -1,8 +1,8 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { useCallback, useRef, useState, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Map, { Marker } from 'react-map-gl/maplibre';
-import type { MapRef, MapMouseEvent } from 'react-map-gl/maplibre';
+import type { MapMouseEvent, MapRef } from 'react-map-gl/maplibre';
 
 import { createMapStyle } from '../mapStyle';
 import type { Bounds, LocationGeometry } from '../types';
@@ -75,9 +75,7 @@ const GeoMap: React.FC<GeoMapProps> = ({ addressGeometry, regionRestriction, onA
       ref={mapRef}
       mapStyle={mapStyle}
       initialViewState={
-        addressGeometry
-          ? { longitude: addressGeometry.lng, latitude: addressGeometry.lat, zoom: 16 }
-          : UKRAINE_CENTER
+        addressGeometry ? { longitude: addressGeometry.lng, latitude: addressGeometry.lat, zoom: 16 } : UKRAINE_CENTER
       }
       maxBounds={maxBounds}
       style={{ width: '100%', height: '100%' }}

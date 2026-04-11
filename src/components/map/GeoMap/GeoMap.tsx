@@ -1,19 +1,16 @@
-import { AdvancedMarker, Map as GoogleMap, useMap } from '@vis.gl/react-google-maps';
-import { useEffect, useMemo, useState } from 'react';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { UKRAINE_BOUNDS } from '../constants';
+import { useCallback, useRef, useState, useEffect } from 'react';
+import Map, { Marker } from 'react-map-gl/maplibre';
+import type { MapRef, MapMouseEvent } from 'react-map-gl/maplibre';
+
+import { createMapStyle } from '../mapStyle';
 import type { Bounds, LocationGeometry } from '../types';
 
-const MAP_ID = import.meta.env.VITE_MAP_ID;
+const UKRAINE_MAX_BOUNDS: [number, number, number, number] = [22.09, 44.38, 40.23, 52.38];
+const UKRAINE_CENTER = { longitude: 30.5234, latitude: 50.4501, zoom: 6 };
 
-const truncateCodeFromAddress = (address: string) => {
-  const segments = address.split(' ');
-  if (segments[0].includes('+')) {
-    return segments.slice(1, segments.length).join(' ');
-  }
-
-  return address;
-};
+const NOMINATIM_URL = (import.meta.env.VITE_NOMINATIM_URL ?? '').replace(/\/$/, '');
 
 type GeoMapProps = {
   addressGeometry?: LocationGeometry;
@@ -21,64 +18,74 @@ type GeoMapProps = {
   onAddressSelect: (address: string, geometry: LocationGeometry, city: string) => void;
 };
 
-const GeoMap: React.FC<GeoMapProps> = ({ addressGeometry, regionRestriction, onAddressSelect }) => {
-  const map = useMap();
-  const [markerPosition, setMarkerPosition] = useState<LocationGeometry | null>(null);
-
-  const geocoder = useMemo(() => new google.maps.Geocoder(), []);
-
-  useEffect(() => {
-    if (!map) return;
-    map.setOptions({
-      restriction: { latLngBounds: regionRestriction ?? UKRAINE_BOUNDS, strictBounds: !!regionRestriction },
-    });
-  }, [map, regionRestriction]);
-
-  useEffect(() => {
-    if (!map || !addressGeometry) return;
-
-    map.panTo(addressGeometry);
-
-    setMarkerPosition(addressGeometry);
-  }, [map, addressGeometry]);
-
-  const handleClick = (geometry: LocationGeometry) => {
-    setMarkerPosition(geometry);
-    geocoder
-      .geocode({
-        location: geometry,
-      })
-      .then((res) => {
-        const result = res.results[0];
-
-        if (result) {
-          const address = truncateCodeFromAddress(result.formatted_address);
-          const city =
-            result.address_components.find((component) => component.types.includes('locality'))?.long_name || '';
-
-          onAddressSelect(address, geometry, city);
-        }
-      });
+type NominatimReverseResult = {
+  display_name?: string;
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
   };
+};
+
+const GeoMap: React.FC<GeoMapProps> = ({ addressGeometry, regionRestriction, onAddressSelect }) => {
+  const mapRef = useRef<MapRef>(null);
+  const [markerPosition, setMarkerPosition] = useState<LocationGeometry | null>(addressGeometry ?? null);
+  const mapStyle = createMapStyle();
+
+  useEffect(() => {
+    if (!addressGeometry) return;
+    setMarkerPosition(addressGeometry);
+    mapRef.current?.flyTo({ center: [addressGeometry.lng, addressGeometry.lat], zoom: 16 });
+  }, [addressGeometry]);
+
+  const maxBounds: [number, number, number, number] = regionRestriction
+    ? [regionRestriction.west, regionRestriction.south, regionRestriction.east, regionRestriction.north]
+    : UKRAINE_MAX_BOUNDS;
+
+  const handleClick = useCallback(
+    async (e: MapMouseEvent) => {
+      const geometry: LocationGeometry = { lat: e.lngLat.lat, lng: e.lngLat.lng };
+      setMarkerPosition(geometry);
+
+      if (!NOMINATIM_URL) return;
+
+      try {
+        const res = await fetch(
+          `${NOMINATIM_URL}/reverse?format=json&lat=${geometry.lat}&lon=${geometry.lng}&accept-language=uk`,
+          { headers: { 'User-Agent': 'DRMP Admin/1.0' } },
+        );
+        if (!res.ok) return;
+        const data: NominatimReverseResult = await res.json();
+        if (data?.display_name) {
+          const addr = data.address ?? {};
+          const city = addr.city ?? addr.town ?? addr.village ?? '';
+          onAddressSelect(data.display_name, geometry, city);
+        }
+      } catch {
+        // silently ignore geocoding errors
+      }
+    },
+    [onAddressSelect],
+  );
+
+  if (!mapStyle) return <div>Не налаштовано VITE_TILES_URL</div>;
 
   return (
-    <GoogleMap
-      defaultCenter={addressGeometry}
-      mapId={MAP_ID}
-      gestureHandling="greedy"
-      onClick={(e) => {
-        if (e.detail.latLng) {
-          handleClick({
-            lat: e.detail.latLng.lat,
-            lng: e.detail.latLng.lng,
-          });
-        }
-      }}
-      streetViewControl={false}
-      clickableIcons={false}
+    <Map
+      ref={mapRef}
+      mapStyle={mapStyle}
+      initialViewState={
+        addressGeometry
+          ? { longitude: addressGeometry.lng, latitude: addressGeometry.lat, zoom: 16 }
+          : UKRAINE_CENTER
+      }
+      maxBounds={maxBounds}
+      style={{ width: '100%', height: '100%' }}
+      onLoad={() => mapRef.current?.resize()}
+      onClick={handleClick}
     >
-      {markerPosition && <AdvancedMarker position={markerPosition} />}
-    </GoogleMap>
+      {markerPosition && <Marker longitude={markerPosition.lng} latitude={markerPosition.lat} />}
+    </Map>
   );
 };
 

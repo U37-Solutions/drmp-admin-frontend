@@ -5,17 +5,20 @@ import UsersChangelogAction from '@features/users/components/UsersChangelogActio
 
 type IProps = {
   handleInviteClick: () => void;
+  showInviteButton?: boolean;
 };
 
-const UserHeader = ({ handleInviteClick }: IProps) => {
+const UserHeader = ({ handleInviteClick, showInviteButton = true }: IProps) => {
   return (
     <Flex gap={12}>
       <Typography.Title level={3} style={{ marginBottom: 0 }}>
         Користувачі
       </Typography.Title>
-      <Tooltip placement="bottom" title="Запросити нового користувача">
-        <Button onClick={handleInviteClick} icon={<PlusOutlined />} />
-      </Tooltip>
+      {showInviteButton && (
+        <Tooltip placement="bottom" title="Запросити нового користувача">
+          <Button onClick={handleInviteClick} icon={<PlusOutlined />} />
+        </Tooltip>
+      )}
       <UsersChangelogAction />
     </Flex>
   );

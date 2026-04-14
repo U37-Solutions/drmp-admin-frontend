@@ -74,7 +74,7 @@ const StaticFieldForm = ({ field, onClose }: Props) => {
     const { added, changed, deleted } = getUpdatedOptions(originalOptions, newOptions || []);
     const promises: Array<Promise<string>> = [];
     if (added.length > 0) {
-      promises.push(...added.map((name) => addStaticFieldDictionary(field.dictionaryKey, name)));
+      promises.push(addStaticFieldDictionary(field.dictionaryKey, added));
     }
     if (changed.length > 0) {
       promises.push(bulkUpdateStaticFieldDictionary(field.dictionaryKey, changed));

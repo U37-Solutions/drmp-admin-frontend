@@ -23,5 +23,5 @@ export const bulkUpdateStaticFieldDictionary = async (key: DICTIONARY_KEYS, data
 export const bulkDeleteStaticFieldDictionary = async (key: DICTIONARY_KEYS, ids: Array<number>) =>
   await apiClient.delete(`/dictionary/${key}`, { data: ids }).then((res) => res.data);
 
-export const addStaticFieldDictionary = async (key: DICTIONARY_KEYS, data: string) =>
-  await apiClient.post(`/dictionary/${key}`, data).then((res) => res.data);
+export const addStaticFieldDictionary = async (key: DICTIONARY_KEYS, values: Array<string>) =>
+  await apiClient.post(`/dictionary/${key}`, { values }).then((res) => res.data);

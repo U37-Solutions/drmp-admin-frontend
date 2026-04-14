@@ -13,6 +13,7 @@ import type { UserDTO } from '@features/users/types.ts';
 
 import useTableState from '@shared/hooks/useTableState.ts';
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
+import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 const searchSchema = z.object({
   page: fallback(z.number(), 1).default(1),
@@ -29,6 +30,8 @@ export const Route = createFileRoute('/_authorized/_editor/users')({
 
 function UsersPage() {
   const alertContext = useAlertContext();
+  const roleContext = useRoleContext();
+  const isEditor = roleContext?.isEditor ?? false;
   const { search, changeSearch } = useTableState('/_authorized/_editor/users');
   const {
     data: users,
@@ -54,13 +57,13 @@ function UsersPage() {
 
   return (
     <Card
-      title={<UserHeader handleInviteClick={() => setShowInviteModal(true)} />}
+      title={<UserHeader handleInviteClick={() => setShowInviteModal(true)} showInviteButton={!isEditor} />}
       style={{ margin: 20 }}
       styles={{ body: { padding: 0 } }}
       extra={<Input.Search defaultValue={search} placeholder="Пошук" onSearch={changeSearch} />}
     >
       <UsersTable data={users!} isLoading={isPending} refetchData={refetch} routeId="/_authorized/_editor/users" />
-      <InviteEditorModal open={showInviteModal} handleClose={handleInviteModalClose} />
+      {!isEditor && <InviteEditorModal open={showInviteModal} handleClose={handleInviteModalClose} />}
     </Card>
   );
 }

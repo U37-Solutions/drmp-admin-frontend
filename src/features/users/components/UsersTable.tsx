@@ -10,6 +10,7 @@ import mapColumnsWithSort from '@services/sort-columns';
 
 import useTableState from '@shared/hooks/useTableState';
 import { useAlertContext } from '@shared/providers/AlertProvider.tsx';
+import { useRoleContext } from '@shared/providers/UserRoleProvider.tsx';
 
 import DeleteUserAction from './DeleteUser/DeleteUserAction';
 import ViewUserAction from './ViewUser/ViewUserAction';
@@ -25,6 +26,8 @@ type IProps = {
 
 const UsersTable = ({ data, isLoading, refetchData, routeId }: IProps) => {
   const alertContext = useAlertContext();
+  const roleContext = useRoleContext();
+  const isEditor = roleContext?.isEditor ?? false;
   const { changePage, page, pageSize, search, changeSorting, sortBy, sortAsc } = useTableState(routeId);
 
   const columns = useMemo(
@@ -32,19 +35,23 @@ const UsersTable = ({ data, isLoading, refetchData, routeId }: IProps) => {
       getColumns({
         getActions: (record) => [
           <ViewUserAction key="view-user" userId={record.id} />,
-          <DeleteUserAction
-            key="delete-user"
-            user={record}
-            onSuccess={() => {
-              if (alertContext) {
-                alertContext.openNotification('Користувача успішно видалено', 'success');
-              }
-              refetchData();
-            }}
-          />,
+          ...(!isEditor
+            ? [
+                <DeleteUserAction
+                  key="delete-user"
+                  user={record}
+                  onSuccess={() => {
+                    if (alertContext) {
+                      alertContext.openNotification('Користувача успішно видалено', 'success');
+                    }
+                    refetchData();
+                  }}
+                />,
+              ]
+            : []),
         ],
       }),
-    [refetchData, alertContext],
+    [refetchData, alertContext, isEditor],
   );
   const { pageFilteredData, total } = useMemo(
     () => filterTableData(data, page, pageSize, search, ['firstName', 'lastName', 'email']),
